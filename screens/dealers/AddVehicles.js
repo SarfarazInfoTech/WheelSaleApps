@@ -71,54 +71,67 @@ const AddVehicles = ({navigation}) => {
 
   const AddVehicle = async () => {
     // console.log(AddMyVehical);
-    await fetch(AddMyVehical, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        categoryId: categoryId,
-        color: Color,
-        images: [
-          {
-            image: null,
-          },
-        ],
-        modelYear: modelYear,
-        sellingPrice: Price,
-        subCategoryName: Specification,
-        vehicleCondition: checked,
-        vehicleNumber: vehicleNumber,
-        wheels: 2,
-      }),
-    })
-      .then(res => res.json())
-      .then(resData => {
-        if (resData.status === 'S') {
-          Alert.alert('WheelSale', resData.message, [
+    if (
+      !Specification ||
+      !vehicleNumber ||
+      !modelYear ||
+      !Color ||
+      !Price ||
+      !checked ||
+      !selected ||
+      !VehiInfo
+    ) {
+      alert('All value must be required !');
+    } else {
+      await fetch(AddMyVehical, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          categoryId: categoryId,
+          color: Color,
+          images: [
             {
-              text: 'Cancel',
-              onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
+              image: null,
             },
-            {text: 'Show', onPress: () => navigation.navigate('My Vehicle')},
-          ]);
-          console.log(resData);
-          setVehicleNumber('');
-          setSpecification('');
-          setColor('');
-          setPrice('');
-          setChecked('');
-        } else if (resData.status === 'F') {
-          alert(resData.message);
-          // setMessage(resData.message);
-          // setError(resData.status);
-        } else {
-          // setMessage(resData.message);
-          // setError(resData.status);
-        }
-      });
+          ],
+          modelYear: modelYear,
+          sellingPrice: Price,
+          subCategoryName: Specification,
+          vehicleCondition: checked,
+          vehicleNumber: vehicleNumber,
+          wheels: 2,
+        }),
+      })
+        .then(res => res.json())
+        .then(resData => {
+          if (resData.status === 'S') {
+            Alert.alert('WheelSale', resData.message, [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {text: 'Show', onPress: () => navigation.navigate('My Vehicle')},
+            ]);
+            console.log(resData);
+            setVehicleNumber('');
+            setSpecification('');
+            setColor('');
+            setPrice('');
+            setChecked('');
+          } else if (resData.status === 'F') {
+            alert(resData.message);
+            // setMessage(resData.message);
+            // setError(resData.status);
+          } else {
+            // setMessage(resData.message);
+            // setError(resData.status);
+          }
+        });
+    }
   };
 
   const Vehicles = async () => {
