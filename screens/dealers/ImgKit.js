@@ -5,7 +5,7 @@ const ImgKit = () => {
   // 1. initialize request
   const xhr = new XMLHttpRequest();
   // 2. open request
-  xhr.open('POST', 'http://103.159.239.52:80/wheelsale-app-ws/images/');
+  xhr.open('POST', 'http://wheelsale.in/wheelsale-app-ws/images/');
   // 3. set up callback for request
   xhr.onload = () => {
     const response = JSON.parse(xhr.response);

@@ -12,6 +12,7 @@ import Notifications from '../dealers/Notifications';
 import Profile from '../dealers/Profile';
 import Tabs from './Tabs.js';
 import {TouchableOpacity} from 'react-native';
+import Supportus from '../dealers/webpages/Support.js';
 
 const Drawer = createDrawerNavigator();
 
@@ -133,7 +134,7 @@ const Drawers = ({navigation}) => {
       />
       <Drawer.Screen
         name="Support"
-        component={Support}
+        component={Supportus}
         options={{
           headerShown: true,
           headerTintColor: '#fff',

@@ -154,7 +154,7 @@ const Profile = ({navigation}) => {
                   color: 'gray',
                   paddingVertical: 5,
                 }}>
-                userDealwala@1234
+                8554843519
               </Text>
             </View>
             <View

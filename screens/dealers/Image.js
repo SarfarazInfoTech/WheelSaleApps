@@ -18,7 +18,7 @@ const ImageUp = () => {
 
   const options = {
     title: 'Image Picker',
-    // includeBase64: true,
+    includeBase64: true,
     mediaType: 'image',
     storageOptions: {
       skipBackup: true,
@@ -28,8 +28,6 @@ const ImageUp = () => {
 
   const choosePic = async () => {
     launchImageLibrary(options, response => {
-      // Use launchImageLibrary to open image gallery
-      console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -39,6 +37,7 @@ const ImageUp = () => {
       } else {
         // console.log('YE VALUE KI IMAGE BHEJO =' + response.assets[0].uri);
         setData(response.assets[0].uri);
+        console.log('Response = ', response.assets[0].base64);
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
       }
@@ -57,7 +56,7 @@ const ImageUp = () => {
     try {
       console.log('Data', newImageUri);
       const response = await fetch(
-        'http://103.159.239.52:80/wheelsale-app-ws/images/',
+        'http://wheelsale.in/wheelsale-app-ws/images/',
         {
           method: 'POST',
           headers: {
@@ -69,15 +68,15 @@ const ImageUp = () => {
 
         },
       )
-        .then(response => response.text())
-        .then(responseData => {
-          console.log(responseData.message);
-          alert(responseData.message);
+        // .then(response => response.text())
+        // .then(responseData => {
+        //   console.log(responseData.message);
+        //   alert(responseData.message);
 
-          console.log('file',formData)
-        });
-      // const json = await response.json();
-      // console.log(json);
+        //   console.log('file',formData)
+        // });
+      const json = await response.text();
+      console.log(json);
     } catch (error) {
       console.error(error, 'erorr');
     }

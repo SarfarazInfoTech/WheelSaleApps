@@ -102,7 +102,7 @@ const AddVehicles = ({navigation}) => {
               onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
-            {text: 'Show', onPress: () => navigation.navigate('Show Vehicle')},
+            {text: 'Show', onPress: () => navigation.navigate('My Vehicle')},
           ]);
           console.log(resData);
           setVehicleNumber('');

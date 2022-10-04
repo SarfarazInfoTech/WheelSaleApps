@@ -51,7 +51,7 @@ const ImageUpload = () => {
   };
 
   const handleUploadPhoto = async () => {
-    await fetch('http://103.159.239.52:80/wheelsale-app-ws/images/', {
+    await fetch('http://wheelsale.in/wheelsale-app-ws/images/', {
       method: 'POST',
       headers: {
         
@@ -96,7 +96,7 @@ const ImageUpload = () => {
   const uploadImageOnServer = async imageData => {
     try {
       let response = await fetch(
-        'http://103.159.239.52:80/wheelsale-app-ws/images/',
+        'http://wheelsale.in/wheelsale-app-ws/images/',
         {
           method: 'POST',
           body: imageData,

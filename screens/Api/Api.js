@@ -1,7 +1,7 @@
-const baseURL = 'http://103.159.239.52:80'
+const baseURL = 'http://wheelsale.in'
 const Api = {
 
-    api: 'http://103.159.239.52:80/wheelsale-app-ws/dealers/',
+    api: 'http://wheelsale.in/wheelsale-app-ws/dealers/',
   };
   
   export default Api;

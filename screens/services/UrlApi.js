@@ -1,4 +1,4 @@
-const baseURL = 'http://103.159.239.52:80'
+const baseURL = 'http://wheelsale.in'
 
 const VehiclesList = `${baseURL}/wheelsale-app-ws/categories`
 export {VehiclesList};

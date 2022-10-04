@@ -20,8 +20,13 @@ import ImgKit from '../dealers/ImgKit';
 import ImageUp from '../dealers/Image';
 import PageLoad from '../dealers/PageLoad';
 import Drawers from './Drawers';
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import VehiclesDetails from '../dealers/VehiclesDetails';
+import About from '../dealers/webpages/About';
+import Terms from '../dealers/webpages/Terms';
+import Supportus from '../dealers/webpages/Support';
+import Privacy from '../dealers/webpages/Privacy';
+import SubscriptionPlan from '../dealers/webpages/SubscriptionPlan';
 // import ImageUploadFirebase from '../dealers/ImageUploadFirebase';
 
 const Stack = createNativeStackNavigator();
@@ -30,7 +35,7 @@ const Tab = createBottomTabNavigator();
 const Routes = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ImageUpload">
+      <Stack.Navigator initialRouteName="Drawers">
         <Stack.Screen
           name="ImageUpload"
           component={ImageUp}
@@ -188,17 +193,41 @@ const Routes = () => {
           component={Account}
           options={{
             headerShown: true,
-            headerRight: () => (
-              <TouchableOpacity onPress={() => console.log("first")}>
-                <Image
-                  style={{backgroundColor: 'white', height: 35, width: 35}}
-                  source={{
-                    uri: "http://wheelsale.in/wheel/Asset1/images/favicon.png",
-                  }}
-                />
-              </TouchableOpacity>
-            ),
+            // headerRight: () => (
+            //   <TouchableOpacity onPress={() => console.log("first")}>
+            //     <Image
+            //       style={{backgroundColor: 'white', height: 35, width: 35}}
+            //       source={{
+            //         uri: "http://wheelsale.in/wheel/Asset1/images/favicon.png",
+            //       }}
+            //     />
+            //   </TouchableOpacity>
+            // ),
           }}
+        />
+
+        <Stack.Screen
+          name="Subscription plans"
+          component={SubscriptionPlan}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="Privacy policy"
+          component={Privacy}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="About us"
+          component={About}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="Terms and conditions"
+          component={Terms}
+          options={{headerShown: true}}
         />
 
         <Stack.Screen
