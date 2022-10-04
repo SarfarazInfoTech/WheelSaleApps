@@ -1,3 +1,4 @@
+import {encode} from 'base-64';
 import React, {useState} from 'react';
 import {
   Platform,
@@ -12,11 +13,12 @@ import RNFetchBlob from 'rn-fetch-blob';
 
 const ImageUp = () => {
   const [file, setfile] = useState();
-  const [Data, setData] = useState([]);
+  const [Data, setData] = useState();
   const [fileName, setfileName] = useState();
 
   const options = {
     title: 'Image Picker',
+    // includeBase64: true,
     mediaType: 'image',
     storageOptions: {
       skipBackup: true,
@@ -35,38 +37,47 @@ const ImageUp = () => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        console.log('YE VALUE KI IMAGE BHEJO =' + response);
-        setData(response.assets[0]);
+        // console.log('YE VALUE KI IMAGE BHEJO =' + response.assets[0].uri);
+        setData(response.assets[0].uri);
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
       }
     });
   };
+
   const uploadPic = async () => {
+    // let formData = new FormData();
+    // formData.append('photo', { file: Data });
+
+    const newImageUri = 'file:' + Data.split('file:/').join('');
+    const formData = new FormData();
+    formData.append('image', {
+      file: newImageUri,
+    });
     try {
+      console.log('Data', newImageUri);
       const response = await fetch(
-        'https://upload.imagekit.io/api/v1/files/upload',
+        'http://103.159.239.52:80/wheelsale-app-ws/images/',
         {
           method: 'POST',
           headers: {
-            Authorization:
-              'Basic cHJpdmF0ZV9IamgyYU9Cbkxub0pZT05iVVFyRzNQaFdkeWc9Og==',
+            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'multipart/form-data',
-            'access-control-allow-origin': '*',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            fileName: Data.fileName,
-            file: Data.uri,
-            type: Data.type,
-          }),
+         },
+          
+          body: formData,
+
         },
-      );
+      )
+        .then(response => response.text())
+        .then(responseData => {
+          console.log(responseData.message);
+          alert(responseData.message);
 
-      const json = await response.json();
-
-      alert(json);
-      console.log(json);
+          console.log('file',formData)
+        });
+      // const json = await response.json();
+      // console.log(json);
     } catch (error) {
       console.error(error, 'erorr');
     }
@@ -78,7 +89,7 @@ const ImageUp = () => {
 
       {Data ? (
         <Image
-          source={{uri: Data.uri}}
+          source={{uri: Data ? Data : ''}}
           style={{width: '100%', height: 300, margin: 10}}
         />
       ) : null}

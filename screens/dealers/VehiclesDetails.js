@@ -15,10 +15,10 @@ const VehiclesDetails = () => {
           />
         </View>
       </View>
-      <View style={{padding: 10, borderBottomColor: 'lightgray', borderBottomWidth: 1}}>
-        <View style={{backgroundColor: 'gray', borderRadius: 5, alignSelf: 'flex-start', flexDirection: 'row', paddingHorizontal: 5,}}>
-          <Ionicons name='shield-checkmark-outline' size={17} color='lightgray' />
-        <Text style={{color: 'lightgray',  textTransform: 'uppercase', paddingLeft: 3}}>Verified</Text>
+      <View style={{padding: 10, borderBottomColor: 'lightgray', borderBottomWidth: 1, margin: 5}}>
+        <View style={{backgroundColor: '#3d3d72', borderRadius: 5, alignSelf: 'flex-start', flexDirection: 'row', paddingHorizontal: 5, paddingVertical: 3}}>
+          <Ionicons name='shield-checkmark-outline' size={17} color='white' />
+        <Text style={{color: 'white',  textTransform: 'uppercase', paddingLeft: 3}}>Verified</Text>
 
         </View>
         <Text style={{color: 'black', fontWeight: '500', fontSize: 16, marginVertical: 5}}>TVS Jupiter ZX (2001)</Text>

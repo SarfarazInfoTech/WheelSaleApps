@@ -22,6 +22,7 @@ import PageLoad from '../dealers/PageLoad';
 import Drawers from './Drawers';
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import VehiclesDetails from '../dealers/VehiclesDetails';
+// import ImageUploadFirebase from '../dealers/ImageUploadFirebase';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,10 +30,10 @@ const Tab = createBottomTabNavigator();
 const Routes = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MainScreen">
+      <Stack.Navigator initialRouteName="ImageUpload">
         <Stack.Screen
-          name="Upload Image"
-          component={PageLoad}
+          name="ImageUpload"
+          component={ImageUp}
           options={{headerShown: true}}
         />
 

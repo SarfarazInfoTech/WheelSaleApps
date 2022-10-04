@@ -17,11 +17,11 @@ const ImageUpload = () => {
     body = {},
   ) => {
     const data = new FormData();
-    // console.log('zzzzzzzz', photo);
+    console.log('zzzzzzzz', photo, " ", photo.assets[0].uri);
     data.append('photo', {
       file: photo.assets[0].uri,
-      fileName: photo.assets[0].fileName,
-      fileType: photo.assets[0].type,
+      // fileName: photo.assets[0].fileName,
+      // fileType: photo.assets[0].type,
     });
 
     Object.keys(body).forEach(key => {
@@ -43,7 +43,7 @@ const ImageUpload = () => {
 
   const handleChoosePhoto = () => {
     launchImageLibrary({noData: true, mediaType: 'photo', includeBase64: true}, (response) => {
-      // console.log('Handle Image ', response.assets);
+      console.log('Handle Image ', response.assets);
       if (response) {
         setPhoto(response);
       }
@@ -51,22 +51,21 @@ const ImageUpload = () => {
   };
 
   const handleUploadPhoto = async () => {
-    await fetch(`https://upload.imagekit.io/api/v1/files/upload`, {
+    await fetch('http://103.159.239.52:80/wheelsale-app-ws/images/', {
       method: 'POST',
-      
+      headers: {
+        
+        'Content-Type': 'multipart/form-data;boundary=boundary',
+            'access-control-allow-origin': '*',
+        
+        Accept: 'application/octet-stream',
+      },
       body: createFormData(photo, {
         file: photo.assets[0].uri,
-        fileName: photo.assets[0].fileName,
-        fileType: photo.assets[0].type,
-        useUniqueFileName: false,
+        // fileName: photo.assets[0].fileName,
+        // fileType: photo.assets[0].type,
+        // useUniqueFileName: false,
       }),
-      headers: {
-        Authorization:
-          'Basic cHJpdmF0ZV9IamgyYU9Cbkxub0pZT05iVVFyRzNQaFdkeWc9Og==',
-        'Content-Type': 'multipart/form-data',
-        'access-control-allow-origin': '*',
-        Accept: 'application/json',
-      },
     })
       .then(response => response.json())
       .then(response => {
@@ -97,23 +96,20 @@ const ImageUpload = () => {
   const uploadImageOnServer = async imageData => {
     try {
       let response = await fetch(
-        'https://upload.imagekit.io/api/v1/files/upload',
+        'http://103.159.239.52:80/wheelsale-app-ws/images/',
         {
           method: 'POST',
           body: imageData,
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization:
-              'Basic ' +
-              encode(
-                'cHJpdmF0ZV9IamgyYU9Cbkxub0pZT05iVVFyRzNQaFdkeWc9Og==' +
-                  ':' +
-                  '',
-              ),
+            'access-control-allow-origin': '*',
+            Accept: 'application/json',
+            
           },
         },
       );
       response = response.json();
+      console.log("response hai ji ", response)
       return response;
     } catch (error) {
       console.log('err', error);
@@ -124,8 +120,8 @@ const ImageUpload = () => {
     const formData = new FormData();
     formData.append('image', {
       file: CameraPhoto,
-      fileName: 'image.jpg',
-      type: 'image/jpeg',
+      // fileName: 'image.jpg',
+      // type: 'image/jpeg',
     });
     const res = await uploadImageOnServer(formData);
     console.log('res hai', res);
@@ -147,26 +143,7 @@ const ImageUpload = () => {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
 
-<IKContext publicKey="public_+Oqkm59GrogcAEECOWsGR6od3yc=" authenticationEndpoint="http://localhost:8080/auth">
-  {/* // Simple file upload and response handling */}
-  {/* <IKUpload
-    onError={onError}
-    onSuccess={onSuccess}
-  /> */}
-
-  {/* // Passing different upload API options */}
-  <IKUpload
-    fileName="file-name.jpg"
-    tags={["sample-tag1", "sample-tag2"]}
-    customCoordinates={"10,10,10,10"}
-    isPrivateFile={false}
-    useUniqueFileName={true}
-    responseFields={["tags"]}
-    folder={"/sample-folder"}
-    OnError={OnError} 
-    OnSuccess={OnSuccess}
-  />
-</IKContext>
+{/*  */}
       {photo ? (
         <>
           <Image source={{uri: photo.assets[0].uri}} style={{width: 300, height: 300}} />
@@ -174,10 +151,10 @@ const ImageUpload = () => {
         </>
       ) : null}
       <Image source={{uri: CameraPhoto}} style={{width: 100, height: 100}} />
-      {/* <Button title="Choose Camera" color={'gray'} onPress={openCamera} /> */}
+      <Button title="Choose Camera" color={'gray'} onPress={openCamera} />
       <Button title="doc" color={'gray'} onPress={doc} />
       <Button title="Choose Photo" onPress={handleChoosePhoto} />
-      {/* <Button title="Save" color={'black'} onPress={onSaveImage} /> */}
+      <Button title="Save" color={'black'} onPress={onSaveImage} />
     </View>
   );
 };
