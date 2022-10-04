@@ -1,0 +1,68 @@
+{
+  "splashimage": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2Fsplashimage.png?alt=media&token=bb7d08be-1ee2-435e-b1be-ad1dc3574140",
+
+  "teacherLogo": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FteacherLogo.jpg?alt=media&token=821e7067-d18b-43fa-aaa8-7039298bc69c",
+
+  "recruiterLogo": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FrecruiterLogo.jpg?alt=media&token=df48f637-0589-4200-830f-46983fdc2421",
+
+  "teacherImage": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FteacherImage.jpg?alt=media&token=f55ab4f9-e705-47fd-af53-900f87170bbf",
+
+  "profilePic": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FprofileIcon.png?alt=media&token=419c2902-f797-43f5-b1ca-85a43c735f78",
+
+  "dashboardIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FdashboardIcon.png?alt=media&token=d477650d-a93f-45d3-a521-cccda81ed3ce",
+
+  "notesIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FnotesIcon.png?alt=media&token=182ee570-d2af-494a-be79-01fc4e0da3ab",
+
+  "approvedIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FapprovedIcon.png?alt=media&token=4080ae0f-6314-4ce2-8c34-a56aff345c44",
+
+  "rejectedIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FrejectedIcon.png?alt=media&token=541c6aba-7a10-42d8-aa0d-78bd713d9d68",
+
+  "pendingIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FpendingIcon.png?alt=media&token=19c54dcf-403c-4ddd-982e-40eacefc9391",
+
+  "altDoc": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FaltDoc.png?alt=media&token=bac34bf6-df8d-48e4-b881-5c6facf1f943",
+
+  "profileIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FprofileIcon.png?alt=media&token=419c2902-f797-43f5-b1ca-85a43c735f78",
+
+  "documentIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FdocumentIcon.png?alt=media&token=670b7771-6204-48bf-b9a8-92f1a82b0ba0",
+
+  "uploadIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FuploadIcon.png?alt=media&token=12f1b46c-4133-472b-a099-a00b1ffb0ea2",
+
+  "academicIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FacademicIcon.png?alt=media&token=5a94d352-0be7-4572-a405-ca5b22c0c1f6",
+
+  "careerIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FcareerIcon.png?alt=media&token=38f84142-df52-43bb-a958-78fb5f835f44",
+
+  "logOutIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FlogOutIcon.png?alt=media&token=a1e3cdc0-b722-4746-853b-afa80d8d8209",
+
+  "profileEditIcon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2FprofileEditIcon.png?alt=media&token=41847c59-177a-421c-bec2-440b04bc6751",
+
+  "pic": [
+    {
+      "index": "1",
+      "route": "Account",
+      "icon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2Faccounts.png?alt=media&token=0e44f56f-67b4-4cef-b0a3-00bdad873a02",
+      "name": "Account"
+    },
+    {
+      "index": "2",
+      "route": "Documents Upload",
+      "icon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2Fdocuments.png?alt=media&token=0df58900-21a7-4641-9bd8-c55b59dff669",
+      "name": "Documents"
+    },
+    {
+      "index": "3",
+      "route": "Academic",
+      "icon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2Facademic.png?alt=media&token=76b0d2b4-7e84-4211-aff3-fbb65884ae50",
+      "name": "Academic"
+    },
+    {
+      "index": "4",
+      "route": "Career",
+      "icon": "https://firebasestorage.googleapis.com/v0/b/trapp-8f869.appspot.com/o/icon%2Fcareer.png?alt=media&token=b667530d-00d0-43a8-850d-6a397b270cfd",
+      "name": "Career"
+    }
+  ],
+
+  "logout": "https://apprecs.org/gp/images/app-icons/300/a5/jp.co.kixx.tool.offwidget.jpg",  
+
+  "DefImg": "https://tspetproducts.com.au/wp-content/uploads/2021/02/Copy-of-Copy-of-Untitled-Design.jpg"  
+}

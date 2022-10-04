@@ -1,0 +1,106 @@
+import {View, Text, TextInput, Button} from 'react-native';
+import React, {useState} from 'react';
+import {signUp} from '../services/user-service';
+
+const ApiHai = {
+  dealers: [
+    {
+      createdAt: '2022-09-08T07:16:36.483Z',
+      modifiedAt: '2022-09-08T07:16:36.483Z',
+      fullName: 'string',
+      dealerId: 'string',
+      email: 'string',
+      phone: 'string',
+      shopName: 'string',
+      shopAddress: 'string',
+    },
+  ],
+};
+
+const Signup = () => {
+  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [shopAddress, setShopAddress] = useState('');
+  const [shopName, setShopName] = useState('');
+
+  const [data, setData] = useState({
+    email: '',
+    fullName: '',
+    password: '',
+    phone: '',
+    repeatPassword: '',
+    shopAddress: '',
+    shopName: '',
+  });
+
+  // const handleChange = (event, property) => {
+  //   setData({...data, [property]: event.target.value});
+  // };
+
+  const submitForm = event => {
+    setData({
+      email: email,
+      fullName: fullName,
+      password: password,
+      phone: phone,
+      repeatPassword: repeatPassword,
+      shopAddress: shopAddress,
+      shopName: shopName,
+    });
+    console.log(data);
+    signUp(data)
+      .then(resp => {
+        console.log(resp);
+        console.log('Success SignUp');
+      })
+      .catch(error => {
+        console.log('Error HAI', error);
+      });
+  };
+  return (
+    <View>
+      <Text>Signup</Text>
+      <TextInput
+        placeholder="Name"
+        value={fullName}
+        onChangeText={value => setFullName(value)}
+      />
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={value => setEmail(value)}
+      />
+      <TextInput
+        placeholder="password"
+        value={password}
+        onChangeText={value => setPassword(value)}
+      />
+      <TextInput
+        placeholder="phone"
+        value={phone}
+        onChangeText={value => setPhone(value)}
+      />
+      <TextInput
+        placeholder=" repet password"
+        value={repeatPassword}
+        onChangeText={value => setRepeatPassword(value)}
+      />
+      <TextInput
+        placeholder="shop Address"
+        value={shopAddress}
+        onChangeText={value => setShopAddress(value)}
+      />
+      <TextInput
+        placeholder="Shop Name"
+        value={shopName}
+        onChangeText={value => setShopName(value)}
+      />
+      <Button title="SignUp" onPress={() => submitForm()} />
+    </View>
+  );
+};
+
+export default Signup;
