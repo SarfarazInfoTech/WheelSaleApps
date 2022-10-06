@@ -8,9 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {
-  ShownMyVehical,
-} from '../services/UrlApi.js';
+import {ShownMyVehical} from '../services/UrlApi.js';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {DefImg} from '../data/data.json';
 
@@ -83,7 +81,25 @@ const ShowVehicles = ({navigation}) => {
           <View style={styles.container}>
             {Object.keys(Data).map(keys => {
               return (
-                <TouchableOpacity key={Data[keys].subCategoryId}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('Vehicles Details', {
+                      subCategoryId: Data[keys].subCategoryId,
+                      categoryName: Data[keys].categoryName,
+                      subCategoryName: Data[keys].subCategoryName,
+                      company: Data[keys].company,
+                      modelYear: Data[keys].modelYear,
+                      color: Data[keys].color,
+                      vehicleCondition: Data[keys].vehicleCondition,
+                      vehicleNumber: Data[keys].vehicleNumber,
+                      sellingPrice: Data[keys].sellingPrice,
+                      images:
+                        Data[keys].images[0].image === null
+                          ? DefImg
+                          : Data[keys].images[0].image,
+                    });
+                  }}
+                  key={Data[keys].subCategoryId}>
                   <View style={styles.cardItem}>
                     <View style={styles.card}>
                       <Image
