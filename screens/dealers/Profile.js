@@ -6,6 +6,7 @@ import {
   ScrollView,
   ActivityIndicator,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {Avatar} from 'react-native-paper';
 import {profilePic} from '../data/data.json';
@@ -85,9 +86,20 @@ const Profile = ({navigation}) => {
 
   const removeData = async () => {
     try {
-      await AsyncStorage.clear();
-      navigation.navigate('Login');
-      console.log("Logout")
+      await Alert.alert('Logout?', 'Are you sure you want to Logout?', [
+        {
+          text: 'NO',
+          onPress: () => console.log('No'),
+          style: 'NO',
+        },
+        {
+          text: 'YES',
+          onPress: () => {
+            AsyncStorage.clear(), navigation.navigate('Login');
+          },
+        },
+      ]);
+      console.log('Logout');
     } catch (error) {
       console.log(error);
     }

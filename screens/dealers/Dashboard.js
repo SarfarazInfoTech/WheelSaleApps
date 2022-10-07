@@ -44,10 +44,11 @@ const Dashboard = ({navigation, route}) => {
         if (value != null) {
           let user = JSON.parse(value);
           setShopName(user[0].shopName);
-          console.log(user[0].dealerId);
-          console.log(user[0].shopName);
-          console.log(user[0].fullName);
-          console.log(user[0].phone);
+          console.log(user)
+          // console.log(user[0].dealerId);
+          // console.log(user[0].shopName);
+          // console.log(user[0].fullName);
+          // console.log(user[0].phone);
         }
       });
     } catch (error) {

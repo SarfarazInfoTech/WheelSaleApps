@@ -15,7 +15,7 @@ const Connection = () => {
       } else if (netInfo.isConnected === true) {
         setShowBar(false);
       }
-    }, 5000);
+    }, 4000);
     return () => {
       // setShowBar(true);
       if (netInfo.isConnected === false) {

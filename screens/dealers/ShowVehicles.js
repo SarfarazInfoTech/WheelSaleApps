@@ -20,23 +20,9 @@ const ShowVehicles = ({navigation}) => {
   const [Error, setError] = useState('');
   const [dealerId, setDealerId] = useState('');
 
-  useEffect(() => {
-    myVehical();
-  }, []);
-
   const myVehical = async () => {
-    // console.log(ShownMyVehical + dealerId)
     try {
-      try {
-        AsyncStorage.getItem('UserData').then(value => {
-          if (value != null) {
-            let user = JSON.parse(value);
-            setDealerId(user[0].dealerId);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      // console.log(ShownMyVehical + dealerId);
       await fetch(ShownMyVehical + dealerId, {
         method: 'GET',
         headers: {
@@ -68,6 +54,24 @@ const ShowVehicles = ({navigation}) => {
       setLoading(false);
     }
   };
+
+  const getData = async () => {
+    try {
+      await AsyncStorage.getItem('UserData').then(value => {
+        if (value != null) {
+          let user = JSON.parse(value);
+          setDealerId(user[0].dealerId);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+    myVehical();
+  });
 
   return (
     <>
