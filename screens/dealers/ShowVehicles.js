@@ -11,16 +11,33 @@ import React, {useEffect, useState} from 'react';
 import {ShownMyVehical} from '../services/UrlApi.js';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {DefImg} from '../data/data.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ShowVehicles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [Data, setData] = useState([]);
   const [message, setMessage] = useState('');
   const [Error, setError] = useState('');
+  const [dealerId, setDealerId] = useState('');
+
+  useEffect(() => {
+    myVehical();
+  }, []);
 
   const myVehical = async () => {
+    // console.log(ShownMyVehical + dealerId)
     try {
-      await fetch(`${ShownMyVehical}`, {
+      try {
+        AsyncStorage.getItem('UserData').then(value => {
+          if (value != null) {
+            let user = JSON.parse(value);
+            setDealerId(user[0].dealerId);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      await fetch(ShownMyVehical + dealerId, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -51,10 +68,6 @@ const ShowVehicles = ({navigation}) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    myVehical();
-  }, []);
 
   return (
     <>

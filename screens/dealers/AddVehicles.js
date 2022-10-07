@@ -14,6 +14,7 @@ import SelectList from 'react-native-dropdown-select-list';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import {RadioButton} from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddVehicles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,7 @@ const AddVehicles = ({navigation}) => {
   const [checked, setChecked] = useState();
   const [selected, setSelected] = useState('');
   const [Data, setData] = useState([]);
+  const [dealerId, setDealerId] = useState();
   const [VehiInfo, setVehiInfo] = useState([]);
   const Years = [
     {value: '2022'},
@@ -66,9 +68,22 @@ const AddVehicles = ({navigation}) => {
     //     [];
     // };
     // getDatabase();
+    getData();
     Vehicles();
   }, []);
 
+  const getData = () => {
+    try {
+      AsyncStorage.getItem('UserData').then(value => {
+        if (value != null) {
+          let user = JSON.parse(value);
+          setDealerId(user[0].dealerId);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const AddVehicle = async () => {
     // console.log(AddMyVehical);
     if (
@@ -83,7 +98,7 @@ const AddVehicles = ({navigation}) => {
     ) {
       alert('All value must be required !');
     } else {
-      await fetch(AddMyVehical, {
+      await fetch(AddMyVehical + dealerId, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
