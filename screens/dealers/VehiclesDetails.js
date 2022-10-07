@@ -2,6 +2,7 @@ import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import React, {useState} from 'react';
+import {Button, FAB} from 'react-native-paper';
 
 const VehiclesDetails = ({navigation, route}) => {
   const {
@@ -25,7 +26,7 @@ const VehiclesDetails = ({navigation, route}) => {
             source={{
               uri: images,
             }}
-            style={{width: '100%', height: 260, backgroundColor: 'black'}}
+            style={styles.image}
           />
         </View>
       </View>
@@ -34,7 +35,7 @@ const VehiclesDetails = ({navigation, route}) => {
           {company} {categoryName} {subCategoryName} ({modelYear})
         </Text>
         <Text style={{fontSize: 14, textTransform: 'capitalize'}}>
-          {color} Color & {vehicleCondition} Condation
+          {color} Color & {vehicleCondition} Condition
         </Text>
 
         <View style={styles.flex}>
@@ -64,6 +65,12 @@ const VehiclesDetails = ({navigation, route}) => {
           </Text>
         </View>
       </View>
+      <Button
+        style={styles.fab}
+        onPress={() => navigation.navigate('Edit Vehicle')}>
+        <FontAwesome name="edit" size={18} color="#3d3d72" />
+        <Text style={{color: '#3d3d72'}}> Edit</Text>
+      </Button>
     </View>
   );
 };
@@ -72,7 +79,12 @@ const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: 'white'},
   flex: {flexDirection: 'row', justifyContent: 'space-between'},
   box: {},
-  image: {},
+  image: {
+    width: '100%',
+    height: 260,
+    backgroundColor: 'black',
+    resizeMode: 'contain',
+  },
   imageBox: {},
   card: {},
   hedBox: {
@@ -101,6 +113,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingVertical: 10,
     fontWeight: '500',
+  },
+  fab: {
+    position: 'absolute',
+    right: 10,
+    bottom: 20,
+    zIndex: 5,
+    borderColor: '#3d3d72',
+    borderWidth: 1,
+    borderRadius: 5,
   },
 });
 export default VehiclesDetails;

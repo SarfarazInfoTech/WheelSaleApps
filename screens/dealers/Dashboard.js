@@ -16,10 +16,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Dashboard = ({navigation, route}) => {
-  // const dealers = route.params.dealers;
-
+  const [shopName, setShopName] = useState('');
   const [Data, setData] = useState('');
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -33,6 +33,27 @@ const Dashboard = ({navigation, route}) => {
     wait(2000).then(() => setLoading(false));
     // await navigation.navigate('Home');
   }, []);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    try {
+      AsyncStorage.getItem('UserData').then(value => {
+        if (value != null) {
+          let user = JSON.parse(value);
+          setShopName(user[0].shopName);
+          console.log(user[0].dealerId);
+          console.log(user[0].shopName);
+          console.log(user[0].fullName);
+          console.log(user[0].phone);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -119,7 +140,7 @@ const Dashboard = ({navigation, route}) => {
                     fontWeight: '500',
                     paddingVertical: 5,
                   }}>
-                  Welcome Sarfaraz
+                  {shopName}
                   {/* {Object.keys(dealers).map(keys => {
                     return <Text>{dealers[keys].shopName}</Text>;
                   })} */}

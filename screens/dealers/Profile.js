@@ -8,19 +8,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Avatar} from 'react-native-paper';
-import {
-  documentIcon,
-  uploadIcon,
-  academicIcon,
-  careerIcon,
-  logOutIcon,
-  profileIcon,
-  profilePic,
-  logout,
-} from '../data/data.json';
-// import firestore from '@react-native-firebase/firestore';
-// import Auth from '@react-native-firebase/auth';
+import {profilePic} from '../data/data.json';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = ({navigation}) => {
   const accountdetails = [
@@ -59,32 +49,49 @@ const Profile = ({navigation}) => {
       routes: 'About us',
       size: 35,
     },
-    {
-      id: '6',
-      icon: 'power-outline',
-      name: 'Logout',
-      routes: 'Logout',
-      size: 35,
-    },
+    // {
+    //   id: '6',
+    //   icon: 'power-outline',
+    //   name: 'Logout',
+    //   routes: 'Logout',
+    //   size: 35,
+    // },
   ];
 
   const [loading, setLoading] = useState(false);
-  // const [Data, setData] = useState('');
-  // useEffect(() => {
-  //   const getDatabase = async () => {
-  //     try {
-  //       const user = await Auth().currentUser.email;
-  //       const data = await firestore().collection('users').doc(`${user}`).get();
-  //       setData(data._data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  const [fullName, setFullName] = useState('');
+  const [shopName, setShopName] = useState('');
+  const [phone, setPhone] = useState('');
 
-  //   getDatabase();
-  // }, []);
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    try {
+      AsyncStorage.getItem('UserData').then(value => {
+        if (value != null) {
+          let user = JSON.parse(value);
+          // console.log(user[0].dealerId);
+          setShopName(user[0].shopName);
+          setFullName(user[0].fullName);
+          setPhone(user[0].phone);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeData = async () => {
+    try {
+      await AsyncStorage.clear();
+      navigation.navigate('Login');
+      console.log("Logout")
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -134,8 +141,7 @@ const Profile = ({navigation}) => {
                   fontSize: 18,
                   color: '#3d3d72',
                 }}>
-                {/* {Data.name} */}
-                Sarfaraz Khan
+                {fullName}
               </Text>
 
               <Text
@@ -144,7 +150,7 @@ const Profile = ({navigation}) => {
                   fontSize: 20,
                   color: 'black',
                 }}>
-                Auto Deal wala
+                {shopName}
               </Text>
 
               <Text
@@ -154,7 +160,7 @@ const Profile = ({navigation}) => {
                   color: 'gray',
                   paddingVertical: 5,
                 }}>
-                8554843519
+                {phone}
               </Text>
             </View>
             <View
@@ -207,6 +213,35 @@ const Profile = ({navigation}) => {
                 </View>
               </TouchableOpacity>
             ))}
+            <TouchableOpacity
+              onPress={() => removeData()}
+              style={{borderBottomColor: 'white', borderBottomWidth: 2}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  display: 'flex',
+                  marginBottom: 2,
+                  paddingHorizontal: 15,
+                  paddingVertical: 10,
+                  backgroundColor: 'white',
+                }}>
+                <Ionicons
+                  name="power-outline"
+                  size={30}
+                  color="#3d3d72"
+                  style={{alignSelf: 'center'}}
+                />
+                <Text
+                  style={{
+                    fontSize: 17,
+                    marginHorizontal: 15,
+                    alignSelf: 'center',
+                    color: '#3d3d72',
+                  }}>
+                  Logout
+                </Text>
+              </View>
+            </TouchableOpacity>
           </ScrollView>
         </View>
       )}

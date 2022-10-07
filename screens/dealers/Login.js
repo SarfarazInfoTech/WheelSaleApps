@@ -8,9 +8,10 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Api from '../Api/Api';
-import { showError, showSuccess } from '../components/FlashMessage';
+import {showError, showSuccess} from '../components/FlashMessage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
   const [phone, setPhone] = useState('');
@@ -21,7 +22,7 @@ const Login = ({navigation}) => {
   const handleLogin = async () => {
     if (!phone && !password) {
       // console.log(`${Api.api}login`);
-      showError('Username & Password are requred!')
+      showError('Username & Password are requred!');
     } else {
       await fetch(`${Api.api}login`, {
         method: 'POST',
@@ -37,12 +38,14 @@ const Login = ({navigation}) => {
         .then(res => res.json())
         .then(resData => {
           if (resData.status === 'S') {
-            showSuccess(resData.message)
-            navigation.navigate(
-              'Drawers',
-              // {dealers: resData.dealers},
-            );
+            showSuccess(resData.message);
             console.log(resData.dealers);
+            try {
+              AsyncStorage.setItem('UserData', JSON.stringify(resData.dealers));
+              navigation.navigate('Drawers');
+            } catch (error) {
+              console.log(error);
+            }
             // alert(resData.dealers);
             // setMessage(resData.dealers)
           } else {
@@ -55,6 +58,23 @@ const Login = ({navigation}) => {
         });
     }
   };
+
+  const getData = () => {
+    try {
+      AsyncStorage.getItem('UserData').then(value => {
+        if (value != null) {
+          navigation.navigate('Drawers');
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>

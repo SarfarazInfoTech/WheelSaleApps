@@ -6,8 +6,6 @@ const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-      
-
     <Image source={{uri:"https://lh4.googleusercontent.com/-PIjFRdZgz6A/AAAAAAAAAAI/AAAAAAAAAAA/ZvfRO5L6-cQ/s55-p-k-no-ns-nd/photo.jpg"}} contextC style={{height: 100, width: 100, borderRadius: 100, bottom : 40, backgroundColor: 'white', alignSelf : 'center', borderWidth:5, borderColor:"white"}} />
     <Text  style={{paddingBottom: 20, color: "#3d3d72", fontSize: 30, alignSelf:"center", fontWeight:"800"}}>
       WHEELSALE
@@ -34,9 +32,7 @@ const MainScreen = ({ navigation }) => {
               Login
             </Text>
           </View>
-
         </TouchableOpacity>
-
         <Text  style={{paddingBottom: 5, color: "#3d3d72", fontSize: 16, marginTop:20,  marginLeft:20}}>
         New User Create Accout
         </Text>
@@ -59,14 +55,9 @@ const MainScreen = ({ navigation }) => {
               Create  Account
             </Text>
           </View>
-
         </TouchableOpacity>
-
-
       </View>
     </View>
-
-
   )
 }
 
