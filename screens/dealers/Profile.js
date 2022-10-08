@@ -89,17 +89,16 @@ const Profile = ({navigation}) => {
       await Alert.alert('Logout?', 'Are you sure you want to Logout?', [
         {
           text: 'NO',
-          onPress: () => console.log('No'),
+          onPress: () => console.log('Logout No'),
           style: 'NO',
         },
         {
           text: 'YES',
           onPress: () => {
-            AsyncStorage.clear(), navigation.navigate('Login');
+            AsyncStorage.clear(), navigation.navigate('Login'), console.log('Logout')
           },
         },
       ]);
-      console.log('Logout');
     } catch (error) {
       console.log(error);
     }
