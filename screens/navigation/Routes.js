@@ -15,6 +15,8 @@ import Terms from '../dealers/webpages/Terms';
 import Privacy from '../dealers/webpages/Privacy';
 import SubscriptionPlan from '../dealers/webpages/SubscriptionPlan';
 import Dashboard from '../dealers/Dashboard';
+import ImageUpload from '../dealers/ImageUploadFirebase';
+import ImageUp from '../dealers/Image';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -23,8 +25,14 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-      initialRouteName="Login"
+      initialRouteName="ImageUpload"
       >
+        <Stack.Screen
+          name="ImageUpload"
+          component={ImageUp}
+          options={{headerShown: false}}
+        />
+
         <Stack.Screen
           name="Drawers"
           component={Drawers}

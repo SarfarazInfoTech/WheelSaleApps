@@ -7,6 +7,8 @@ import {
   ScrollView,
   TextInput,
   ActivityIndicator,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {AddMyVehical, VehiclesList} from '../services/UrlApi.js';
@@ -15,6 +17,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import {RadioButton} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DocumentPicker from 'react-native-document-picker';
+import storage from '@react-native-firebase/storage';
+import database from '@react-native-firebase/database';
 
 const AddVehicles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -29,6 +34,10 @@ const AddVehicles = ({navigation}) => {
   const [Data, setData] = useState([]);
   const [dealerId, setDealerId] = useState();
   const [VehiInfo, setVehiInfo] = useState([]);
+  const [ImageData, setImageData] = useState(null);
+  const [fullImagePath, setfullImagePath] = useState('');
+  const [imgDownloadUrl, setimgDownloadUrl] = useState('');
+  // const [loading, setLoading] = useState(false);
   const Years = [
     {value: '2022'},
     {value: '2021'},
@@ -94,7 +103,8 @@ const AddVehicles = ({navigation}) => {
       !Price ||
       !checked ||
       !selected ||
-      !VehiInfo
+      !VehiInfo ||
+      !imgDownloadUrl
     ) {
       alert('All value must be required !');
     } else {
@@ -109,7 +119,7 @@ const AddVehicles = ({navigation}) => {
           color: Color,
           images: [
             {
-              image: null,
+              image:  imgDownloadUrl,
             },
           ],
           modelYear: modelYear,
@@ -179,6 +189,36 @@ const AddVehicles = ({navigation}) => {
       navigation.navigate('Dashboard ');
     }
   };
+
+  const picImage = async () => {
+    try {
+      const responce = await DocumentPicker.pickSingle({
+        type: [DocumentPicker.types.images],
+        copyTo: 'cachesDirectory',
+      });
+      console.log('PicImage', responce);
+      setImageData(responce);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const uploadImage = async () => {
+    setLoading(true);
+    try {
+      const responce = storage().ref(`/Wheelsale/Images/${ImageData.name}`);
+      const put = await responce.putFile(ImageData.fileCopyUri);
+      setfullImagePath(put.metadata.fullPath);
+      const url = await responce.getDownloadURL();
+      setimgDownloadUrl(url);
+      console.log("Image Uploded : url - ", url )
+    } catch (err) {
+      console.log('upload', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -365,9 +405,21 @@ const AddVehicles = ({navigation}) => {
                 </View>
               </View>
               <Text style={styles.lable}> Image</Text>
+              <View style={{marginHorizontal: 20}}>
+                <Button title="Add Photo" onPress={() => picImage()} />
+              </View>
               <View
                 style={{justifyContent: 'space-around', flexDirection: 'row'}}>
-                <View style={styles.imageBox}></View>
+                <View style={styles.imageBox}>
+                  <TouchableOpacity onPress={() => picImage()}>
+                    {ImageData ? (
+                      <Image
+                        source={{uri: ImageData.uri}}
+                        style={{width: '100%', height: '100%'}}
+                      />
+                    ) : null}
+                  </TouchableOpacity>
+                </View>
                 <View style={styles.imageBox}></View>
               </View>
               <View style={{margin: 15}}>
@@ -375,7 +427,8 @@ const AddVehicles = ({navigation}) => {
                   title="Add Vehicle"
                   color={'#3d3d72'}
                   onPress={() => {
-                    AddVehicle();
+                    uploadImage(),
+                    AddVehicle()
                   }}
                   // onPress={
                   // () => Vehicles()
