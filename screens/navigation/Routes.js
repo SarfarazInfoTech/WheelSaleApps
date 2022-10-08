@@ -25,14 +25,8 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-      initialRouteName="ImageUpload"
+      initialRouteName="Login"
       >
-        <Stack.Screen
-          name="ImageUpload"
-          component={ImageUp}
-          options={{headerShown: false}}
-        />
-
         <Stack.Screen
           name="Drawers"
           component={Drawers}

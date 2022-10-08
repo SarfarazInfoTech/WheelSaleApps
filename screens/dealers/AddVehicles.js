@@ -406,7 +406,10 @@ const AddVehicles = ({navigation}) => {
               </View>
               <Text style={styles.lable}> Image</Text>
               <View style={{marginHorizontal: 20}}>
-                <Button title="Add Photo" onPress={() => picImage()} />
+                {!ImageData ? 
+                <Button title="Add Photo" onPress={() => picImage()} /> : 
+                <Button title="Upload Photo" color={'green'} onPress={() => uploadImage()} />
+                }
               </View>
               <View
                 style={{justifyContent: 'space-around', flexDirection: 'row'}}>
@@ -427,7 +430,7 @@ const AddVehicles = ({navigation}) => {
                   title="Add Vehicle"
                   color={'#3d3d72'}
                   onPress={() => {
-                    uploadImage(),
+                    
                     AddVehicle()
                   }}
                   // onPress={
