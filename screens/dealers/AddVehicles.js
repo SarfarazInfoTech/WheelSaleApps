@@ -14,6 +14,7 @@ import React, {useState, useEffect} from 'react';
 import {AddMyVehical, VehiclesList} from '../services/UrlApi.js';
 import SelectList from 'react-native-dropdown-select-list';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RadioButton} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -128,6 +129,7 @@ const AddVehicles = ({navigation}) => {
             setColor('');
             setPrice('');
             setChecked('');
+            setImageData('');
           } else if (resData.status === 'F') {
             alert(resData.message);
             // setMessage(resData.message);
@@ -182,6 +184,7 @@ const AddVehicles = ({navigation}) => {
   };
 
   const choosePic = async () => {
+    
     launchImageLibrary(options, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -195,9 +198,15 @@ const AddVehicles = ({navigation}) => {
         console.log('Response = ', response.assets[0].uri);
       }
     });
+    if (Data === Data) {
+      Base64()
+      
+    } else {
+      console.log("wait")
+    }
   };
 
-  const Base64 = async() => {
+  const Base64 = async () => {
     setLoading(true);
     try {
       const requestOptions = {
@@ -220,7 +229,6 @@ const AddVehicles = ({navigation}) => {
           setimgDownloadUrl(json);
           console.log(json);
           alert('Image Upload');
-          setImageData('');
         })
         .catch(err => {
           console.log(err);
@@ -419,7 +427,7 @@ const AddVehicles = ({navigation}) => {
               </View>
               <Text style={styles.lable}> Image</Text>
               <View style={{marginHorizontal: 20}}>
-                {!ImageData ? (
+                {/* {!ImageData ? (
                   <Button title="Add Photo" onPress={() => choosePic()} />
                 ) : (
                   <Button
@@ -427,20 +435,35 @@ const AddVehicles = ({navigation}) => {
                     color={'green'}
                     onPress={() => Base64()}
                   />
-                )}
+                )} */}
               </View>
               <View
                 style={{justifyContent: 'space-around', flexDirection: 'row'}}>
-                <View style={styles.imageBox}>
-                  <TouchableOpacity onPress={() => choosePic()}>
-                    {ImageData ? (
-                      <Image
-                        source={{uri: ImageData}}
-                        style={{width: '100%', height: '100%'}}
+                <TouchableOpacity
+                  style={styles.imageBox}
+                  onPress={() => choosePic()}>
+                  {ImageData ? (
+                    <Image
+                      source={{uri: ImageData}}
+                      style={{width: '100%', height: '100%'}}
+                    />
+                  ) : (
+                    <View
+                      style={{
+                        alignSelf: 'center',
+                        top: 30,
+                        position: 'absolute',
+                      }}>
+                      <Ionicons
+                        name="ios-add-outline"
+                        size={38}
+                        color={'gray'}
+                        style={{alignSelf: 'center'}}
                       />
-                    ) : null}
-                  </TouchableOpacity>
-                </View>
+                      <Text style={{alignSelf: 'center'}}>Add Image 1</Text>
+                    </View>
+                  )}
+                </TouchableOpacity>
                 <View style={styles.imageBox}></View>
               </View>
               <View style={{margin: 15}}>
