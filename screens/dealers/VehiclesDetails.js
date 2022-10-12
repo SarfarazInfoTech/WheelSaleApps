@@ -1,10 +1,15 @@
 import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, FAB} from 'react-native-paper';
+import {ShownMyVehical} from '../services/UrlApi.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VehiclesDetails = ({navigation, route}) => {
+  const [dealerId, setDealerId] = useState('');
+  const [Price, setPrice] = useState('');
+  const [Condition, setCondition] = useState('');
   const {
     subCategoryId,
     categoryName,
@@ -17,6 +22,51 @@ const VehiclesDetails = ({navigation, route}) => {
     sellingPrice,
     images,
   } = route.params;
+
+  const getData = async () => {
+    try {
+      await AsyncStorage.getItem('UserData').then(value => {
+        if (value != null) {
+          let user = JSON.parse(value);
+          setDealerId(user[0].dealerId);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const UpdateVehical = () => {
+    const requestOptions = {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+      },
+      body: JSON.stringify({
+        sellingPrice: Price,
+        vehicleCondition: Condition,
+      }),
+    };
+
+    fetch(
+      `http://wheelsale.in:80/wheelsale-app-ws/sub-categories/${subCategoryId}/update`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(json => {
+        alert(json.message);
+        console.log(json);
+        setPrice('');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  });
 
   return (
     <View style={styles.container}>
@@ -65,9 +115,66 @@ const VehiclesDetails = ({navigation, route}) => {
           </Text>
         </View>
       </View>
-      <Button
-        style={styles.fab}
-        onPress={() => navigation.navigate('Edit Vehicle')}>
+
+      <View style={{}}>
+        {sellingPrice === sellingPrice ? (
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text
+              style={{
+                fontSize: 18,
+              }}>
+              Selling Price :
+            </Text>
+            {Price.length != 0 ? (
+              <TextInput
+                value={sellingPrice}
+                placeholder="Selling Price"
+                onChangeText={Price => setPrice(Price)}
+                style={{
+                  fontSize: 18,
+                  borderBottomColor: 'gray',
+                  borderBottomWidth: 1,
+                  marginBottom: 0,
+                  paddingBottom: 0,
+                  alignSelf: 'center',
+                  alignItems: 'center',
+                }}
+                placeholderTextColor="gray"
+              />
+            ) : (
+              <Text
+                style={{
+                  fontWeight: '500',
+                  fontSize: 18,
+                  borderBottomColor: 'gray',
+                  borderBottomWidth: 1,
+                }}>
+                {sellingPrice}
+              </Text>
+            )}
+
+            {Price <= 0 ? (
+              <Button onPress={() => setPrice('Update')}>
+                <FontAwesome name="pencil" size={18} color="#3d3d72" />
+              </Button>
+            ) : null}
+            {Price.length >= 1 ? (
+              <Button onPress={() => UpdateVehical()}>SAVE</Button>
+            ) : null}
+          </View>
+        ) : Price === 'Update' ? (
+          <TextInput
+            value={sellingPrice}
+            placeholder="Selling Price"
+            onChangeText={Price => setPrice(Price)}
+            style={styles.textInput}
+            placeholderTextColor="gray"
+          />
+        ) : null}
+      </View>
+      <Text>Vehicle Condition</Text>
+
+      <Button style={styles.fab} onPress={() => UpdateVehical()}>
         <FontAwesome name="edit" size={18} color="#3d3d72" />
         <Text style={{color: '#3d3d72'}}> Edit</Text>
       </Button>

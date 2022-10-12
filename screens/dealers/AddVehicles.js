@@ -14,12 +14,9 @@ import React, {useState, useEffect} from 'react';
 import {AddMyVehical, VehiclesList} from '../services/UrlApi.js';
 import SelectList from 'react-native-dropdown-select-list';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import axios from 'axios';
 import {RadioButton} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DocumentPicker from 'react-native-document-picker';
-import storage from '@react-native-firebase/storage';
-import database from '@react-native-firebase/database';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const AddVehicles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -37,7 +34,7 @@ const AddVehicles = ({navigation}) => {
   const [ImageData, setImageData] = useState(null);
   const [fullImagePath, setfullImagePath] = useState('');
   const [imgDownloadUrl, setimgDownloadUrl] = useState('');
-  // const [loading, setLoading] = useState(false);
+
   const Years = [
     {value: '2022'},
     {value: '2021'},
@@ -62,21 +59,6 @@ const AddVehicles = ({navigation}) => {
   ];
 
   useEffect(() => {
-    // const getDatabase = async () => {
-    //   await axios
-    //   .get('https://jsonplaceholder.typicode.com/users')
-    //     .then(response => {
-    //       let newArray = response.data.map(item => {
-    //         return {key: item.id, value: item.name};
-    //       });
-    //       setData(newArray);
-    //     })
-    //     .catch(e => {
-    //       console.log("Error hai", e);
-    //     }),
-    //     [];
-    // };
-    // getDatabase();
     getData();
     Vehicles();
   }, []);
@@ -94,7 +76,6 @@ const AddVehicles = ({navigation}) => {
     }
   };
   const AddVehicle = async () => {
-    // console.log(AddMyVehical);
     if (
       !Specification ||
       !vehicleNumber ||
@@ -119,7 +100,7 @@ const AddVehicles = ({navigation}) => {
           color: Color,
           images: [
             {
-              image:  imgDownloadUrl,
+              image: imgDownloadUrl,
             },
           ],
           modelYear: modelYear,
@@ -190,30 +171,62 @@ const AddVehicles = ({navigation}) => {
     }
   };
 
-  const picImage = async () => {
-    try {
-      const responce = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.images],
-        copyTo: 'cachesDirectory',
-      });
-      console.log('PicImage', responce);
-      setImageData(responce);
-    } catch (err) {
-      console.log(err);
-    }
+  const options = {
+    title: 'Image Picker',
+    includeBase64: true,
+    mediaType: 'image',
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
   };
 
-  const uploadImage = async () => {
+  const choosePic = async () => {
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        setData(response.assets[0].base64);
+        setImageData(response.assets[0].uri);
+        console.log('Response = ', response.assets[0].uri);
+      }
+    });
+  };
+
+  const Base64 = async() => {
     setLoading(true);
     try {
-      const responce = storage().ref(`/Wheelsale/Images/${ImageData.name}`);
-      const put = await responce.putFile(ImageData.fileCopyUri);
-      setfullImagePath(put.metadata.fullPath);
-      const url = await responce.getDownloadURL();
-      setimgDownloadUrl(url);
-      console.log("Image Uploded : url - ", url )
-    } catch (err) {
-      console.log('upload', err);
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          accept: '*/*',
+        },
+        body: JSON.stringify({
+          image: Data,
+        }),
+      };
+
+      await fetch(
+        `http://wheelsale.in:80/wheelsale-app-ws/images/upload`,
+        requestOptions,
+      )
+        .then(response => response.text())
+        .then(json => {
+          setimgDownloadUrl(json);
+          console.log(json);
+          alert('Image Upload');
+          setImageData('');
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -406,18 +419,23 @@ const AddVehicles = ({navigation}) => {
               </View>
               <Text style={styles.lable}> Image</Text>
               <View style={{marginHorizontal: 20}}>
-                {!ImageData ? 
-                <Button title="Add Photo" onPress={() => picImage()} /> : 
-                <Button title="Upload Photo" color={'green'} onPress={() => uploadImage()} />
-                }
+                {!ImageData ? (
+                  <Button title="Add Photo" onPress={() => choosePic()} />
+                ) : (
+                  <Button
+                    title="Upload Photo"
+                    color={'green'}
+                    onPress={() => Base64()}
+                  />
+                )}
               </View>
               <View
                 style={{justifyContent: 'space-around', flexDirection: 'row'}}>
                 <View style={styles.imageBox}>
-                  <TouchableOpacity onPress={() => picImage()}>
+                  <TouchableOpacity onPress={() => choosePic()}>
                     {ImageData ? (
                       <Image
-                        source={{uri: ImageData.uri}}
+                        source={{uri: ImageData}}
                         style={{width: '100%', height: '100%'}}
                       />
                     ) : null}
@@ -430,8 +448,7 @@ const AddVehicles = ({navigation}) => {
                   title="Add Vehicle"
                   color={'#3d3d72'}
                   onPress={() => {
-                    
-                    AddVehicle()
+                    AddVehicle();
                   }}
                   // onPress={
                   // () => Vehicles()

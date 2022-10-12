@@ -36,7 +36,7 @@ const ImageUp = () => {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         // console.log('YE VALUE KI IMAGE BHEJO =' + response.assets[0].uri);
-        setData(response.assets[0].uri);
+        setData(response.assets[0].base64);
         console.log('Response = ', response.assets[0].base64);
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
@@ -56,16 +56,14 @@ const ImageUp = () => {
     try {
       console.log('Data', newImageUri);
       const response = await fetch(
-        'http://wheelsale.in/wheelsale-app-ws/images/',
+        'http://wheelsale.in:80/wheelsale-app-ws/images',
         {
           method: 'POST',
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'multipart/form-data',
          },
-          
           body: formData,
-
         },
       )
         // .then(response => response.text())
@@ -81,6 +79,33 @@ const ImageUp = () => {
       console.error(error, 'erorr');
     }
   };
+
+  const Base64 = () => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        accept: '*/*',
+      },
+      body: JSON.stringify({
+        image: Data
+      }),
+    };
+
+    fetch(
+      `http://wheelsale.in:80/wheelsale-app-ws/images/upload`,
+      requestOptions,
+    )
+      .then(response => response.text())
+      .then(json => {
+        console.log(json);
+        alert("Image Upload")
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
 
   return (
     <View style={styles.container}>
@@ -98,7 +123,7 @@ const ImageUp = () => {
         <Text style={{color: '#fff'}}>Select Image</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => uploadPic()}>
+      <TouchableOpacity onPress={() => Base64()}>
         <Text>Upload</Text>
       </TouchableOpacity>
     </View>

@@ -1,38 +1,33 @@
-import React, {useState, useRoute} from 'react';
 import {
   View,
   Text,
   Button,
-  Image,
-  ActivityIndicator,
-  StyleSheet,
   Alert,
+  StyleSheet,
+  ScrollView,
   TextInput,
+  ActivityIndicator,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
+import React, {useState, useEffect} from 'react';
 import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage';
-// import Auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
 
-const ImageUpload = ({navigation}) => {
+const ImageUploadFirebase = ({navigation}) => {
+  const [loading, setLoading] = useState(true);
   const [ImageData, setImageData] = useState(null);
   const [fullImagePath, setfullImagePath] = useState('');
   const [imgDownloadUrl, setimgDownloadUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [docuName, setdocuName] = useState('');
 
   const picImage = async () => {
     try {
-      if (!docuName) {
-        alert('Please write document name then select document');
-      } else {
-        const responce = await DocumentPicker.pickSingle({
-          type: [DocumentPicker.types.images],
-          copyTo: 'cachesDirectory',
-        });
-          console.log('PicImage', responce);
-        setImageData(responce);
-      }
+      const responce = await DocumentPicker.pickSingle({
+        type: [DocumentPicker.types.images],
+        copyTo: 'cachesDirectory',
+      });
+      console.log('PicImage', responce);
+      setImageData(responce);
     } catch (err) {
       console.log(err);
     }
@@ -41,37 +36,12 @@ const ImageUpload = ({navigation}) => {
   const uploadImage = async () => {
     setLoading(true);
     try {
-      const UID = await "8ZIh013wOCSUiL0tKZqu4TadIug2";
-    //   const UID = await Auth().currentUser.uid;
-      const document = await "admin@gmail.com";
-    //   const document = await Auth().currentUser.email;
-      const responce = storage().ref(`/Documents/${document}/${docuName}`);
+      const responce = storage().ref(`/Wheelsale/Images/${ImageData.name}`);
       const put = await responce.putFile(ImageData.fileCopyUri);
       setfullImagePath(put.metadata.fullPath);
       const url = await responce.getDownloadURL();
       setimgDownloadUrl(url);
-
-      await database().ref(`Documents/${UID}`).push({
-        documentName: docuName,
-        documentURL: url,
-        status: 'pending',
-      })
-      
-      navigation.navigate('Home');
-      Alert.alert(
-        'Uploded Successfully',
-        `You can upload more documents click upload.`,
-        [
-          {
-            text: 'upload',
-            onPress: () => navigation.navigate('Documents Upload'),
-          },
-          {
-            text: 'close',
-            onPress: () => console.log('close'),
-          },
-        ],
-      );
+      console.log("Image Uploded : url - ", url )
     } catch (err) {
       console.log('upload', err);
     } finally {
@@ -80,84 +50,30 @@ const ImageUpload = ({navigation}) => {
   };
 
   return (
-    <>
-      {loading ? (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignSelf: 'center',
-            marginTop: 30,
-          }}>
-          <ActivityIndicator
-            size="large"
-            color="#01b7a9"
-            visible={loading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerTextStyle}
-          />
-        </View>
-      ) : (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          {ImageData ? (
-            <Image
-              source={{uri: ImageData.uri}}
-              style={{width: '95%', height: '80%', margin: 10}}
-            />
-          ) : null}
+    <View>
+      <Text style={styles.lable}> Image</Text>
+              <View style={{marginHorizontal: 20}}>
+                {!ImageData ? 
+                <Button title="Add Photo" onPress={() => picImage()} /> : 
+                <Button title="Upload Photo" color={'green'} onPress={() => uploadImage()} />
+                }
+              </View>
+              <View
+                style={{justifyContent: 'space-around', flexDirection: 'row'}}>
+                <View style={styles.imageBox}>
+                  <TouchableOpacity onPress={() => picImage()}>
+                    {ImageData ? (
+                      <Image
+                        source={{uri: ImageData.uri}}
+                        style={{width: '100%', height: '100%'}}
+                      />
+                    ) : null}
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.imageBox}></View>
+              </View>
+    </View>
+  )
+}
 
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-              alignContent: 'space-between',
-            }}>
-            {ImageData ? (
-              <Button
-                color="green"
-                title="Upload Document"
-                onPress={() => uploadImage()}
-              />
-            ) : (
-              <>
-                <TextInput
-                  style={{
-                    color: 'darkgreen',
-                    borderRadius: 5,
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                    padding: 3,
-                    paddingHorizontal: 15,
-                    margin: 5,
-                  }}
-                  placeholder="Document name"
-                  value={docuName}
-                  onChangeText={value => setdocuName(value)}
-                  maxLength={15}
-                />
-                <Button title="Select Document" onPress={() => picImage()} />
-              </>
-            )}
-          </View>
-
-          {/* <Text style={{margin: 10}}>{fullImagePath}</Text> */}
-          {/* <Image
-            source={{uri: imgDownloadUrl}}
-            style={{width: '95%', height: '40%', margin: 10}}
-          /> */}
-          {/* <Text style={{margin: 10}}>{imgDownloadUrl}</Text> */}
-        </View>
-      )}
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  spinnerTextStyle: {
-    color: '#FFF',
-    flex: 1,
-  },
-});
-export default ImageUpload;
+export default ImageUploadFirebase
