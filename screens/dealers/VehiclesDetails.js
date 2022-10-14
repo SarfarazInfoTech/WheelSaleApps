@@ -64,6 +64,27 @@ const VehiclesDetails = ({navigation, route}) => {
       });
   };
 
+  const SoldVehical = () => {
+    fetch(`http://wheelsale.in:80/wheelsale-app-ws/sub-categories/${subCategoryId}/sold`, {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+      },
+      body: JSON.stringify({
+        sellingPrice: 9999,
+        // vehicleCondition: Condition,
+      }),
+    }).then(res => res.json()).then(json => {
+      console.log(json.message)
+      // alert("Your Vehical is Sold.")
+      alert(json.message)
+    }).catch( err => {
+      console.log(err)
+    }
+    )
+  }
+
   useEffect(() => {
     getData();
   });
@@ -174,9 +195,9 @@ const VehiclesDetails = ({navigation, route}) => {
       </View>
       <Text>Vehicle Condition</Text>
 
-      <Button style={styles.fab} onPress={() => UpdateVehical()}>
-        <FontAwesome name="edit" size={18} color="#3d3d72" />
-        <Text style={{color: '#3d3d72'}}> Edit</Text>
+      <Button style={styles.fab} onPress={() => SoldVehical()}>
+        {/* <FontAwesome name="edit" size={18} color="#3d3d72" /> */}
+        <Text style={{color: '#3d3d72'}}>Sold</Text>
       </Button>
     </View>
   );
@@ -224,7 +245,7 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     right: 10,
-    bottom: 20,
+    bottom: 80,
     zIndex: 5,
     borderColor: '#3d3d72',
     borderWidth: 1,

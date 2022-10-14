@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  Button,
   Alert,
   StyleSheet,
   ScrollView,
@@ -15,7 +14,7 @@ import {AddMyVehical, VehiclesList} from '../services/UrlApi.js';
 import SelectList from 'react-native-dropdown-select-list';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {RadioButton} from 'react-native-paper';
+import {RadioButton, Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
@@ -29,12 +28,8 @@ const AddVehicles = ({navigation}) => {
   const [Price, setPrice] = useState();
   const [checked, setChecked] = useState();
   const [selected, setSelected] = useState('');
-  const [Data, setData] = useState([]);
   const [dealerId, setDealerId] = useState();
   const [VehiInfo, setVehiInfo] = useState([]);
-  const [ImageData, setImageData] = useState(null);
-  const [fullImagePath, setfullImagePath] = useState('');
-  const [imgDownloadUrl, setimgDownloadUrl] = useState('');
 
   const Years = [
     {value: '2022'},
@@ -86,7 +81,8 @@ const AddVehicles = ({navigation}) => {
       !checked ||
       !selected ||
       !VehiInfo ||
-      !imgDownloadUrl
+      !imgDownloadUrl1 ||
+      !imgDownloadUrl2
     ) {
       alert('All value must be required !');
     } else {
@@ -101,7 +97,10 @@ const AddVehicles = ({navigation}) => {
           color: Color,
           images: [
             {
-              image: imgDownloadUrl,
+              image: imgDownloadUrl1,
+            },
+            {
+              image: imgDownloadUrl2,
             },
           ],
           modelYear: modelYear,
@@ -121,22 +120,31 @@ const AddVehicles = ({navigation}) => {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
-              {text: 'Show', onPress: () => navigation.navigate('My Vehicle')},
+              {
+                text: 'Show',
+                onPress: () => navigation.navigate('My Vehicle'),
+              },
             ]);
             console.log(resData);
+            // setSelected('');
             setVehicleNumber('');
+            // setCategoryId('');
             setSpecification('');
+            // setModelYear('');
             setColor('');
             setPrice('');
             setChecked('');
-            setImageData('');
+            setData1('');
+            setData2('');
+            setImageData1('');
+            setImageData2('');
+            setimgDownloadUrl1('');
+            setimgDownloadUrl2('');
           } else if (resData.status === 'F') {
             alert(resData.message);
-            // setMessage(resData.message);
-            // setError(resData.status);
+            console.log('Error', resData.message);
           } else {
-            // setMessage(resData.message);
-            // setError(resData.status);
+            console.log('Error');
           }
         });
     }
@@ -173,6 +181,15 @@ const AddVehicles = ({navigation}) => {
     }
   };
 
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
+  const [Data1, setData1] = useState([]);
+  const [Data2, setData2] = useState([]);
+  const [ImageData1, setImageData1] = useState(null);
+  const [ImageData2, setImageData2] = useState(null);
+  const [imgDownloadUrl1, setimgDownloadUrl1] = useState(null);
+  const [imgDownloadUrl2, setimgDownloadUrl2] = useState(null);
+
   const options = {
     title: 'Image Picker',
     includeBase64: true,
@@ -183,31 +200,48 @@ const AddVehicles = ({navigation}) => {
     },
   };
 
-  const choosePic = async () => {
-    
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        setData(response.assets[0].base64);
-        setImageData(response.assets[0].uri);
-        console.log('Response = ', response.assets[0].uri);
-      }
-    });
-    if (Data === Data) {
-      Base64()
-      
-    } else {
-      console.log("wait")
+  const choosePic1 = () => {
+    try {
+      launchImageLibrary(options, response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        } else {
+          setData1(response.assets[0].base64);
+          setImageData1(response.assets[0].uri);
+          // console.log('Response = ', response.assets[0].uri);
+        }
+      });
+    } catch (error) {
+      alert(error);
     }
   };
 
-  const Base64 = async () => {
-    setLoading(true);
+  const choosePic2 = () => {
+    try {
+      launchImageLibrary(options, response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        } else {
+          setData2(response.assets[0].base64);
+          setImageData2(response.assets[0].uri);
+          // console.log('Response = ', response.assets[0].uri);
+        }
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const Base641 = async () => {
+    setLoading1(true);
     try {
       const requestOptions = {
         method: 'POST',
@@ -216,7 +250,7 @@ const AddVehicles = ({navigation}) => {
           accept: '*/*',
         },
         body: JSON.stringify({
-          image: Data,
+          image: Data1,
         }),
       };
 
@@ -226,9 +260,9 @@ const AddVehicles = ({navigation}) => {
       )
         .then(response => response.text())
         .then(json => {
-          setimgDownloadUrl(json);
+          setimgDownloadUrl1(json);
           console.log(json);
-          alert('Image Upload');
+          alert('Image Upload 1');
         })
         .catch(err => {
           console.log(err);
@@ -236,7 +270,41 @@ const AddVehicles = ({navigation}) => {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      setLoading1(false);
+    }
+  };
+
+  const Base642 = async () => {
+    setLoading2(true);
+    try {
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          accept: '*/*',
+        },
+        body: JSON.stringify({
+          image: Data2,
+        }),
+      };
+
+      await fetch(
+        `http://wheelsale.in:80/wheelsale-app-ws/images/upload`,
+        requestOptions,
+      )
+        .then(response => response.text())
+        .then(json => {
+          setimgDownloadUrl2(json);
+          console.log(json);
+          alert('Image Upload 2');
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading2(false);
     }
   };
 
@@ -288,33 +356,6 @@ const AddVehicles = ({navigation}) => {
                 autoCapitalize={'characters'}
                 placeholderTextColor="gray"
               />
-              {/* <Text style={styles.lable}>Company</Text>
-          <SelectList
-            data={VehiInfo.map(({company, categoryName, categoryId}) => company + " " + categoryName)}
-            maxHeight={400}
-            inputStyles={{}}
-            setSelected={setSelected}
-            onSelect={() => alert(selected)}
-            placeholder="Select Company"
-            dropdownStyles={{margin: 10, backgroundColor: '#f7f7f7'}}
-            boxStyles={styles.selectInput}
-            arrowicon={
-              <FontAwesome
-                name="chevron-down"
-                size={12}
-                color={'gray'}
-                style={{alignSelf: 'center'}}
-              />
-            }
-            searchicon={
-              <FontAwesome
-                name="search"
-                size={18}
-                color={'gray'}
-                style={{paddingRight: 10}}
-              />
-            }
-          /> */}
               <Text style={styles.lable}>Vehicle Name</Text>
               <SelectList
                 data={VehiInfo}
@@ -425,70 +466,143 @@ const AddVehicles = ({navigation}) => {
                   <Text style={styles.btnTxt}>GOOD</Text>
                 </View>
               </View>
-              <Text style={styles.lable}> Image</Text>
-              <View style={{marginHorizontal: 20}}>
-                {/* {!ImageData ? (
-                  <Button title="Add Photo" onPress={() => choosePic()} />
-                ) : (
-                  <Button
-                    title="Upload Photo"
-                    color={'green'}
-                    onPress={() => Base64()}
-                  />
-                )} */}
-              </View>
-              <View
-                style={{justifyContent: 'space-around', flexDirection: 'row'}}>
-                <TouchableOpacity
-                  style={styles.imageBox}
-                  onPress={() => choosePic()}>
-                  {ImageData ? (
-                    <Image
-                      source={{uri: ImageData}}
-                      style={{width: '100%', height: '100%'}}
-                    />
-                  ) : (
-                    <View
-                      style={{
-                        alignSelf: 'center',
-                        top: 30,
-                        position: 'absolute',
-                      }}>
-                      <Ionicons
-                        name="ios-add-outline"
-                        size={38}
-                        color={'gray'}
-                        style={{alignSelf: 'center'}}
-                      />
-                      <Text style={{alignSelf: 'center'}}>Add Image 1</Text>
-                    </View>
-                  )}
-                </TouchableOpacity>
-                <View style={styles.imageBox}></View>
-              </View>
-              <View style={{margin: 15}}>
-                <Button
-                  title="Add Vehicle"
-                  color={'#3d3d72'}
-                  onPress={() => {
-                    AddVehicle();
-                  }}
-                  // onPress={
-                  // () => Vehicles()
-                  // Alert.alert(
-                  //   'WheelSale',
-                  //   'To use this feature please buy Our subscription & Contact us.',
-                  //   [
-                  //     {
-                  //       text: 'Cancel',
-                  //       onPress: () => console.log('Cancel Pressed'),
-                  //       style: 'cancel',
-                  //     },
-                  //     {text: 'OK', onPress: () => console.log('OK Pressed')},
-                  //   ],
-                  // )
-                  // }
-                />
+              <View>
+                <Text style={styles.lable}> Image</Text>
+                <View
+                  style={{
+                    justifyContent: 'space-around',
+                    flexDirection: 'row',
+                  }}>
+                  <TouchableOpacity
+                    style={styles.imageBox}
+                    onPressIn={() => choosePic1()}>
+                    {ImageData1 ? (
+                      <>
+                        {loading1 ? (
+                          <View
+                            style={{
+                              flex: 1,
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}>
+                            <ActivityIndicator
+                              size="small"
+                              color="#3d3d72"
+                              visible={loading1}
+                              textContent={'Loading...'}
+                              textStyle={styles.spinnerTextStyle}
+                            />
+                          </View>
+                        ) : (
+                          <Image
+                            source={{uri: ImageData1}}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: 4,
+                            }}
+                          />
+                        )}
+                        {!imgDownloadUrl1 ? (
+                          loading1 ? (
+                            <Text
+                              style={{textAlign: 'center', marginBottom: 5}}>
+                              Uploading
+                            </Text>
+                          ) : (
+                            <Button onPress={() => Base641()}>Upload</Button>
+                          )
+                        ) : null}
+                      </>
+                    ) : (
+                      <View
+                        style={{
+                          alignSelf: 'center',
+                          top: 30,
+                          position: 'absolute',
+                        }}>
+                        <Ionicons
+                          name="ios-add-outline"
+                          size={38}
+                          color={'gray'}
+                          style={{alignSelf: 'center'}}
+                        />
+                        <Text style={{alignSelf: 'center'}}>Add Image 1</Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.imageBox}
+                    onPressIn={() => choosePic2()}>
+                    {ImageData2 ? (
+                      <>
+                        {loading2 ? (
+                          <View
+                            style={{
+                              flex: 1,
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                            }}>
+                            <ActivityIndicator
+                              size="small"
+                              color="#3d3d72"
+                              visible={loading2}
+                              textContent={'Loading...'}
+                              textStyle={styles.spinnerTextStyle}
+                            />
+                          </View>
+                        ) : (
+                          <Image
+                            source={{uri: ImageData2}}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: 4,
+                            }}
+                          />
+                        )}
+                        {!imgDownloadUrl2 ? (
+                          loading2 ? (
+                            <Text
+                              style={{textAlign: 'center', marginBottom: 5}}>
+                              Uploading
+                            </Text>
+                          ) : (
+                            <Button onPress={() => Base642()}>Upload</Button>
+                          )
+                        ) : null}
+                      </>
+                    ) : (
+                      <>
+                        <View
+                          style={{
+                            alignSelf: 'center',
+                            top: 30,
+                            position: 'absolute',
+                          }}>
+                          <Ionicons
+                            name="ios-add-outline"
+                            size={38}
+                            color={'gray'}
+                            style={{alignSelf: 'center'}}
+                          />
+                          <Text style={{alignSelf: 'center'}}>Add Image 2</Text>
+                        </View>
+                      </>
+                    )}
+                  </TouchableOpacity>
+                </View>
+                <View style={{margin: 15}}>
+                  {imgDownloadUrl1 && imgDownloadUrl2 ? (
+                    <Button
+                      onPress={() => AddVehicle()}
+                      textColor="white"
+                      buttonColor="#3d3d72"
+                      style={{margin: 5, borderRadius: 6}}>
+                      Add Vehicle
+                    </Button>
+                  ) : null}
+                </View>
               </View>
             </View>
           </ScrollView>
@@ -513,7 +627,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     paddingVertical: 8,
     paddingLeft: 20,
-    // fontWeight: '500',
   },
   selectInput: {
     backgroundColor: 'white',
@@ -529,7 +642,6 @@ const styles = StyleSheet.create({
   btnTxt: {
     alignSelf: 'center',
     color: 'black',
-    // fontWeight: '500',
   },
   imageBox: {
     backgroundColor: 'lightgray',

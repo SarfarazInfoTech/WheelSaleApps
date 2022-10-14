@@ -28,12 +28,6 @@ const Routes = () => {
       initialRouteName="Login"
       >
         <Stack.Screen
-          name="ImageUp"
-          component={ImageUp}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
           name="Drawers"
           component={Drawers}
           options={{headerShown: false}}
