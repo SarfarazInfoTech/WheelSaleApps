@@ -78,15 +78,17 @@ const SoldVehicles = ({navigation}) => {
         <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
           {/* <Text>{message}</Text> */}
           {/* <Text>{Error}</Text> */}
-          <View style={{padding: 10, flex: 1}}>
+          <View style={{paddingHorizontal: 5, flex: 1}}>
             {Object.keys(Data).map(keys => {
               return (
-                <View style={{marginVertical: 10}} key={Data[keys].subCategoryId}>
+                <View
+                  style={{marginVertical: 3}}
+                  key={Data[keys].subCategoryId}>
                   <View
                     style={{
                       paddingHorizontal: 10,
                       paddingVertical: 10,
-                      borderWidth: 1,
+                      // borderWidth: 1,
                       borderColor: '#aaa',
                       borderRadius: 10,
                       backgroundColor: 'white',
@@ -104,7 +106,12 @@ const SoldVehicles = ({navigation}) => {
                             style={{
                               flexDirection: 'row',
                             }}>
-                            <Text style={{fontSize: 13, fontWeight: '500'}}>
+                            <Text
+                              style={{
+                                fontSize: 13,
+                                fontWeight: '500',
+                                color: 'black',
+                              }}>
                               Vehicle No :
                             </Text>
                             <Text
@@ -120,7 +127,7 @@ const SoldVehicles = ({navigation}) => {
                                 fontSize: 12,
                                 textTransform: 'uppercase',
                               }}>
-                              MH 31 BE 8599
+                              {Data[keys].vehicleNumber}
                             </Text>
                           </View>
                         </View>
@@ -132,17 +139,12 @@ const SoldVehicles = ({navigation}) => {
                             style={{
                               alignSelf: 'flex-end',
                             }}>
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                              }}>
+                            <View>
                               <Text style={{fontSize: 11, fontWeight: '500'}}>
-                                13-09-2022,{' '}
-                                {/* {Data[keys].modifiedAt} */}
-                              </Text>
-                              <Text style={{fontSize: 11, fontWeight: '500'}}>
-                                {' '}
-                                12:04 PM
+                                Date :{' '}
+                                {Data[keys].modifiedAt
+                                  .split(' ')
+                                  .join('\n Time : ')}
                               </Text>
                             </View>
                           </View>
@@ -156,10 +158,16 @@ const SoldVehicles = ({navigation}) => {
                         flexDirection: 'row',
                         alignItems: 'flex-start',
                       }}>
-                      <Text style={{fontSize: 13, fontWeight: '500'}}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontWeight: '500',
+                          color: 'black',
+                        }}>
                         Company :{' '}
                       </Text>
-                      <Text style={{textTransform: 'uppercase'}}>
+                      <Text
+                        style={{textTransform: 'uppercase', color: 'black'}}>
                         {Data[keys].company}
                       </Text>
                     </View>
@@ -169,10 +177,16 @@ const SoldVehicles = ({navigation}) => {
                         flexDirection: 'row',
                         alignItems: 'flex-start',
                       }}>
-                      <Text style={{fontSize: 13, fontWeight: '500'}}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontWeight: '500',
+                          color: 'black',
+                        }}>
                         Vehicle :{' '}
                       </Text>
-                      <Text style={{textTransform: 'uppercase'}}>
+                      <Text
+                        style={{textTransform: 'uppercase', color: 'black'}}>
                         {Data[keys].categoryName} - (
                         {Data[keys].subCategoryName})
                       </Text>
@@ -183,51 +197,21 @@ const SoldVehicles = ({navigation}) => {
                         flexDirection: 'row',
                         alignItems: 'flex-start',
                       }}>
-                      <Text style={{fontSize: 13, fontWeight: '500'}}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontWeight: '500',
+                          color: 'black',
+                        }}>
                         Year :{' '}
                       </Text>
-                      <Text style={{textTransform: 'uppercase'}}>
+                      <Text
+                        style={{textTransform: 'uppercase', color: 'black'}}>
                         {Data[keys].modelYear}
                       </Text>
                     </View>
 
-                    {/* <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <View style={{flexDirection: 'row'}}>
-                        <Text
-                          style={{
-                            color: 'black',
-                            fontSize: 15,
-                            paddingRight: 3,
-                            fontWeight: 'bold',
-                          }}>
-                          Pending
-                        </Text>
-                      </View>
-
-                      <View>
-                        <Text
-                          style={{fontSize: 15, color: '#000', fontWeight: ''}}>
-                          Qty: 4
-                        </Text>
-                      </View>
-                      <View>
-                        <Text
-                          style={{
-                            color: '#3d3d72',
-                            fontWeight: '500',
-                            fontSize: 15,
-                            alignSelf: 'center',
-                          }}>
-                          <FontAwesome name="rupee" size={16} color="#3d3d72" />
-                          {''} {Data[keys].sellingPrice}/-
-                        </Text>
-                      </View>
-                    </View> */}
-                    <View style={{paddingTop: 6}}>
+                    <View style={{paddingTop: 0}}>
                       <View
                         style={{
                           flexDirection: 'row',
@@ -235,32 +219,33 @@ const SoldVehicles = ({navigation}) => {
                         }}>
                         <Text
                           style={{
-                            color: '#fff',
-                            backgroundColor: 'green',
-                            fontWeight: 'bold',
-                            paddingHorizontal: 10,
-                            paddingVertical: 3,
-                            borderRadius: 20,
+                            color: '#3d3d72',
+                            fontWeight: '500',
+                            fontSize: 16,
                           }}>
-                          Sold{' '}
-                          <Icon
+                          Sold Price :
+                          {/* <Icon
                             name="checkmark-circle"
                             size={15}
                             color="white"
-                          />
+                          /> */}
                         </Text>
                         <View>
-                        <Text
-                          style={{
-                            color: '#3d3d72',
-                            fontWeight: '500',
-                            fontSize: 15,
-                            alignSelf: 'center',
-                          }}>
-                          <FontAwesome name="rupee" size={16} color="#3d3d72" />
-                          {''} {Data[keys].sellingPrice}/-
-                        </Text>
-                      </View>
+                          <Text
+                            style={{
+                              color: '#3d3d72',
+                              fontWeight: '500',
+                              fontSize: 16,
+                              alignSelf: 'center',
+                            }}>
+                            <FontAwesome
+                              name="rupee"
+                              size={15}
+                              color="#3d3d72"
+                            />
+                            {''} {Data[keys].sellingPrice}/-
+                          </Text>
+                        </View>
                         <TouchableOpacity
                           style={{
                             // paddingHorizontal: 4,
@@ -270,7 +255,7 @@ const SoldVehicles = ({navigation}) => {
                           }}
                           onPress={() => {
                             // navigation.navigate('View Detail');
-                            alert("please wait")
+                            alert('please wait');
                           }}>
                           <Text
                             style={{

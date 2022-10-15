@@ -84,7 +84,7 @@ const AddVehicles = ({navigation}) => {
       !imgDownloadUrl1 ||
       !imgDownloadUrl2
     ) {
-      alert('All value must be required !');
+      Alert.alert('', 'All Information must be required !')
     } else {
       await fetch(AddMyVehical + dealerId, {
         method: 'POST',
@@ -261,8 +261,8 @@ const AddVehicles = ({navigation}) => {
         .then(response => response.text())
         .then(json => {
           setimgDownloadUrl1(json);
-          console.log(json);
-          alert('Image Upload 1');
+          console.log("Image Upload 1", json);
+          // alert('Image Upload 1');
         })
         .catch(err => {
           console.log(err);
@@ -295,8 +295,8 @@ const AddVehicles = ({navigation}) => {
         .then(response => response.text())
         .then(json => {
           setimgDownloadUrl2(json);
-          console.log(json);
-          alert('Image Upload 2');
+          console.log("Image Upload 2", json);
+          // alert('Image Upload 2');
         })
         .catch(err => {
           console.log(err);

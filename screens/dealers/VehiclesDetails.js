@@ -260,8 +260,8 @@ const VehiclesDetails = ({navigation, route}) => {
                         // paddingHorizontal: 15,
                         padding: 6,
                         width: '40%',
-                        alignSelf: 'center',
-                        textAlign: 'center',
+                        alignSelf: 'flex-end',
+                        textAlign: 'right',
                         color: 'gray',
                       }}>
                       {sellingPrice}
@@ -344,8 +344,8 @@ const VehiclesDetails = ({navigation, route}) => {
                     // paddingHorizontal: 15,
                     padding: 6,
                     width: '30%',
-                    alignSelf: 'center',
-                    textAlign: 'center',
+                    alignSelf: 'flex-end',
+                    textAlign: 'right',
                     color: 'gray',
                   }}>
                   {vehicleCondition}
@@ -406,7 +406,19 @@ const VehiclesDetails = ({navigation, route}) => {
             width: '50%',
             paddingVertical: 10,
           }}
-          onPress={() => SoldVehical()}>
+          onPress={() =>
+            Alert.alert('', 'Confirm you sold this vehicle ?', [
+              {
+                text: 'No',
+                onPress: () => console.log('No Pressed'),
+                style: 'No',
+              },
+              {
+                text: 'YES',
+                onPress: () => SoldVehical(),
+              },
+            ])
+          }>
           <Text
             style={{
               fontSize: 20,

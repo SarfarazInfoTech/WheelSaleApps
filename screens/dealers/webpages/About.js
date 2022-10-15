@@ -16,7 +16,7 @@ const About = () => {
     <>
       <WebView
         originWhitelist={['*']}
-        source={{uri: 'http://wheelsale.in/app/aboutus.html'}}
+        source={{uri: 'http://wheelsale.in/app/about.html'}}
         renderLoading={LoadingIndicatorView}
         startInLoadingState={true}
       />

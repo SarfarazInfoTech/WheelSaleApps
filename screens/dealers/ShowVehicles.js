@@ -185,8 +185,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 10,
+    justifyContent: 'space-evenly',
+    // margin: 10,
   },
   card: {
     borderRadius: 10,
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     width: 165,
-    marginVertical: 10,
+    marginVertical: 5,
   },
   cardImg: {
     width: '100%',
