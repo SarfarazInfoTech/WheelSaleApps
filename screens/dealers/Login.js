@@ -6,14 +6,15 @@ import {
   Button,
   TouchableOpacity,
   Alert,
-  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Api from '../Api/Api';
 import {showError, showSuccess} from '../components/FlashMessage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ActivityIndicator } from 'react-native-paper';
 
 const Login = ({navigation}) => {
+  const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -24,6 +25,7 @@ const Login = ({navigation}) => {
       // console.log(`${Api.api}login`);
       showError('Username & Password are requred!');
     } else {
+      setLoading(true)
       await fetch(`${Api.api}login`, {
         method: 'POST',
         headers: {
@@ -76,69 +78,89 @@ const Login = ({navigation}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.heading}>Dealer Login</Text>
-        <View style={{marginVertical: 15}}>
-          <Text style={styles.lable}>Phone Number</Text>
-          <TextInput
-            style={styles.inputBox}
-            placeholder="Enter Your Phone Number"
-            value={phone}
-            onChangeText={value => setPhone(value)}
-            maxLength={10}
-            keyboardType="numeric"
-          />
-        </View>
-        <View style={{marginVertical: 15}}>
-          <Text style={styles.lable}>Password</Text>
-          <TextInput
-            style={styles.inputBox}
-            placeholder="Enter Your Password"
-            value={password}
-            onChangeText={value => setPassword(value)}
-            secureTextEntry={true}
-            maxLength={8}
-          />
-        </View>
-        <View style={{marginHorizontal: 30, marginTop: 20}}>
-          <Button
-            style={styles.addButton}
+    <>
+      {loading ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignSelf: 'center',
+            marginTop: 30,
+          }}>
+          <ActivityIndicator
+            size="large"
             color="#00b8dc"
-            onPress={() => handleLogin()}
-            title="Login"
+            visible={loading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
           />
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <View style={styles.card}>
+            <Text style={styles.heading}>Dealer Login</Text>
+            <View style={{marginVertical: 15}}>
+              <Text style={styles.lable}>Phone Number</Text>
+              <TextInput
+                style={styles.inputBox}
+                placeholder="Enter Your Phone Number"
+                value={phone}
+                onChangeText={value => setPhone(value)}
+                maxLength={10}
+                keyboardType="numeric"
+              />
+            </View>
+            <View style={{marginVertical: 15}}>
+              <Text style={styles.lable}>Password</Text>
+              <TextInput
+                style={styles.inputBox}
+                placeholder="Enter Your Password"
+                value={password}
+                onChangeText={value => setPassword(value)}
+                secureTextEntry={true}
+                maxLength={8}
+              />
+            </View>
+            <View style={{marginHorizontal: 30, marginTop: 20}}>
+              <Button
+                style={styles.addButton}
+                color="#00b8dc"
+                onPress={() => handleLogin()}
+                title="Login"
+              />
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              marginTop: 10,
-            }}>
-            <Text
-              style={{
-                color: 'gray',
-                fontSize: 13,
-                fontWeight: '500',
-                margin: 5,
-              }}>
-              New User ?
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-              <Text
+              <View
                 style={{
-                  color: 'orange',
-                  fontSize: 14,
-                  fontWeight: '500',
-                  margin: 5,
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                  marginTop: 10,
                 }}>
-                SignUp
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={{
+                    color: 'gray',
+                    fontSize: 13,
+                    fontWeight: '500',
+                    margin: 5,
+                  }}>
+                  New User ?
+                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+                  <Text
+                    style={{
+                      color: 'orange',
+                      fontSize: 14,
+                      fontWeight: '500',
+                      margin: 5,
+                    }}>
+                    SignUp
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
-      </View>
-    </View>
+      )}
+    </>
   );
 };
 

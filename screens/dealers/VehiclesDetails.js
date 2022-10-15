@@ -32,6 +32,7 @@ const VehiclesDetails = ({navigation, route}) => {
     vehicleNumber,
     sellingPrice,
     images,
+    soldVehicle,
   } = route.params;
 
   const getData = async () => {
@@ -213,10 +214,88 @@ const VehiclesDetails = ({navigation, route}) => {
               </Text>
             </View>
           </View>
+          {subCategoryId ? (
+            <>
+              <View style={{margin: 10}}>
+                {sellingPrice === sellingPrice ? (
+                  <View style={{alignItems: 'stretch'}}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: 'black',
+                          marginRight: 10,
+                          alignSelf: 'center',
+                        }}>
+                        Selling Price
+                      </Text>
+                      {Price.length != 0 ? (
+                        <TextInput
+                          value={sellingPrice}
+                          placeholder="Price"
+                          keyboardType="decimal-pad"
+                          onChangeText={Price => setPrice(Price)}
+                          style={{
+                            fontSize: 16,
+                            borderColor: 'lightgray',
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            // paddingHorizontal: 15,
+                            padding: 0,
+                            width: '40%',
+                            textAlign: 'center',
+                            color: 'gray',
+                          }}
+                          placeholderTextColor="gray"
+                        />
+                      ) : (
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            borderColor: 'lightgray',
+                            // borderWidth: 1,
+                            borderRadius: 5,
+                            // paddingHorizontal: 15,
+                            padding: 6,
+                            width: '40%',
+                            alignSelf: 'flex-end',
+                            textAlign: 'right',
+                            color: 'gray',
+                          }}>
+                          {sellingPrice}
+                        </Text>
+                      )}
 
-          <View style={{margin: 10}}>
-            {sellingPrice === sellingPrice ? (
-              <View style={{alignItems: 'stretch'}}>
+                      {Price <= 0 ? (
+                        <Button onPress={() => setPrice('Update')}>
+                          <FontAwesome
+                            name="pencil"
+                            size={18}
+                            color="#3d3d72"
+                          />
+                        </Button>
+                      ) : null}
+                      {Price.length >= 1 ? (
+                        <Button onPress={() => UpdatePrice()}>UPDATE</Button>
+                      ) : null}
+                    </View>
+                  </View>
+                ) : Price === 'Update' ? (
+                  <TextInput
+                    value={sellingPrice}
+                    placeholder="Selling Price"
+                    onChangeText={Price => setPrice(Price)}
+                    style={styles.textInput}
+                    placeholderTextColor="gray"
+                  />
+                ) : null}
+              </View>
+
+              <View style={{margin: 10}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -229,27 +308,47 @@ const VehiclesDetails = ({navigation, route}) => {
                       marginRight: 10,
                       alignSelf: 'center',
                     }}>
-                    Selling Price
+                    Vehicle Condition
                   </Text>
-                  {Price.length != 0 ? (
-                    <TextInput
-                      value={sellingPrice}
-                      placeholder="Price"
-                      keyboardType="decimal-pad"
-                      onChangeText={Price => setPrice(Price)}
-                      style={{
-                        fontSize: 16,
-                        borderColor: 'lightgray',
-                        borderWidth: 1,
-                        borderRadius: 5,
-                        // paddingHorizontal: 15,
-                        padding: 0,
-                        width: '40%',
-                        textAlign: 'center',
-                        color: 'gray',
-                      }}
-                      placeholderTextColor="gray"
-                    />
+
+                  {Condition ? (
+                    <>
+                      <View style={styles.radioBtn}>
+                        <RadioButton
+                          value="POOR"
+                          status={checked === 'POOR' ? 'checked' : 'unchecked'}
+                          onPress={() => setChecked('POOR')}
+                          color="red"
+                        />
+                        <Text style={[styles.btnTxt, {color: 'red'}]}>
+                          Poor{' '}
+                        </Text>
+                      </View>
+                      <View style={styles.radioBtn}>
+                        <RadioButton
+                          value="AVERAGE"
+                          status={
+                            checked === 'AVERAGE' ? 'checked' : 'unchecked'
+                          }
+                          onPress={() => setChecked('AVERAGE')}
+                          color="blue"
+                        />
+                        <Text style={[styles.btnTxt, {color: 'blue'}]}>
+                          Average{' '}
+                        </Text>
+                      </View>
+                      <View style={styles.radioBtn}>
+                        <RadioButton
+                          value="GOOD"
+                          status={checked === 'GOOD' ? 'checked' : 'unchecked'}
+                          onPress={() => setChecked('GOOD')}
+                          color="green"
+                        />
+                        <Text style={[styles.btnTxt, {color: 'green'}]}>
+                          Good
+                        </Text>
+                      </View>
+                    </>
                   ) : (
                     <Text
                       style={{
@@ -259,177 +358,143 @@ const VehiclesDetails = ({navigation, route}) => {
                         borderRadius: 5,
                         // paddingHorizontal: 15,
                         padding: 6,
-                        width: '40%',
+                        width: '30%',
                         alignSelf: 'flex-end',
                         textAlign: 'right',
                         color: 'gray',
                       }}>
-                      {sellingPrice}
+                      {vehicleCondition}
                     </Text>
                   )}
-
-                  {Price <= 0 ? (
-                    <Button onPress={() => setPrice('Update')}>
+                  {Condition <= 0 ? (
+                    <Button onPress={() => setCondition('Update')}>
                       <FontAwesome name="pencil" size={18} color="#3d3d72" />
                     </Button>
                   ) : null}
-                  {Price.length >= 1 ? (
-                    <Button onPress={() => UpdatePrice()}>UPDATE</Button>
+                  {Condition.length >= 1 ? (
+                    <Button onPress={() => UpdateCondition()}>UPDATE</Button>
                   ) : null}
                 </View>
               </View>
-            ) : Price === 'Update' ? (
-              <TextInput
-                value={sellingPrice}
-                placeholder="Selling Price"
-                onChangeText={Price => setPrice(Price)}
-                style={styles.textInput}
-                placeholderTextColor="gray"
-              />
-            ) : null}
-          </View>
-
-          <View style={{margin: 10}}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: 'black',
-                  marginRight: 10,
-                  alignSelf: 'center',
-                }}>
-                Vehicle Condition
-              </Text>
-
-              {Condition ? (
-                <>
-                  <View style={styles.radioBtn}>
-                    <RadioButton
-                      value="POOR"
-                      status={checked === 'POOR' ? 'checked' : 'unchecked'}
-                      onPress={() => setChecked('POOR')}
-                      color="red"
-                    />
-                    <Text style={[styles.btnTxt, {color: 'red'}]}>Poor </Text>
-                  </View>
-                  <View style={styles.radioBtn}>
-                    <RadioButton
-                      value="AVERAGE"
-                      status={checked === 'AVERAGE' ? 'checked' : 'unchecked'}
-                      onPress={() => setChecked('AVERAGE')}
-                      color="blue"
-                    />
-                    <Text style={[styles.btnTxt, {color: 'blue'}]}>
-                      Average{' '}
-                    </Text>
-                  </View>
-                  <View style={styles.radioBtn}>
-                    <RadioButton
-                      value="GOOD"
-                      status={checked === 'GOOD' ? 'checked' : 'unchecked'}
-                      onPress={() => setChecked('GOOD')}
-                      color="green"
-                    />
-                    <Text style={[styles.btnTxt, {color: 'green'}]}>Good</Text>
-                  </View>
-                </>
-              ) : (
-                <Text
-                  style={{
-                    fontSize: 16,
-                    borderColor: 'lightgray',
-                    // borderWidth: 1,
-                    borderRadius: 5,
-                    // paddingHorizontal: 15,
-                    padding: 6,
-                    width: '30%',
-                    alignSelf: 'flex-end',
-                    textAlign: 'right',
-                    color: 'gray',
-                  }}>
-                  {vehicleCondition}
-                </Text>
-              )}
-              {Condition <= 0 ? (
-                <Button onPress={() => setCondition('Update')}>
-                  <FontAwesome name="pencil" size={18} color="#3d3d72" />
-                </Button>
-              ) : null}
-              {Condition.length >= 1 ? (
-                <Button onPress={() => UpdateCondition()}>UPDATE</Button>
-              ) : null}
-            </View>
-          </View>
+            </>
+          ) : null}
         </View>
       </ScrollView>
-
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          position: 'absolute',
-          bottom: 0,
-        }}>
-        <TouchableOpacity
+      {subCategoryId ? (
+        <View
           style={{
-            backgroundColor: '#f84848',
-            width: '50%',
-            paddingVertical: 10,
-          }}
-          onPress={() =>
-            Alert.alert('Are you sure ', 'You want to delete this vehicle ?', [
-              {
-                text: 'No',
-                onPress: () => console.log('No Pressed'),
-                style: 'No',
-              },
-              {
-                text: 'Delete',
-                onPress: () => DeleteVehical(),
-              },
-            ])
-          }>
-          <Text
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            position: 'absolute',
+            bottom: 0,
+          }}>
+          <TouchableOpacity
             style={{
-              fontSize: 20,
-              width: '100%',
-              textAlign: 'center',
-              color: 'white',
-            }}>
-            DELETE
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+              backgroundColor: '#f84848',
+              width: '50%',
+              paddingVertical: 10,
+            }}
+            onPress={() =>
+              Alert.alert(
+                'Are you sure ',
+                'You want to delete this vehicle ?',
+                [
+                  {
+                    text: 'No',
+                    onPress: () => console.log('No Pressed'),
+                    style: 'No',
+                  },
+                  {
+                    text: 'Delete',
+                    onPress: () => DeleteVehical(),
+                  },
+                ],
+              )
+            }>
+            <Text
+              style={{
+                fontSize: 20,
+                width: '100%',
+                textAlign: 'center',
+                color: 'white',
+              }}>
+              DELETE
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#366666',
+              width: '50%',
+              paddingVertical: 10,
+            }}
+            onPress={() =>
+              Alert.alert('', 'Confirm you sold this vehicle ?', [
+                {
+                  text: 'No',
+                  onPress: () => console.log('No Pressed'),
+                  style: 'No',
+                },
+                {
+                  text: 'YES',
+                  onPress: () => SoldVehical(),
+                },
+              ])
+            }>
+            <Text
+              style={{
+                fontSize: 20,
+                width: '100%',
+                textAlign: 'center',
+                color: 'white',
+              }}>
+              SOLD
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : soldVehicle === 'Sold' ? null : (
+        <View
           style={{
-            backgroundColor: '#366666',
-            width: '50%',
-            paddingVertical: 10,
-          }}
-          onPress={() =>
-            Alert.alert('', 'Confirm you sold this vehicle ?', [
-              {
-                text: 'No',
-                onPress: () => console.log('No Pressed'),
-                style: 'No',
-              },
-              {
-                text: 'YES',
-                onPress: () => SoldVehical(),
-              },
-            ])
-          }>
-          <Text
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            position: 'absolute',
+            bottom: 0,
+          }}>
+          <TouchableOpacity
             style={{
-              fontSize: 20,
-              width: '100%',
-              textAlign: 'center',
-              color: 'white',
-            }}>
-            SOLD
-          </Text>
-        </TouchableOpacity>
-      </View>
+              backgroundColor: '#009193',
+              width: '50%',
+              paddingVertical: 10,
+            }}
+            onPress={() => alert('Wait')}>
+            <Text
+              style={{
+                fontSize: 20,
+                width: '100%',
+                textAlign: 'center',
+                color: 'white',
+              }}>
+              MESSAGE
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#3d3d72',
+              width: '50%',
+              paddingVertical: 10,
+            }}
+            onPress={() => alert('Wait')}>
+            <Text
+              style={{
+                fontSize: 20,
+                width: '100%',
+                textAlign: 'center',
+                color: 'white',
+              }}>
+              CALL
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </>
   );
 };

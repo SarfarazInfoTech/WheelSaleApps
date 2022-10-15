@@ -254,8 +254,22 @@ const SoldVehicles = ({navigation}) => {
                             borderWidth: 1,
                           }}
                           onPress={() => {
-                            // navigation.navigate('View Detail');
-                            alert('please wait');
+                            navigation.navigate('Vehicles Details', {
+                              // subCategoryId: Data[keys].subCategoryId,
+                              soldVehicle: "Sold",
+                              categoryName: Data[keys].categoryName,
+                              subCategoryName: Data[keys].subCategoryName,
+                              company: Data[keys].company,
+                              modelYear: Data[keys].modelYear,
+                              color: Data[keys].color,
+                              vehicleCondition: Data[keys].vehicleCondition,
+                              vehicleNumber: Data[keys].vehicleNumber,
+                              sellingPrice: Data[keys].sellingPrice,
+                              images:
+                                Data[keys].images[0].image === null
+                                  ? DefImg
+                                  : Data[keys].images[0].image,
+                            });
                           }}>
                           <Text
                             style={{

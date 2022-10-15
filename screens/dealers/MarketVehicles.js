@@ -87,7 +87,23 @@ const MarketVehicles = ({navigation}) => {
           <View style={styles.container}>
             {Object.keys(Data).map(keys => {
               return (
-                <TouchableOpacity key={Data[keys].subCategoryId}>
+                <TouchableOpacity key={Data[keys].subCategoryId} onPress={() => {
+                  navigation.navigate('Vehicles Details', {
+                    // subCategoryId: Data[keys].subCategoryId,
+                    categoryName: Data[keys].categoryName,
+                    subCategoryName: Data[keys].subCategoryName,
+                    company: Data[keys].company,
+                    modelYear: Data[keys].modelYear,
+                    color: Data[keys].color,
+                    vehicleCondition: Data[keys].vehicleCondition,
+                    vehicleNumber: Data[keys].vehicleNumber,
+                    sellingPrice: Data[keys].sellingPrice,
+                    images:
+                      Data[keys].images[0].image === null
+                        ? DefImg
+                        : Data[keys].images[0].image,
+                  });
+                }}>
                   <View style={styles.cardItem}>
                     <View style={styles.card}>
                       <Image
@@ -115,14 +131,14 @@ const MarketVehicles = ({navigation}) => {
                           {''} {Data[keys].sellingPrice}/-
                         </Text>
 
-                        <Text style={styles.shopName} numberOfLines={1}>
+                        {/* <Text style={styles.shopName} numberOfLines={1}>
                           <FontAwesome
                             name="map-marker"
                             size={16}
                             color="black"
                           />{' '}
                           Taj Auto Delars Sadar
-                        </Text>
+                        </Text> */}
                       </View>
                     </View>
                   </View>

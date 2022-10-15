@@ -221,7 +221,7 @@ const Dashboard = ({navigation, route}) => {
               style={{
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                justifyContent: 'space-around',
+                justifyContent: 'space-evenly',
               }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('Add Vehicle')}
