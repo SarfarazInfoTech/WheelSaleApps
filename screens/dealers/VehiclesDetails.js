@@ -84,6 +84,8 @@ const VehiclesDetails = ({navigation, route}) => {
       },
       body: JSON.stringify({
         vehicleCondition: checked,
+        sellingPrice: 9999,
+
       }),
     };
 

@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   vehName: {
     textTransform: 'uppercase',
     color: 'black',
-    fontSize: 15,
+    fontSize: 12,
   },
   vehPrice: {
     color: '#3d3d72',

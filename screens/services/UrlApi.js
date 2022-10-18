@@ -12,7 +12,7 @@ export {ShownMyVehical};
 const MarketVehical = `${baseURL}/wheelsale-app-ws/sub-categories?limit=100&page=1`
 export {MarketVehical};
 
-const SoldMyVehical = `${baseURL}/wheelsale-app-ws/sub-categories?limit=100&page=1&dealerId=lBqt4o9WXrpc4asLy7WmUnMwaOF5Q9&visibility=false`
+const SoldMyVehical = `${baseURL}/wheelsale-app-ws/sub-categories?limit=100&page=1&visibility=false&dealerId=`
 export {SoldMyVehical};
 
 const SearchVehical = `${baseURL}/wheelsale-app-ws/sub-categories?limit=100&page=`

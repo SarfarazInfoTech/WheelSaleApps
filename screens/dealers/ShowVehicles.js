@@ -40,10 +40,12 @@ const ShowVehicles = ({navigation}) => {
             // alert(resData.message);
             setMessage(resData.message);
             setData(resData.subCategories);
-          } else {
-            alert(resData.message);
+          } else if (resData.status === 'F') {
+            // alert(resData.message);
+            // navigation.navigate('Dashboard ');
             setMessage(resData.message);
             setError(resData.status);
+            // console.log(resData.status);
           }
         });
     } catch (err) {
@@ -61,6 +63,8 @@ const ShowVehicles = ({navigation}) => {
         if (value != null) {
           let user = JSON.parse(value);
           setDealerId(user[0].dealerId);
+        } else if (value === '') {
+          navigation.navigate('Dashboard ');
         }
       });
     } catch (error) {
@@ -93,42 +97,41 @@ const ShowVehicles = ({navigation}) => {
         </View>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-          {/* <Text>{message}</Text> */}
-          {/* <Text>{Error}</Text> */}
-          <View style={styles.container}>
-            {Object.keys(Data).map(keys => {
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Vehicles Details', {
-                      subCategoryId: Data[keys].subCategoryId,
-                      categoryName: Data[keys].categoryName,
-                      subCategoryName: Data[keys].subCategoryName,
-                      company: Data[keys].company,
-                      modelYear: Data[keys].modelYear,
-                      color: Data[keys].color,
-                      vehicleCondition: Data[keys].vehicleCondition,
-                      vehicleNumber: Data[keys].vehicleNumber,
-                      sellingPrice: Data[keys].sellingPrice,
-                      images:
-                        Data[keys].images[0].image === null
-                          ? DefImg
-                          : Data[keys].images[0].image,
-                    });
-                  }}
-                  key={Data[keys].subCategoryId}>
-                  <View style={styles.cardItem}>
-                    <View style={styles.card}>
-                      <Image
-                        source={{
-                          uri:
-                            Data[keys].images[0].image === null
-                              ? DefImg
-                              : Data[keys].images[0].image,
-                        }}
-                        style={styles.cardImg}
-                      />
-                      {/* {Data[keys].images.map((image, imageId) => {
+          {Error === '' ? (
+            <View style={styles.container}>
+              {Object.keys(Data).map(keys => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('Vehicles Details', {
+                        subCategoryId: Data[keys].subCategoryId,
+                        categoryName: Data[keys].categoryName,
+                        subCategoryName: Data[keys].subCategoryName,
+                        company: Data[keys].company,
+                        modelYear: Data[keys].modelYear,
+                        color: Data[keys].color,
+                        vehicleCondition: Data[keys].vehicleCondition,
+                        vehicleNumber: Data[keys].vehicleNumber,
+                        sellingPrice: Data[keys].sellingPrice,
+                        images:
+                          Data[keys].images[0].image === null
+                            ? DefImg
+                            : Data[keys].images[0].image,
+                      });
+                    }}
+                    key={Data[keys].subCategoryId}>
+                    <View style={styles.cardItem}>
+                      <View style={styles.card}>
+                        <Image
+                          source={{
+                            uri:
+                              Data[keys].images[0].image === null
+                                ? DefImg
+                                : Data[keys].images[0].image,
+                          }}
+                          style={styles.cardImg}
+                        />
+                        {/* {Data[keys].images.map((image, imageId) => {
                         // console.log(image.image);
                         //  console.log(Object.keys(Data[keys].images[0].image));
                         //  console.log(Data[keys].images[0].image);
@@ -143,23 +146,28 @@ const ShowVehicles = ({navigation}) => {
                         );
                       })} */}
 
-                      <Image
-                        source={{
-                          uri: 'http://wheelsale.in/wheel/Asset1/images/favicon.png',
-                        }}
-                        style={styles.iconLogo}
-                      />
-                      <View style={{margin: 5}}>
-                        <Text style={styles.vehName} numberOfLines={2}>
-                          {Data[keys].company} {Data[keys].categoryName} -{' '}
-                          {Data[keys].modelYear} ({Data[keys].subCategoryName})
-                        </Text>
-                        <Text style={styles.vehPrice}>
-                          <FontAwesome name="rupee" size={16} color="#3d3d72" />
-                          {''} {Data[keys].sellingPrice}/-
-                        </Text>
+                        <Image
+                          source={{
+                            uri: 'http://wheelsale.in/wheel/Asset1/images/favicon.png',
+                          }}
+                          style={styles.iconLogo}
+                        />
+                        <View style={{margin: 5}}>
+                          <Text style={styles.vehName} numberOfLines={2}>
+                            {Data[keys].company} {Data[keys].categoryName} -{' '}
+                            {Data[keys].modelYear} ({Data[keys].subCategoryName}
+                            )
+                          </Text>
+                          <Text style={styles.vehPrice}>
+                            <FontAwesome
+                              name="rupee"
+                              size={16}
+                              color="#3d3d72"
+                            />
+                            {''} {Data[keys].sellingPrice}/-
+                          </Text>
 
-                        {/* <Text style={styles.shopName} numberOfLines={1}>
+                          {/* <Text style={styles.shopName} numberOfLines={1}>
                         <FontAwesome
                           name="map-marker"
                           size={16}
@@ -167,13 +175,25 @@ const ShowVehicles = ({navigation}) => {
                         />{' '}
                         Taj Auto Delars Sadar
                       </Text> */}
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ) : Error === 'F' ? (
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: '500',
+                fontSize: 18,
+                alignSelf: 'center',
+                marginTop: 30,
+              }}>
+              -- {message} --
+            </Text>
+          ) : null}
         </ScrollView>
       )}
     </>
