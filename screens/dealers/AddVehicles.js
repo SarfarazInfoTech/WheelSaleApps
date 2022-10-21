@@ -8,6 +8,9 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Image,
+  PermissionsAndroid,
+  Modal,
+  Pressable,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {AddMyVehical, VehiclesList} from '../services/UrlApi.js';
@@ -80,11 +83,9 @@ const AddVehicles = ({navigation}) => {
       !Price ||
       !checked ||
       !selected ||
-      !VehiInfo ||
-      !imgDownloadUrl1 ||
-      !imgDownloadUrl2
+      !VehiInfo
     ) {
-      Alert.alert('', 'All Information must be required !')
+      Alert.alert('', 'All Information must be required !');
     } else {
       await fetch(AddMyVehical + dealerId, {
         method: 'POST',
@@ -97,10 +98,10 @@ const AddVehicles = ({navigation}) => {
           color: Color,
           images: [
             {
-              image: imgDownloadUrl1,
+              image: imgDownloadUrl1 || CamDownloadUrl1,
             },
             {
-              image: imgDownloadUrl2,
+              image: imgDownloadUrl2 || CamDownloadUrl2,
             },
           ],
           modelYear: modelYear,
@@ -138,8 +139,10 @@ const AddVehicles = ({navigation}) => {
             setData2('');
             setImageData1('');
             setImageData2('');
-            setimgDownloadUrl1('');
-            setimgDownloadUrl2('');
+            setimgDownloadUrl1(null);
+            setimgDownloadUrl2(null);
+            setCamDownloadUrl1(null);
+            setCamDownloadUrl2(null);
           } else if (resData.status === 'F') {
             alert(resData.message);
             console.log('Error', resData.message);
@@ -189,6 +192,140 @@ const AddVehicles = ({navigation}) => {
   const [ImageData2, setImageData2] = useState(null);
   const [imgDownloadUrl1, setimgDownloadUrl1] = useState(null);
   const [imgDownloadUrl2, setimgDownloadUrl2] = useState(null);
+  const [CameraPhoto1, setCameraPhoto1] = useState();
+  const [CameraPhoto2, setCameraPhoto2] = useState();
+  const [ShowPicCam1, setShowPicCam1] = useState();
+  const [ShowPicCam2, setShowPicCam2] = useState();
+  const [CamDownloadUrl1, setCamDownloadUrl1] = useState(null);
+  const [CamDownloadUrl2, setCamDownloadUrl2] = useState(null);
+  const [modalVisible1, setModalVisible1] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+
+  let optionsCam = {
+    includeBase64: true,
+    saveToPhotos: true,
+    mediaType: 'photo',
+  };
+
+  const openCamera1 = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const result = await launchCamera(optionsCam, response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        } else {
+          setShowPicCam1(response.assets[0].uri);
+          setCameraPhoto1(response.assets[0].base64);
+          // console.log('response hai', response);
+          setModalVisible1(!modalVisible1);
+        }
+      });
+    }
+  };
+
+  const openCamera2 = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const result = await launchCamera(optionsCam, response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        } else {
+          setShowPicCam2(response.assets[0].uri);
+          setCameraPhoto2(response.assets[0].base64);
+          // console.log('response hai', response);
+          setModalVisible2(!modalVisible2);
+        }
+      });
+    }
+  };
+
+  const UploadCamPhoto1 = async () => {
+    setLoading1(true);
+    try {
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          accept: '*/*',
+        },
+        body: JSON.stringify({
+          image: CameraPhoto1,
+        }),
+      };
+
+      await fetch(
+        `http://wheelsale.in:80/wheelsale-app-ws/images/upload`,
+        requestOptions,
+      )
+        .then(response => response.text())
+        .then(json => {
+          setCamDownloadUrl1(json);
+          setShowPicCam1(json);
+          console.log('Camera Photo Upload 1', json);
+          // alert('Camera Photo Upload 1');
+          setLoading1(false);
+          setImageData1(null);
+          setShowPicCam1(null);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading1(false);
+    }
+  };
+
+  const UploadCamPhoto2 = async () => {
+    setLoading2(true);
+    try {
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          accept: '*/*',
+        },
+        body: JSON.stringify({
+          image: CameraPhoto2,
+        }),
+      };
+
+      await fetch(
+        `http://wheelsale.in:80/wheelsale-app-ws/images/upload`,
+        requestOptions,
+      )
+        .then(response => response.text())
+        .then(json => {
+          setCamDownloadUrl2(json);
+          setShowPicCam2(json);
+          console.log('Camera Photo Upload 2', json);
+          // alert('Camera Photo Upload 2');
+          setLoading2(false);
+          setImageData2(null);
+          setShowPicCam2(null);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading2(false);
+    }
+  };
 
   const options = {
     title: 'Image Picker',
@@ -213,6 +350,7 @@ const AddVehicles = ({navigation}) => {
           setData1(response.assets[0].base64);
           setImageData1(response.assets[0].uri);
           // console.log('Response = ', response.assets[0].uri);
+          setModalVisible1(!modalVisible1);
         }
       });
     } catch (error) {
@@ -233,6 +371,7 @@ const AddVehicles = ({navigation}) => {
           setData2(response.assets[0].base64);
           setImageData2(response.assets[0].uri);
           // console.log('Response = ', response.assets[0].uri);
+          setModalVisible2(!modalVisible2);
         }
       });
     } catch (error) {
@@ -261,8 +400,10 @@ const AddVehicles = ({navigation}) => {
         .then(response => response.text())
         .then(json => {
           setimgDownloadUrl1(json);
-          console.log("Image Upload 1", json);
+          console.log('Image Upload 1', json);
           // alert('Image Upload 1');
+          setImageData1(null);
+          setShowPicCam1(null);
         })
         .catch(err => {
           console.log(err);
@@ -295,8 +436,10 @@ const AddVehicles = ({navigation}) => {
         .then(response => response.text())
         .then(json => {
           setimgDownloadUrl2(json);
-          console.log("Image Upload 2", json);
+          console.log('Image Upload 2', json);
           // alert('Image Upload 2');
+          setImageData2(null);
+          setShowPicCam2(null);
         })
         .catch(err => {
           console.log(err);
@@ -468,6 +611,65 @@ const AddVehicles = ({navigation}) => {
               </View>
               <View>
                 <Text style={styles.lable}> Image</Text>
+
+                <View style={styles.centeredView}>
+                  <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible1}
+                    onRequestClose={() => {
+                      console.log('Modal closed');
+                      setModalVisible1(!modalVisible1);
+                    }}>
+                    <View style={styles.centeredView}>
+                      <View style={styles.modalView}>
+                        <Text style={styles.modalText}>
+                          Select Vehicle Image
+                        </Text>
+                        <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPressIn={() => choosePic1()}>
+                          <Text style={styles.textStyle}>Image from Phone</Text>
+                        </Pressable>
+                        <View style={{margin: 5}}></View>
+                        <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPress={() => openCamera1()}>
+                          <Text style={styles.textStyle}>Open Camera</Text>
+                        </Pressable>
+                      </View>
+                    </View>
+                  </Modal>
+
+                  <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible2}
+                    onRequestClose={() => {
+                      console.log('Modal closed');
+                      setModalVisible2(!modalVisible2);
+                    }}>
+                    <View style={styles.centeredView}>
+                      <View style={styles.modalView}>
+                        <Text style={styles.modalText}>
+                          Select Vehicle Image
+                        </Text>
+                        <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPressIn={() => choosePic2()}>
+                          <Text style={styles.textStyle}>Image from Phone</Text>
+                        </Pressable>
+                        <View style={{margin: 5}}></View>
+                        <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPress={() => openCamera2()}>
+                          <Text style={styles.textStyle}>Open Camera</Text>
+                        </Pressable>
+                      </View>
+                    </View>
+                  </Modal>
+                </View>
+
                 <View
                   style={{
                     justifyContent: 'space-around',
@@ -475,8 +677,8 @@ const AddVehicles = ({navigation}) => {
                   }}>
                   <TouchableOpacity
                     style={styles.imageBox}
-                    onPressIn={() => choosePic1()}>
-                    {ImageData1 ? (
+                    onPress={() => setModalVisible1(true)}>
+                    {ImageData1 || ShowPicCam1 ? (
                       <>
                         {loading1 ? (
                           <View
@@ -495,7 +697,7 @@ const AddVehicles = ({navigation}) => {
                           </View>
                         ) : (
                           <Image
-                            source={{uri: ImageData1}}
+                            source={{uri: ImageData1 || ShowPicCam1}}
                             style={{
                               width: '100%',
                               height: '100%',
@@ -503,17 +705,43 @@ const AddVehicles = ({navigation}) => {
                             }}
                           />
                         )}
-                        {!imgDownloadUrl1 ? (
+
+                        {imgDownloadUrl1 === null ||
+                        CamDownloadUrl1 === null ? (
                           loading1 ? (
                             <Text
                               style={{textAlign: 'center', marginBottom: 5}}>
                               Uploading
                             </Text>
-                          ) : (
-                            <Button onPress={() => Base641()}>Upload</Button>
-                          )
+                          ) : !imgDownloadUrl1 || !CamDownloadUrl1 ? (
+                            <Button
+                              onPress={() =>
+                                ImageData1
+                                  ? Base641()
+                                  : ShowPicCam1
+                                  ? UploadCamPhoto1()
+                                  : console.log('Blank Hai')
+                              }>
+                              Upload{' '}
+                              <FontAwesome
+                                name="upload"
+                                size={13}
+                                color={'#3d3d72'}
+                                style={{alignSelf: 'center'}}
+                              />
+                            </Button>
+                          ) : null
                         ) : null}
                       </>
+                    ) : imgDownloadUrl1 || CamDownloadUrl1 ? (
+                      <Image
+                        source={{uri: imgDownloadUrl1 || CamDownloadUrl1}}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: 4,
+                        }}
+                      />
                     ) : (
                       <View
                         style={{
@@ -533,8 +761,8 @@ const AddVehicles = ({navigation}) => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.imageBox}
-                    onPressIn={() => choosePic2()}>
-                    {ImageData2 ? (
+                    onPress={() => setModalVisible2(true)}>
+                    {ImageData2 || ShowPicCam2 ? (
                       <>
                         {loading2 ? (
                           <View
@@ -553,7 +781,7 @@ const AddVehicles = ({navigation}) => {
                           </View>
                         ) : (
                           <Image
-                            source={{uri: ImageData2}}
+                            source={{uri: ImageData2 || ShowPicCam2}}
                             style={{
                               width: '100%',
                               height: '100%',
@@ -561,47 +789,79 @@ const AddVehicles = ({navigation}) => {
                             }}
                           />
                         )}
-                        {!imgDownloadUrl2 ? (
+
+                        {imgDownloadUrl2 === null ||
+                        CamDownloadUrl2 === null ? (
                           loading2 ? (
                             <Text
                               style={{textAlign: 'center', marginBottom: 5}}>
                               Uploading
                             </Text>
-                          ) : (
-                            <Button onPress={() => Base642()}>Upload</Button>
-                          )
+                          ) : !imgDownloadUrl2 || !CamDownloadUrl2 ? (
+                            <Button
+                              onPress={() =>
+                                ImageData2
+                                  ? Base642()
+                                  : ShowPicCam2
+                                  ? UploadCamPhoto2()
+                                  : console.log('Blank Hai')
+                              }>
+                              Upload{' '}
+                              <FontAwesome
+                                name="upload"
+                                size={13}
+                                color={'#3d3d72'}
+                                style={{alignSelf: 'center'}}
+                              />
+                            </Button>
+                          ) : null
                         ) : null}
                       </>
+                    ) : imgDownloadUrl2 || CamDownloadUrl2 ? (
+                      <Image
+                        source={{uri: imgDownloadUrl2 || CamDownloadUrl2}}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: 4,
+                        }}
+                      />
                     ) : (
-                      <>
-                        <View
-                          style={{
-                            alignSelf: 'center',
-                            top: 30,
-                            position: 'absolute',
-                          }}>
-                          <Ionicons
-                            name="ios-add-outline"
-                            size={38}
-                            color={'gray'}
-                            style={{alignSelf: 'center'}}
-                          />
-                          <Text style={{alignSelf: 'center'}}>Add Image 2</Text>
-                        </View>
-                      </>
+                      <View
+                        style={{
+                          alignSelf: 'center',
+                          top: 30,
+                          position: 'absolute',
+                        }}>
+                        <Ionicons
+                          name="ios-add-outline"
+                          size={38}
+                          color={'gray'}
+                          style={{alignSelf: 'center'}}
+                        />
+                        <Text style={{alignSelf: 'center'}}>Add Image 2</Text>
+                      </View>
                     )}
                   </TouchableOpacity>
                 </View>
                 <View style={{margin: 15}}>
-                  {imgDownloadUrl1 && imgDownloadUrl2 ? (
+                  {(imgDownloadUrl1 && imgDownloadUrl2) ||
+                  (CamDownloadUrl1 && CamDownloadUrl2) ? (
                     <Button
                       onPress={() => AddVehicle()}
                       textColor="white"
                       buttonColor="#3d3d72"
-                      style={{margin: 5, borderRadius: 6}}>
+                      style={{margin: 5, borderRadius: 6, marginTop: 20}}>
                       Add Vehicle
                     </Button>
-                  ) : null}
+                  ) : (
+                    <Button
+                      textColor="white"
+                      buttonColor="darkgray"
+                      style={{margin: 5, borderRadius: 6, marginTop: 20}}>
+                      Add Vehicle
+                    </Button>
+                  )}
                 </View>
               </View>
             </View>
@@ -651,6 +911,49 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: 'gray',
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#b6b6b666',
+  },
+  modalView: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    fontSize: 20,
+    textAlign: 'center',
+    color: 'black',
   },
 });
 
