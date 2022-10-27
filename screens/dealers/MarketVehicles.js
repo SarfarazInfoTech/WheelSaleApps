@@ -101,7 +101,8 @@ const MarketVehicles = ({navigation}) => {
                     images:
                       Data[keys].images[0].image === null
                         ? DefImg
-                        : Data[keys].images[0].image,
+                        : Data[keys].images,
+                        // : Data[keys].images[0].image,
                   });
                 }}>
                   <View style={styles.cardItem}>

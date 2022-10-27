@@ -7,6 +7,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  FlatList,
+  Dimensions,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -16,10 +18,12 @@ import {ShownMyVehical} from '../services/UrlApi.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VehiclesDetails = ({navigation, route}) => {
+  const {height, width} = Dimensions.get('window');
   const [dealerId, setDealerId] = useState('');
   const [Price, setPrice] = useState('');
   const [Condition, setCondition] = useState('');
   const [checked, setChecked] = useState();
+  const {selectedIndex, setSelectedIndex} = useState(0);
 
   const {
     subCategoryId,
@@ -85,7 +89,6 @@ const VehiclesDetails = ({navigation, route}) => {
       body: JSON.stringify({
         vehicleCondition: checked,
         sellingPrice: 9999,
-
       }),
     };
 
@@ -164,12 +167,48 @@ const VehiclesDetails = ({navigation, route}) => {
         <View style={styles.container}>
           <View style={styles.imageBox}>
             <View style={styles.image}>
-              <Image
-                source={{
-                  uri: images,
+              <FlatList
+                horizontal
+                data={images}
+                renderItem={({item, index}) => {
+                  // console.log('item', item.image);
+                  return (
+                    <View key={index} style={{width: width}}>
+                      <Image
+                        source={{
+                          uri: item.image,
+                        }}
+                        style={styles.image}
+                      />
+                    </View>
+                  );
                 }}
-                style={styles.image}
               />
+              <View
+                style={{
+                  width: width,
+                  height: 30,
+                  position: 'absolute',
+                  bottom: 0,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {images.map((item, index) => {
+                  // console.log(index);
+                  return (
+                    <View
+                      style={{
+                        backgroundColor:
+                          selectedIndex === index ? 'black' : 'white',
+                        height: 10,
+                        width: 10,
+                        margin: 5,
+                        borderRadius: 100,
+                      }}></View>
+                  );
+                })}
+              </View>
             </View>
           </View>
           <View style={styles.hedBox}>
