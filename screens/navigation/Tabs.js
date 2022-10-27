@@ -49,7 +49,8 @@ const Tabs = () => {
           },
           headerStyle: {
             backgroundColor: '#00b8dc',
-          },}}
+          },
+        headerTitle: 'Broker Association Notification'}}
         />
         <Tab.Screen
           name="Profile"

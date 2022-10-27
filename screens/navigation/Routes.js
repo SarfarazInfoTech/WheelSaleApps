@@ -17,6 +17,7 @@ import SubscriptionPlan from '../dealers/webpages/SubscriptionPlan';
 import Dashboard from '../dealers/Dashboard';
 import ImageUpload from '../dealers/ImageUploadFirebase';
 import ImageUp from '../dealers/Image';
+import ShowNotification from '../dealers/ShowNotification';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,6 +37,12 @@ const Routes = () => {
         <Stack.Screen
           name="Vehicles Details"
           component={VehiclesDetails}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="Show Notification"
+          component={ShowNotification}
           options={{headerShown: true}}
         />
 

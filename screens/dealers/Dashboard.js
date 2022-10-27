@@ -352,7 +352,7 @@ const Dashboard = ({navigation, route}) => {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => navigation.navigate('Subscription')}
+                onPress={() => navigation.navigate('Subscription plans')}
                 style={styles.shadowCard}>
                 <View style={styles.card}>
                   <View
