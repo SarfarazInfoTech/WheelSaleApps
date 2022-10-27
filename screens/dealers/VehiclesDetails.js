@@ -198,6 +198,7 @@ const VehiclesDetails = ({navigation, route}) => {
                   // console.log(index);
                   return (
                     <View
+                    key={index}
                       style={{
                         backgroundColor:
                           selectedIndex === index ? 'black' : 'white',
