@@ -626,17 +626,72 @@ const AddVehicles = ({navigation}) => {
                         <Text style={styles.modalText}>
                           Select Vehicle Image
                         </Text>
-                        <Pressable
-                          style={[styles.button, styles.buttonClose]}
-                          onPressIn={() => choosePic1()}>
-                          <Text style={styles.textStyle}>Image from Phone</Text>
-                        </Pressable>
-                        <View style={{margin: 5}}></View>
-                        <Pressable
-                          style={[styles.button, styles.buttonClose]}
-                          onPress={() => openCamera1()}>
-                          <Text style={styles.textStyle}>Open Camera</Text>
-                        </Pressable>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            width: '30%',
+                            marginLeft: 10,
+                            marginBottom: 30,
+                          }}>
+                          <View
+                            style={{width: '100%', alignItems: 'flex-start'}}>
+                            <TouchableOpacity
+                              onPress={() => openCamera1()}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                              }}>
+                              <Image
+                                source={{
+                                  uri: 'https://cdn.dribbble.com/users/1190502/screenshots/4167230/1.png',
+                                }}
+                                style={{
+                                  width: '45%',
+                                  height: 45,
+                                  borderRadius: 10,
+                                }}
+                              />
+                            </TouchableOpacity>
+                            <Text
+                              style={{
+                                fontSize: 11,
+                                marginTop: 5,
+                                color: 'black',
+                              }}>
+                              Camera
+                            </Text>
+                          </View>
+                          <View
+                            style={{width: '100%', alignItems: 'flex-start'}}>
+                            <TouchableOpacity
+                              onPressIn={() => choosePic1()}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                              }}>
+                              <Image
+                                source={{
+                                  uri: 'https://ukca.org.uk/wp-content/uploads/2020/05/resource_DB.jpg',
+                                }}
+                                style={{
+                                  width: '45%',
+                                  height: 45,
+                                  borderRadius: 10,
+                                }}
+                              />
+                            </TouchableOpacity>
+                            <Text
+                              style={{
+                                fontSize: 11,
+                                marginTop: 5,
+                                color: 'black',
+                              }}>
+                              {' '}
+                              Photos
+                            </Text>
+                          </View>
+                        </View>
                       </View>
                     </View>
                   </Modal>
@@ -654,17 +709,72 @@ const AddVehicles = ({navigation}) => {
                         <Text style={styles.modalText}>
                           Select Vehicle Image
                         </Text>
-                        <Pressable
-                          style={[styles.button, styles.buttonClose]}
-                          onPressIn={() => choosePic2()}>
-                          <Text style={styles.textStyle}>Image from Phone</Text>
-                        </Pressable>
-                        <View style={{margin: 5}}></View>
-                        <Pressable
-                          style={[styles.button, styles.buttonClose]}
-                          onPress={() => openCamera2()}>
-                          <Text style={styles.textStyle}>Open Camera</Text>
-                        </Pressable>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            width: '30%',
+                            marginLeft: 10,
+                            marginBottom: 30,
+                          }}>
+                          <View
+                            style={{width: '100%', alignItems: 'flex-start'}}>
+                            <TouchableOpacity
+                              onPress={() => openCamera2()}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                              }}>
+                              <Image
+                                source={{
+                                  uri: 'https://cdn.dribbble.com/users/1190502/screenshots/4167230/1.png',
+                                }}
+                                style={{
+                                  width: '45%',
+                                  height: 45,
+                                  borderRadius: 10,
+                                }}
+                              />
+                            </TouchableOpacity>
+                            <Text
+                              style={{
+                                fontSize: 11,
+                                marginTop: 5,
+                                color: 'black',
+                              }}>
+                              Camera
+                            </Text>
+                          </View>
+                          <View
+                            style={{width: '100%', alignItems: 'flex-start'}}>
+                            <TouchableOpacity
+                              onPressIn={() => choosePic2()}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                              }}>
+                              <Image
+                                source={{
+                                  uri: 'https://ukca.org.uk/wp-content/uploads/2020/05/resource_DB.jpg',
+                                }}
+                                style={{
+                                  width: '45%',
+                                  height: 45,
+                                  borderRadius: 10,
+                                }}
+                              />
+                            </TouchableOpacity>
+                            <Text
+                              style={{
+                                fontSize: 11,
+                                marginTop: 5,
+                                color: 'black',
+                              }}>
+                              {' '}
+                              Photos
+                            </Text>
+                          </View>
+                        </View>
                       </View>
                     </View>
                   </Modal>
@@ -915,15 +1025,16 @@ const styles = StyleSheet.create({
 
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
     backgroundColor: '#b6b6b666',
+    bottom: 0,
   },
   modalView: {
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    padding: 20,
+    bottom: -15,
+    alignItems: 'flex-start',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -950,8 +1061,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    marginBottom: 15,
-    fontSize: 20,
+    marginBottom: 30,
+    fontSize: 18,
     textAlign: 'center',
     color: 'black',
   },
