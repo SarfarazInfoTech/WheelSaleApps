@@ -34,6 +34,7 @@ const MarketVehicles = ({navigation}) => {
         .then(res => res.json())
         .then(resData => {
           if (resData.status === 'S') {
+            // console.log(resData.subCategories[0].vehicleDealer)
             // alert(resData.message);
             setMessage(resData.message);
             setData(resData.subCategories);
@@ -56,7 +57,6 @@ const MarketVehicles = ({navigation}) => {
     myVehical();
   }, []);
 
-  
   return (
     <>
       {loading ? (
@@ -87,24 +87,27 @@ const MarketVehicles = ({navigation}) => {
           <View style={styles.container}>
             {Object.keys(Data).map(keys => {
               return (
-                <TouchableOpacity key={Data[keys].subCategoryId} onPress={() => {
-                  navigation.navigate('Vehicles Details', {
-                    // subCategoryId: Data[keys].subCategoryId,
-                    categoryName: Data[keys].categoryName,
-                    subCategoryName: Data[keys].subCategoryName,
-                    company: Data[keys].company,
-                    modelYear: Data[keys].modelYear,
-                    color: Data[keys].color,
-                    vehicleCondition: Data[keys].vehicleCondition,
-                    vehicleNumber: Data[keys].vehicleNumber,
-                    sellingPrice: Data[keys].sellingPrice,
-                    images:
-                      Data[keys].images[0].image === null
-                        ? DefImg
-                        : Data[keys].images,
-                        // : Data[keys].images[0].image,
-                  });
-                }}>
+                <TouchableOpacity
+                  key={Data[keys].subCategoryId}
+                  onPress={() => {
+                    navigation.navigate('Vehicles Details', {
+                      // subCategoryId: Data[keys].subCategoryId,
+                      categoryName: Data[keys].categoryName,
+                      subCategoryName: Data[keys].subCategoryName,
+                      company: Data[keys].company,
+                      modelYear: Data[keys].modelYear,
+                      color: Data[keys].color,
+                      vehicleCondition: Data[keys].vehicleCondition,
+                      vehicleNumber: Data[keys].vehicleNumber,
+                      sellingPrice: Data[keys].sellingPrice,
+                      images:
+                        Data[keys].images[0].image === null
+                          ? DefImg
+                          : Data[keys].images,
+                      // : Data[keys].images[0].image,
+                      vehicleDealer: Data[keys].vehicleDealer,
+                    });
+                  }}>
                   <View style={styles.cardItem}>
                     <View style={styles.card}>
                       <Image

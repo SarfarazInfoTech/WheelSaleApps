@@ -37,6 +37,7 @@ const VehiclesDetails = ({navigation, route}) => {
     sellingPrice,
     images,
     soldVehicle,
+    vehicleDealer,
   } = route.params;
 
   const getData = async () => {
@@ -198,7 +199,7 @@ const VehiclesDetails = ({navigation, route}) => {
                   // console.log(index);
                   return (
                     <View
-                    key={index}
+                      key={index}
                       style={{
                         backgroundColor:
                           selectedIndex === index ? 'black' : 'white',
@@ -256,6 +257,84 @@ const VehiclesDetails = ({navigation, route}) => {
               </Text>
             </View>
           </View>
+
+          {/* User Dealer Details With Logic */}
+          {!subCategoryId ? (
+            soldVehicle === 'Sold' ? null : (
+              <View style={{flex: 1, margin: 5, paddingBottom: 50}}>
+                <View
+                  style={{
+                    padding: 5,
+                    borderRadius: 10,
+                    backgroundColor: 'white',
+                    borderColor: 'lightgray',
+                    borderWidth: 1,
+                  }}>
+                  <View>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 17,
+                        borderBottomColor: 'gray',
+                        borderBottomWidth: 1,
+                        alignSelf: 'flex-start',
+                        marginBottom: 6,
+                        paddingBottom: 3,
+                      }}>
+                      Dealer Details
+                    </Text>
+                  </View>
+                  {/* <Text> id : {vehicleDealer.dealerId}</Text> */}
+                  <View style={{flexDirection: 'row', margin: 5}}>
+                    <Text
+                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      Name :{' '}
+                    </Text>
+                    <Text style={{color: 'black', fontSize: 14}}>
+                      {vehicleDealer.fullName}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', margin: 5}}>
+                    <Text
+                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      Mobile :{' '}
+                    </Text>
+                    <Text style={{color: 'black', fontSize: 14}}>
+                      {vehicleDealer.phone}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', margin: 5}}>
+                    <Text
+                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      Email Id :{' '}
+                    </Text>
+                    <Text style={{color: 'black', fontSize: 14}}>
+                      {vehicleDealer.email}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', margin: 5}}>
+                    <Text
+                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      Shop Name :{' '}
+                    </Text>
+                    <Text style={{color: 'black', fontSize: 14}}>
+                      {vehicleDealer.shopName}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', margin: 5}}>
+                    <Text
+                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      Shop Address :{' '}
+                    </Text>
+                    <Text style={{color: 'black', fontSize: 14}}>
+                      {vehicleDealer.shopAddress}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )
+          ) : null}
+
           {subCategoryId ? (
             <>
               <View style={{margin: 10}}>
@@ -494,14 +573,15 @@ const VehiclesDetails = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
       ) : soldVehicle === 'Sold' ? null : (
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            position: 'absolute',
-            bottom: 0,
-          }}>
-          <TouchableOpacity
+        <>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              position: 'absolute',
+              bottom: 0,
+            }}>
+            {/* <TouchableOpacity
             style={{
               backgroundColor: '#009193',
               width: '50%',
@@ -517,25 +597,34 @@ const VehiclesDetails = ({navigation, route}) => {
               }}>
               MESSAGE
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#3d3d72',
-              width: '50%',
-              paddingVertical: 10,
-            }}
-            onPress={() => alert('Wait')}>
-            <Text
+          </TouchableOpacity> */}
+            <TouchableOpacity
               style={{
-                fontSize: 20,
+                backgroundColor: '#3d3d72',
                 width: '100%',
-                textAlign: 'center',
-                color: 'white',
-              }}>
-              CALL
-            </Text>
-          </TouchableOpacity>
-        </View>
+                paddingVertical: 10,
+              }}
+              onPress={() => alert('Wait')}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  width: '100%',
+                  textAlign: 'center',
+                  color: 'white',
+                  alignSelf: 'center',
+                }}>
+                <FontAwesome
+                  style={{padding: 50}}
+                  name="phone"
+                  size={25}
+                  color="white"
+                />
+                {'  '}
+                CALL : {vehicleDealer.phone}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
       )}
     </>
   );

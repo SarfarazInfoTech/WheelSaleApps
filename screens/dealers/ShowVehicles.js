@@ -37,6 +37,7 @@ const ShowVehicles = ({navigation}) => {
         .then(res => res.json())
         .then(resData => {
           if (resData.status === 'S') {
+            // console.log(resData.subCategories[0].vehicleDealer)
             // alert(resData.message);
             setMessage(resData.message);
             setData(resData.subCategories);
