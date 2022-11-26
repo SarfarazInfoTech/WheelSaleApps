@@ -18,6 +18,7 @@ import Dashboard from '../dealers/Dashboard';
 import ImageUpload from '../dealers/ImageUploadFirebase';
 import ImageUp from '../dealers/Image';
 import ShowNotification from '../dealers/ShowNotification';
+import Searching from '../dealers/Searching';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -80,7 +81,7 @@ const Routes = () => {
 
         <Stack.Screen
           name="Search"
-          component={Search}
+          component={Searching}
           options={{headerShown: false}}
         />
 

@@ -15,5 +15,5 @@ export {MarketVehical};
 const SoldMyVehical = `${baseURL}/wheelsale-app-ws/sub-categories?limit=100&page=1&visibility=false&dealerId=`
 export {SoldMyVehical};
 
-const SearchVehical = `${baseURL}/wheelsale-app-ws/sub-categories?limit=100&page=`
+const SearchVehical = `${baseURL}/wheelsale-app-ws/sub-categories/search?keyword=`
 export {SearchVehical};

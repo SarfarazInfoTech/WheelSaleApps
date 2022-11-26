@@ -285,45 +285,91 @@ const VehiclesDetails = ({navigation, route}) => {
                     </Text>
                   </View>
                   {/* <Text> id : {vehicleDealer.dealerId}</Text> */}
-                  <View style={{flexDirection: 'row', margin: 5}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      margin: 5,
+                      alignItems: 'center',
+                    }}>
+                    <FontAwesome name="user" size={17} color="#3d3d72" />
+
                     <Text
                       style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      {' '}
                       Name :{' '}
                     </Text>
                     <Text style={{color: 'black', fontSize: 14}}>
                       {vehicleDealer.fullName}
                     </Text>
                   </View>
-                  <View style={{flexDirection: 'row', margin: 5}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      margin: 5,
+                      alignItems: 'center',
+                    }}>
+                    <FontAwesome
+                      name="phone-square"
+                      size={15}
+                      color="#3d3d72"
+                    />
+
                     <Text
                       style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      {' '}
                       Mobile :{' '}
                     </Text>
                     <Text style={{color: 'black', fontSize: 14}}>
                       {vehicleDealer.phone}
                     </Text>
                   </View>
-                  <View style={{flexDirection: 'row', margin: 5}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      margin: 5,
+                      alignItems: 'center',
+                    }}>
+                    <FontAwesome
+                      name="envelope-square"
+                      size={16}
+                      color="#3d3d72"
+                    />
                     <Text
                       style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      {' '}
                       Email Id :{' '}
                     </Text>
                     <Text style={{color: 'black', fontSize: 14}}>
                       {vehicleDealer.email}
                     </Text>
                   </View>
-                  <View style={{flexDirection: 'row', margin: 5}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      margin: 5,
+                      alignItems: 'center',
+                    }}>
+                    <FontAwesome name="map" size={14} color="#3d3d72" />
                     <Text
                       style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      {' '}
                       Shop Name :{' '}
                     </Text>
                     <Text style={{color: 'black', fontSize: 14}}>
                       {vehicleDealer.shopName}
                     </Text>
                   </View>
-                  <View style={{flexDirection: 'row', margin: 5}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      margin: 5,
+                      alignItems: 'center',
+                      width: '65%',
+                    }}>
+                    <FontAwesome name="map-marker" style={{alignSelf: 'baseline'}} size={19} color="#3d3d72" />
                     <Text
-                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      style={{color: 'black', fontSize: 14, fontWeight: '500', alignSelf: 'baseline' }}>
+                      {' '}
                       Shop Address :{' '}
                     </Text>
                     <Text style={{color: 'black', fontSize: 14}}>
