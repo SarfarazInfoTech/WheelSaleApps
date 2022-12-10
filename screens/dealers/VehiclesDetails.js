@@ -9,6 +9,9 @@ import {
   Alert,
   FlatList,
   Dimensions,
+  Modal,
+  Pressable,
+  Linking,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -24,6 +27,14 @@ const VehiclesDetails = ({navigation, route}) => {
   const [Condition, setCondition] = useState('');
   const [checked, setChecked] = useState();
   const {selectedIndex, setSelectedIndex} = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [aadharNumber, setAadharNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [soldPrice, setSoldPrice] = useState('');
+  const [sales, setSales] = useState({});
 
   const {
     subCategoryId,
@@ -37,6 +48,7 @@ const VehiclesDetails = ({navigation, route}) => {
     sellingPrice,
     images,
     soldVehicle,
+    salesVehicle,
     vehicleDealer,
   } = route.params;
 
@@ -61,12 +73,15 @@ const VehiclesDetails = ({navigation, route}) => {
         accept: 'application/json',
       },
       body: JSON.stringify({
+        saleDetails: {
+          dealerId: dealerId,
+        },
         sellingPrice: Price,
       }),
     };
 
     fetch(
-      `http://wheelsale.in:80/wheelsale-app-ws/sub-categories/${subCategoryId}/price`,
+      `http://wheelsale.in/wheelsale-app-ws/sub-categories/${subCategoryId}/price`,
       requestOptions,
     )
       .then(response => response.json())
@@ -88,13 +103,16 @@ const VehiclesDetails = ({navigation, route}) => {
         accept: 'application/json',
       },
       body: JSON.stringify({
-        vehicleCondition: checked,
+        saleDetails: {
+          dealerId: dealerId,
+        },
         sellingPrice: 9999,
+        vehicleCondition: checked,
       }),
     };
 
     fetch(
-      `http://wheelsale.in:80/wheelsale-app-ws/sub-categories/${subCategoryId}/condition`,
+      `http://wheelsale.in/wheelsale-app-ws/sub-categories/${subCategoryId}/condition`,
       requestOptions,
     )
       .then(response => response.json())
@@ -110,7 +128,7 @@ const VehiclesDetails = ({navigation, route}) => {
 
   const SoldVehical = () => {
     fetch(
-      `http://wheelsale.in:80/wheelsale-app-ws/sub-categories/${subCategoryId}/sold`,
+      `http://wheelsale.in/wheelsale-app-ws/sub-categories/${subCategoryId}/sold`,
       {
         method: 'PUT',
         headers: {
@@ -118,6 +136,17 @@ const VehiclesDetails = ({navigation, route}) => {
           accept: 'application/json',
         },
         body: JSON.stringify({
+          buyer: {
+            aadharNumber: aadharNumber,
+            email: email,
+            name: name,
+            password: password,
+            phone: phone,
+          },
+          saleDetails: {
+            dealerId: dealerId,
+            soldPrice: soldPrice,
+          },
           sellingPrice: 9999,
         }),
       },
@@ -125,7 +154,7 @@ const VehiclesDetails = ({navigation, route}) => {
       .then(res => res.json())
       .then(json => {
         console.log(json.message);
-        alert(json.message);
+        Alert.alert('', json.message);
         navigation.navigate('Sold Vehicle');
       })
       .catch(err => {
@@ -135,7 +164,7 @@ const VehiclesDetails = ({navigation, route}) => {
 
   const DeleteVehical = () => {
     fetch(
-      `http://wheelsale.in:80/wheelsale-app-ws/sub-categories/${subCategoryId}/delete`,
+      `http://wheelsale.in/wheelsale-app-ws/sub-categories/${subCategoryId}/delete`,
       {
         method: 'PUT',
         headers: {
@@ -143,13 +172,16 @@ const VehiclesDetails = ({navigation, route}) => {
           accept: 'application/json',
         },
         body: JSON.stringify({
-          sellingPrice: 9999,
+          saleDetails: {
+            dealerId: dealerId,
+          },
+          sellingPrice: 99999,
         }),
       },
     )
       .then(res => res.json())
       .then(json => {
-        console.log(json.message);
+        console.log(json);
         alert(json.message);
         navigation.navigate('My Vehicle');
       })
@@ -158,7 +190,28 @@ const VehiclesDetails = ({navigation, route}) => {
       });
   };
 
+  const SaleUser = () => {
+    fetch(`http://wheelsale.in/wheelsale-app-ws/sales/${salesVehicle}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(json => {
+        setSales(json.user);
+        // console.log(json);
+        // alert(json.message);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
+    // console.log(subCategoryId);
+    SaleUser();
     getData();
   });
 
@@ -366,9 +419,19 @@ const VehiclesDetails = ({navigation, route}) => {
                       alignItems: 'center',
                       width: '65%',
                     }}>
-                    <FontAwesome name="map-marker" style={{alignSelf: 'baseline'}} size={19} color="#3d3d72" />
+                    <FontAwesome
+                      name="map-marker"
+                      style={{alignSelf: 'baseline'}}
+                      size={19}
+                      color="#3d3d72"
+                    />
                     <Text
-                      style={{color: 'black', fontSize: 14, fontWeight: '500', alignSelf: 'baseline' }}>
+                      style={{
+                        color: 'black',
+                        fontSize: 14,
+                        fontWeight: '500',
+                        alignSelf: 'baseline',
+                      }}>
                       {' '}
                       Shop Address :{' '}
                     </Text>
@@ -547,6 +610,83 @@ const VehiclesDetails = ({navigation, route}) => {
           ) : null}
         </View>
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          console.log('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <Pressable
+            style={{margin: 15}}
+            onPress={() => setModalVisible(!modalVisible)}>
+            <FontAwesome
+              name="times"
+              size={20}
+              color="white"
+              style={styles.textStyle}
+            />
+          </Pressable>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Buyer's Details</Text>
+            <Text style={styles.lable}>Name</Text>
+            <TextInput
+              value={name}
+              placeholder="Name"
+              onChangeText={value => setName(value)}
+              style={styles.textInput}
+              maxLength={40}
+              placeholderTextColor="gray"
+            />
+            <Text style={styles.lable}>Email</Text>
+            <TextInput
+              value={email}
+              placeholder="Email Address"
+              onChangeText={value => setEmail(value)}
+              style={styles.textInput}
+              maxLength={30}
+              placeholderTextColor="gray"
+            />
+            <Text style={styles.lable}>Phone</Text>
+            <TextInput
+              value={phone}
+              placeholder="Phone Number"
+              onChangeText={value => setPhone(value)}
+              style={styles.textInput}
+              maxLength={10}
+              keyboardType="decimal-pad"
+              placeholderTextColor="gray"
+            />
+            <Text style={styles.lable}>Aadhaar</Text>
+            <TextInput
+              value={aadharNumber}
+              placeholder="Aadhaar Number"
+              onChangeText={value => setAadharNumber(value)}
+              style={styles.textInput}
+              maxLength={12}
+              keyboardType="decimal-pad"
+              placeholderTextColor="gray"
+            />
+            <Text style={styles.lable}>Sold Price</Text>
+            <TextInput
+              value={soldPrice}
+              placeholder="Sold Price"
+              onChangeText={value => setSoldPrice(value)}
+              style={styles.textInput}
+              maxLength={6}
+              keyboardType="decimal-pad"
+              placeholderTextColor="gray"
+            />
+            <Button
+              onPress={() => SoldVehical()}
+              style={{marginTop: 30, borderColor: 'gray', borderWidth: 1}}>
+              Submit Customer Details
+            </Button>
+          </View>
+        </View>
+      </Modal>
       {subCategoryId ? (
         <View
           style={{
@@ -603,7 +743,7 @@ const VehiclesDetails = ({navigation, route}) => {
                 },
                 {
                   text: 'YES',
-                  onPress: () => SoldVehical(),
+                  onPress: () => setModalVisible(true),
                 },
               ])
             }>
@@ -618,7 +758,113 @@ const VehiclesDetails = ({navigation, route}) => {
             </Text>
           </TouchableOpacity>
         </View>
-      ) : soldVehicle === 'Sold' ? null : (
+      ) : soldVehicle === 'Sold' ? (
+        <View style={{backgroundColor: 'white', padding: 5, paddingBottom: 50}}>
+          <View
+            style={{
+              padding: 5,
+              borderRadius: 10,
+              backgroundColor: 'white',
+              borderColor: 'lightgray',
+              borderWidth: 1,
+            }}>
+            <View>
+              <Text
+                style={{
+                  color: 'black',
+                  fontSize: 17,
+                  borderBottomColor: 'gray',
+                  borderBottomWidth: 1,
+                  alignSelf: 'flex-start',
+                  marginBottom: 6,
+                  paddingBottom: 3,
+                }}>
+                Customer Details
+              </Text>
+            </View>
+            {/* <Text> Sales id : {sales.userId}</Text> */}
+            <View
+              style={{
+                flexDirection: 'row',
+                margin: 5,
+                alignItems: 'center',
+              }}>
+              <FontAwesome name="user" size={17} color="#3d3d72" />
+
+              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                {' '}
+                Name :{' '}
+              </Text>
+              <Text style={{color: 'black', fontSize: 14}}>{sales.name}</Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                margin: 5,
+                alignItems: 'center',
+              }}>
+              <FontAwesome name="envelope-square" size={16} color="#3d3d72" />
+              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                {' '}
+                Email Id :{' '}
+              </Text>
+              <Text style={{color: 'black', fontSize: 14}}>{sales.email}</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                margin: 5,
+                alignItems: 'center',
+              }}>
+              <FontAwesome name="phone-square" size={15} color="#3d3d72" />
+              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                {' '}
+                Mobile No. :{' '}
+              </Text>
+              <Text style={{color: 'black', fontSize: 14}}>{sales.phone}</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                margin: 5,
+                alignItems: 'center',
+              }}>
+              <FontAwesome name="id-card" size={14} color="#3d3d72" />
+              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                {' '}
+                Aadhaar No. :{' '}
+              </Text>
+              <Text style={{color: 'black', fontSize: 14}}>
+                {sales.aadharNumber}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                margin: 5,
+                alignItems: 'center',
+              }}>
+              <FontAwesome name="clock-o" size={14} color="#3d3d72" />
+              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                {' '}
+                Purchase :{' '}
+              </Text>
+              <Text style={{color: 'black', fontSize: 14}}>
+                Date -{' '}
+                {sales.createdAt
+                  ? sales.createdAt
+                      .replace(/-/g, '/')
+                      .split('T')
+                      .join(', Time - ')
+                      .split('.000+00:00')
+                      .join(' ')
+                  : ''}
+              </Text>
+            </View>
+          </View>
+        </View>
+      ) : (
         <>
           <View
             style={{
@@ -650,7 +896,17 @@ const VehiclesDetails = ({navigation, route}) => {
                 width: '100%',
                 paddingVertical: 10,
               }}
-              onPress={() => alert('Wait')}>
+              onPress={() =>
+                Linking.canOpenURL(`tel:${vehicleDealer.phone}`).then(
+                  supported => {
+                    if (!supported) {
+                      return Linking.openURL(`tel:${vehicleDealer.phone}`);
+                    } else {
+                      console.log('Not Working');
+                    }
+                  },
+                )
+              }>
               <Text
                 style={{
                   fontSize: 20,
@@ -724,5 +980,54 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'black',
   },
+
+  lable: {
+    color: 'black',
+    fontSize: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginTop: 10,
+  },
+  textInput: {
+    borderColor: 'darkgray',
+    borderRadius: 10,
+    borderWidth: 1,
+    marginHorizontal: 10,
+    paddingVertical: 8,
+    paddingLeft: 20,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#00b8dc',
+  },
+  modalView: {
+    margin: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 30,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  textStyle: {
+    textAlign: 'right',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 22,
+    color: '#00b8dc',
+    fontWeight: '500',
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 2,
+    paddingBottom: 2,
+  },
 });
+
 export default VehiclesDetails;

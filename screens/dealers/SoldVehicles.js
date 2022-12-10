@@ -40,6 +40,7 @@ const SoldVehicles = ({navigation}) => {
             // alert(resData.message);
             setMessage(resData.message);
             setData(resData.subCategories);
+            // console.log(resData.subCategories);
           } else if (resData.status === 'F') {
             // alert(resData.message);
             // navigation.navigate('Dashboard ');
@@ -275,6 +276,7 @@ const SoldVehicles = ({navigation}) => {
                               navigation.navigate('Vehicles Details', {
                                 // subCategoryId: Data[keys].subCategoryId,
                                 soldVehicle: 'Sold',
+                                salesVehicle: Data[keys].subCategoryId,
                                 categoryName: Data[keys].categoryName,
                                 subCategoryName: Data[keys].subCategoryName,
                                 company: Data[keys].company,
@@ -287,7 +289,7 @@ const SoldVehicles = ({navigation}) => {
                                   Data[keys].images[0].image === null
                                     ? DefImg
                                     : Data[keys].images,
-                                    // : Data[keys].images[0].image,
+                                // : Data[keys].images[0].image,
                               });
                             }}>
                             <Text

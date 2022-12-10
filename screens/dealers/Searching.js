@@ -15,7 +15,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {DefImg} from '../data/data.json';
 import {SearchVehical} from '../services/UrlApi.js';
 
-const Searching = () => {
+const Searching = ({navigation}) => {
   const [FilterData, setFilterData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -84,7 +84,26 @@ const Searching = () => {
           </View>
         ) : (
           <View style={styles.container}>
-            <TouchableOpacity key={item.subCategoryId}>
+            <TouchableOpacity key={item.subCategoryId} 
+            onPress={() => {
+              navigation.navigate('Vehicles Details', {
+                // subCategoryId: item.subCategoryId,
+                categoryName: item.categoryName,
+                subCategoryName: item.subCategoryName,
+                company: item.company,
+                modelYear: item.modelYear,
+                color: item.color,
+                vehicleCondition: item.vehicleCondition,
+                vehicleNumber: item.vehicleNumber,
+                sellingPrice: item.sellingPrice,
+                images:
+                  item.images[0].image === null
+                    ? DefImg
+                    : item.images,
+                // : item.images[0].image,
+                vehicleDealer: item.vehicleDealer,
+              });
+            }}>
               <View style={styles.cardItem}>
                 <View style={styles.card}>
                   <Image
