@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     top: 120,
     right: 5,
   },
-  shopName: {},
+  // shopName: {},
   vehName: {
     textTransform: 'uppercase',
     color: 'black',
