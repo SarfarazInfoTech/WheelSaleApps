@@ -12,7 +12,7 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {AddMyVehical, VehiclesList} from '../services/UrlApi.js';
 import SelectList from 'react-native-dropdown-select-list';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -20,6 +20,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RadioButton, Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {useFocusEffect} from '@react-navigation/native';
 
 const AddVehicles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ const AddVehicles = ({navigation}) => {
   const [VehiInfo, setVehiInfo] = useState([]);
 
   const Years = [
+    {value: '2023'},
     {value: '2022'},
     {value: '2021'},
     {value: '2020'},
