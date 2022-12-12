@@ -27,24 +27,70 @@ const Account = () => {
   return (
     <>
       {Data.length != 0 ? (
-        <View style={{flex: 1, backgroundColor: 'white', padding: 10}}>
-          <View style={{flexDirection: 'row', marginVertical: 10}}>
+        <View
+          style={{
+            // flex: 1,
+            backgroundColor: 'white',
+            marginHorizontal: 10,
+            // borderColor: 'lightgray',
+            // borderWidth: 1
+          }}>
+          <View
+            style={{
+              backgroundColor: '#f7f7f7',
+              flexDirection: 'row',
+              paddingVertical: 10,
+              borderBottomColor: 'lightgray',
+              borderBottomWidth: 5,
+            }}>
             <Text style={styles.txtline}>Name : </Text>
             <Text style={styles.txtvalue}>{Data[0].fullName}</Text>
           </View>
-          <View style={{flexDirection: 'row', marginVertical: 10}}>
+          <View
+            style={{
+              backgroundColor: '#f7f7f7',
+              flexDirection: 'row',
+              paddingVertical: 10,
+              borderBottomColor: 'lightgray',
+              borderBottomWidth: 5,
+              width: '100%',
+            }}>
             <Text style={styles.txtline}>Email : </Text>
             <Text style={styles.txtvalue}>{Data[0].email}</Text>
           </View>
-          <View style={{flexDirection: 'row', marginVertical: 10}}>
+          <View
+            style={{
+              backgroundColor: '#f7f7f7',
+              flexDirection: 'row',
+              paddingVertical: 10,
+              borderBottomColor: 'lightgray',
+              borderBottomWidth: 5,
+              width: '100%',
+            }}>
             <Text style={styles.txtline}>Mobile : </Text>
             <Text style={styles.txtvalue}>{Data[0].phone}</Text>
           </View>
-          <View style={{flexDirection: 'row', marginVertical: 10}}>
+          <View
+            style={{
+              backgroundColor: '#f7f7f7',
+              flexDirection: 'row',
+              paddingVertical: 10,
+              borderBottomColor: 'lightgray',
+              borderBottomWidth: 5,
+              width: '100%',
+            }}>
             <Text style={styles.txtline}>Shop Name : </Text>
             <Text style={styles.txtvalue}>{Data[0].shopName}</Text>
           </View>
-          <View style={{flexDirection: 'row', marginVertical: 10}}>
+          <View
+            style={{
+              backgroundColor: '#f7f7f7',
+              flexDirection: 'row',
+              paddingVertical: 10,
+              borderBottomColor: 'lightgray',
+              borderBottomWidth: 5,
+              width: '100%',
+            }}>
             <Text style={styles.txtline}>Shop Address : </Text>
             <Text style={styles.txtvalue}>{Data[0].shopAddress}</Text>
           </View>
@@ -64,14 +110,17 @@ const Account = () => {
 
 const styles = StyleSheet.create({
   txtline: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '500',
     color: 'black',
-    marginRight: 5,
+    // marginRight: 5,
+    width: '23%',
   },
   txtvalue: {
-    fontSize: 16,
+    fontSize: 17,
     color: 'black',
+    width: '75%',
+    // backgroundColor: 'blue'
   },
 });
 export default Account;
