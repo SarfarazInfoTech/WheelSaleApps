@@ -1,5 +1,5 @@
-import {View, Text} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import {View, Text, Image, BackHandler} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -11,8 +11,13 @@ const SplashScreen = ({navigation}) => {
       AsyncStorage.getItem('UserData').then(value => {
         if (value != null) {
           navigation.navigate('Drawers');
+          console.log('Login');
+          // setLoading(false);
         } else {
+          console.log('Not Login');
           navigation.navigate('Login');
+          // navigation.navigate('MainScreen');
+          // setLoading(false)
         }
       });
     } catch (error) {
@@ -21,8 +26,11 @@ const SplashScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    getData();
+    setTimeout(function () {
+      getData();
+    }, 6000);
   }, []);
+
   return (
     <>
       {loading ? (
@@ -30,21 +38,36 @@ const SplashScreen = ({navigation}) => {
           style={{
             flex: 1,
             justifyContent: 'center',
-            // alignSelf: 'center',
-            // marginTop: 30,
-            backgroundColor: '#00b8dc'
+            backgroundColor: '#00b8dc',
           }}>
-          <ActivityIndicator
+          {/* <ActivityIndicator
             size="large"
             color="white"
             visible={loading}
             textContent={'Loading...'}
             textStyle={{}}
+          /> */}
+          <Image
+            source={{uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png'}}
+            style={{
+              height: 215,
+              width: 210,
+              borderRadius: 100,
+              alignSelf: 'center',
+            }}
           />
+          <Text
+            style={{
+              marginVertical: 15,
+              color: 'white',
+              fontSize: 30,
+              alignSelf: 'center',
+              fontWeight: '500',
+            }}>
+            WHEELSALE
+          </Text>
         </View>
-      ) : (
-        null
-      )}
+      ) : null}
     </>
   );
 };

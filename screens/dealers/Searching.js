@@ -117,7 +117,7 @@ const Searching = ({navigation}) => {
                   />
                   <Image
                     source={{
-                      uri: 'http://wheelsale.in/wheel/Asset1/images/favicon.png',
+                      uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png',
                     }}
                     style={styles.iconLogo}
                   />
@@ -224,7 +224,6 @@ const Searching = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
     flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -251,15 +250,14 @@ const styles = StyleSheet.create({
     height: 150,
   },
   iconLogo: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     borderRadius: 100,
     position: 'absolute',
     alignSelf: 'flex-end',
     top: 120,
     right: 5,
   },
-  // shopName: {},
   vehName: {
     textTransform: 'uppercase',
     color: 'black',
@@ -272,7 +270,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   shopName: {
-    // fontStyle: 'italic',
     fontSize: 13,
   },
 });

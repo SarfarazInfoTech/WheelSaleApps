@@ -6,12 +6,22 @@ import {
   Image,
   ScrollView,
   ActivityIndicator,
+  Button,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {ShownMyVehical} from '../services/UrlApi.js';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {DefImg} from '../data/data.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useFocusEffect} from '@react-navigation/native';
+import {
+  showSuccess,
+  showError,
+  showWarning,
+  showInfo,
+  showDefault,
+  showNone,
+} from '../components/FlashMessage';
 
 const ShowVehicles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -19,44 +29,6 @@ const ShowVehicles = ({navigation}) => {
   const [message, setMessage] = useState('');
   const [Error, setError] = useState('');
   const [dealerId, setDealerId] = useState('');
-
-  const myVehical = async () => {
-    try {
-      // console.log(ShownMyVehical + dealerId);
-      await fetch(ShownMyVehical + dealerId, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-type': 'application/json',
-        },
-        // body: JSON.stringify({
-        //   page: '1',
-        //   limit: '10',
-        // }),
-      })
-        .then(res => res.json())
-        .then(resData => {
-          if (resData.status === 'S') {
-            // console.log(resData.subCategories[0].vehicleDealer)
-            // alert(resData.message);
-            setMessage(resData.message);
-            setData(resData.subCategories);
-          } else if (resData.status === 'F') {
-            // alert(resData.message);
-            // navigation.navigate('Dashboard ');
-            setMessage(resData.message);
-            setError(resData.status);
-            // console.log(resData.status);
-          }
-        });
-    } catch (err) {
-      alert(err);
-      console.log(err);
-      navigation.navigate('Dashboard ');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getData = async () => {
     try {
@@ -73,10 +45,58 @@ const ShowVehicles = ({navigation}) => {
     }
   };
 
+  const myVehical = async () => {
+    try {
+      if (dealerId) {
+        await fetch(ShownMyVehical + dealerId, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json',
+          },
+          // body: JSON.stringify({
+          //   page: '1',
+          //   limit: '10',
+          // }),
+        })
+          .then(res => res.json())
+          .then(resData => {
+            if (resData.status === 'S') {
+              setError(resData.status);
+              setData(resData.subCategories);
+            } else if (resData.status === 'F') {
+              setError(resData.status);
+              setMessage(resData.message);
+              navigation.navigate('Dashboard ');
+            }
+          });
+      }
+    } catch (err) {
+      alert(err);
+      console.log(err);
+      navigation.navigate('Dashboard ');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getData();
     myVehical();
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      myVehical();
+
+      return () => {
+        setData('');
+        Error === 'F'
+          ? showWarning(`${message} Add at least one Vehicle.`)
+          : null;
+      };
+    }, []),
+  );
 
   return (
     <>
@@ -98,7 +118,7 @@ const ShowVehicles = ({navigation}) => {
         </View>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-          {Error === '' ? (
+          {Error === 'S' ? (
             <View style={styles.container}>
               {Object.keys(Data).map(keys => {
                 return (
@@ -118,7 +138,7 @@ const ShowVehicles = ({navigation}) => {
                           Data[keys].images[0].image === null
                             ? DefImg
                             : Data[keys].images,
-                            // : Data[keys].images[0].image,
+                        // : Data[keys].images[0].image,
                       });
                     }}
                     key={Data[keys].subCategoryId}>
@@ -133,24 +153,10 @@ const ShowVehicles = ({navigation}) => {
                           }}
                           style={styles.cardImg}
                         />
-                        {/* {Data[keys].images.map((image, imageId) => {
-                        // console.log(image.image);
-                        //  console.log(Object.keys(Data[keys].images[0].image));
-                        //  console.log(Data[keys].images[0].image);
-                        return (
-                          <Image
-                            key={imageId}
-                            source={{
-                              uri: Data[keys].images[0].image === null ? DefImg : Data[keys].images[0].image,
-                            }}
-                            style={styles.cardImg}
-                          />
-                        );
-                      })} */}
 
                         <Image
                           source={{
-                            uri: 'http://wheelsale.in/wheel/Asset1/images/favicon.png',
+                            uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png',
                           }}
                           style={styles.iconLogo}
                         />
@@ -206,9 +212,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    flexDirection: 'row',
     justifyContent: 'space-evenly',
-    // margin: 10,
   },
   card: {
     borderRadius: 10,
@@ -231,15 +235,14 @@ const styles = StyleSheet.create({
     height: 150,
   },
   iconLogo: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     borderRadius: 100,
     position: 'absolute',
     alignSelf: 'flex-end',
     top: 120,
     right: 5,
   },
-  // shopName: {},
   vehName: {
     textTransform: 'uppercase',
     color: 'black',
@@ -252,7 +255,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   shopName: {
-    // fontStyle: 'italic',
     fontSize: 13,
   },
 });

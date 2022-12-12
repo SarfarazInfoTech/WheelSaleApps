@@ -1,17 +1,27 @@
+// import Icon from 'react-native-vector-icons/Ionicons';
+// import FontAwesome from 'react-native-vector-icons/FontAwesome';
+// import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
   View,
   Text,
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {SoldMyVehical} from '../services/UrlApi.js';
 import {DefImg} from '../data/data.json';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useFocusEffect} from '@react-navigation/native';
+import {
+  showSuccess,
+  showError,
+  showWarning,
+  showInfo,
+  showDefault,
+  showNone,
+} from '../components/FlashMessage';
 
 const SoldVehicles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -19,44 +29,6 @@ const SoldVehicles = ({navigation}) => {
   const [message, setMessage] = useState('');
   const [Error, setError] = useState('');
   const [dealerId, setDealerId] = useState('');
-
-  const myVehical = async () => {
-    try {
-      // console.log(SoldMyVehical + dealerId);
-      await fetch(SoldMyVehical + dealerId, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-type': 'application/json',
-        },
-        // body: JSON.stringify({
-        //   page: '1',
-        //   limit: '10',
-        // }),
-      })
-        .then(res => res.json())
-        .then(resData => {
-          if (resData.status === 'S') {
-            // alert(resData.message);
-            setMessage(resData.message);
-            setData(resData.subCategories);
-            // console.log(resData.subCategories);
-          } else if (resData.status === 'F') {
-            // alert(resData.message);
-            // navigation.navigate('Dashboard ');
-            setMessage(resData.message);
-            setError(resData.status);
-            // console.log(resData.status);
-          }
-        });
-    } catch (err) {
-      alert(err);
-      console.log(err);
-      navigation.navigate('Dashboard ');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getData = async () => {
     try {
@@ -71,10 +43,58 @@ const SoldVehicles = ({navigation}) => {
     }
   };
 
+  const myVehical = async () => {
+    try {
+      if (dealerId) {
+        await fetch(SoldMyVehical + dealerId, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json',
+          },
+          // body: JSON.stringify({
+          //   page: '1',
+          //   limit: '10',
+          // }),
+        })
+          .then(res => res.json())
+          .then(resData => {
+            if (resData.status === 'S') {
+              setError(resData.status);
+              setData(resData.subCategories);
+            } else if (resData.status === 'F') {
+              setError(resData.status);
+              setMessage(resData.message);
+              navigation.navigate('Dashboard ');
+            }
+          });
+      }
+    } catch (err) {
+      alert(err);
+      console.log(err);
+      navigation.navigate('Dashboard ');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getData();
     myVehical();
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      myVehical();
+
+      return () => {
+        setData('');
+        Error === 'F'
+          ? showWarning(`${message}`)
+          : null;
+      };
+    }, []),
+  );
 
   return (
     <>
@@ -95,8 +115,8 @@ const SoldVehicles = ({navigation}) => {
           />
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-          {Error === '' ? (
+        <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1, backgroundColor: '#00b8dc'}}>
+          {Error === 'S' ? (
             <View style={{paddingHorizontal: 5, flex: 1}}>
               {Object.keys(Data).map(keys => {
                 return (
@@ -108,8 +128,8 @@ const SoldVehicles = ({navigation}) => {
                         paddingHorizontal: 10,
                         paddingVertical: 10,
                         // borderWidth: 1,
-                        borderColor: '#aaa',
-                        borderRadius: 10,
+                        // borderColor: 'lightgray',
+                        borderRadius: 5,
                         backgroundColor: 'white',
                       }}>
                       <View style={{}}>
@@ -135,18 +155,22 @@ const SoldVehicles = ({navigation}) => {
                               </Text>
                               <Text
                                 style={{
-                                  backgroundColor: '#ff9800',
+                                  backgroundColor: '#00b8dc',
+                                  fontWeight: '500',
                                   color: '#ffffff',
                                   marginLeft: 4,
                                   paddingTop: 1,
                                   paddingBottom: 2,
                                   paddingLeft: 6,
                                   paddingRight: 6,
-                                  borderRadius: 4,
+                                  borderRadius: 2,
                                   fontSize: 12,
                                   textTransform: 'uppercase',
                                 }}>
-                                {Data[keys].vehicleNumber}
+                                {Data[keys].vehicleNumber
+                                  .match(/.{1,2}/g)
+                                  .join(' ')
+                                  .replace(/.(?=.{2,2}$)/g, '')}
                               </Text>
                             </View>
                           </View>
@@ -173,7 +197,6 @@ const SoldVehicles = ({navigation}) => {
 
                       <View
                         style={{
-                          // marginVertical: 5,
                           flexDirection: 'row',
                           alignItems: 'flex-start',
                         }}>
@@ -192,7 +215,7 @@ const SoldVehicles = ({navigation}) => {
                       </View>
                       <View
                         style={{
-                          // marginVertical: 5,
+                          marginVertical: 5,
                           flexDirection: 'row',
                           alignItems: 'flex-start',
                         }}>
@@ -210,100 +233,101 @@ const SoldVehicles = ({navigation}) => {
                           {Data[keys].subCategoryName})
                         </Text>
                       </View>
+
                       <View
                         style={{
-                          // marginVertical: 5,
                           flexDirection: 'row',
-                          alignItems: 'flex-start',
+                          justifyContent: 'space-between',
                         }}>
-                        <Text
-                          style={{
-                            fontSize: 13,
-                            fontWeight: '500',
-                            color: 'black',
-                          }}>
-                          Year :{' '}
-                        </Text>
-                        <Text
-                          style={{textTransform: 'uppercase', color: 'black'}}>
-                          {Data[keys].modelYear}
-                        </Text>
-                      </View>
-
-                      <View style={{paddingTop: 0}}>
                         <View
                           style={{
                             flexDirection: 'row',
-                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
                           }}>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              fontWeight: '500',
+                              color: 'black',
+                            }}>
+                            Year :{' '}
+                          </Text>
+                          <Text
+                            style={{
+                              textTransform: 'uppercase',
+                              color: 'black',
+                            }}>
+                            {Data[keys].modelYear}
+                          </Text>
+                        </View>
+
+                        <TouchableOpacity
+                          style={{
+                            borderColor: 'darkgreen',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                          }}
+                          onPress={() => {
+                            navigation.navigate('Vehicles Details', {
+                              // subCategoryId: Data[keys].subCategoryId,
+                              soldVehicle: 'Sold',
+                              salesVehicle: Data[keys].subCategoryId,
+                              categoryName: Data[keys].categoryName,
+                              subCategoryName: Data[keys].subCategoryName,
+                              company: Data[keys].company,
+                              modelYear: Data[keys].modelYear,
+                              color: Data[keys].color,
+                              vehicleCondition: Data[keys].vehicleCondition,
+                              vehicleNumber: Data[keys].vehicleNumber,
+                              // sellingPrice: Data[keys].sellingPrice,
+                              images:
+                                Data[keys].images[0].image === null
+                                  ? DefImg
+                                  : Data[keys].images,
+                              // : Data[keys].images[0].image,
+                            });
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              padding: 4,
+                              color: 'darkgreen',
+                              fontWeight: '500',
+                            }}>
+                            View Detail
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      {/* <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text
+                          style={{
+                            color: '#3d3d72',
+                            fontWeight: '500',
+                            fontSize: 16,
+                          }}>
+                          Sold Price :
+                        </Text>
+                        <View>
                           <Text
                             style={{
                               color: '#3d3d72',
                               fontWeight: '500',
                               fontSize: 16,
+                              alignSelf: 'center',
                             }}>
-                            Sold Price :
-                            {/* <Icon
-                            name="checkmark-circle"
-                            size={15}
-                            color="white"
-                          /> */}
+                            <FontAwesome
+                              name="rupee"
+                              size={15}
+                              color="#3d3d72"
+                            />
+                            {''} {Data[keys].sellingPrice}/-
                           </Text>
-                          <View>
-                            <Text
-                              style={{
-                                color: '#3d3d72',
-                                fontWeight: '500',
-                                fontSize: 16,
-                                alignSelf: 'center',
-                              }}>
-                              <FontAwesome
-                                name="rupee"
-                                size={15}
-                                color="#3d3d72"
-                              />
-                              {''} {Data[keys].sellingPrice}/-
-                            </Text>
-                          </View>
-                          <TouchableOpacity
-                            style={{
-                              // paddingHorizontal: 4,
-                              borderColor: '#00b8dc',
-                              borderRadius: 5,
-                              borderWidth: 1,
-                            }}
-                            onPress={() => {
-                              navigation.navigate('Vehicles Details', {
-                                // subCategoryId: Data[keys].subCategoryId,
-                                soldVehicle: 'Sold',
-                                salesVehicle: Data[keys].subCategoryId,
-                                categoryName: Data[keys].categoryName,
-                                subCategoryName: Data[keys].subCategoryName,
-                                company: Data[keys].company,
-                                modelYear: Data[keys].modelYear,
-                                color: Data[keys].color,
-                                vehicleCondition: Data[keys].vehicleCondition,
-                                vehicleNumber: Data[keys].vehicleNumber,
-                                sellingPrice: Data[keys].sellingPrice,
-                                images:
-                                  Data[keys].images[0].image === null
-                                    ? DefImg
-                                    : Data[keys].images,
-                                // : Data[keys].images[0].image,
-                              });
-                            }}>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                padding: 4,
-                                color: '#00b8dc',
-                                fontWeight: '500',
-                              }}>
-                              View Detail
-                            </Text>
-                          </TouchableOpacity>
                         </View>
-                      </View>
+                      </View> */}
                     </View>
                   </View>
                 );

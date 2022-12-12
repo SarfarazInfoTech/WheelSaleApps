@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawer from '../components/CustomDrawer.js';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,10 +13,24 @@ import Profile from '../dealers/Profile';
 import Tabs from './Tabs.js';
 import {TouchableOpacity} from 'react-native';
 import Supportus from '../dealers/webpages/Support.js';
+import {BackHandler} from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
 const Drawers = ({navigation}) => {
+  // async function backButtonHandler()  {
+  // await  BackHandler.exitApp();
+  // }
+
+  // useEffect(() => {
+  //   BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
+
+  //   return () => {
+  //     BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
+  //   };
+  // }, [backButtonHandler]);
+
+  
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}

@@ -22,7 +22,7 @@ const Support = () => {
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Image
             source={{
-              uri: 'http://wheelsale.in/wheel/Asset1/images/favicon.png',
+              uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png',
             }}
             style={{width: 90, height: 90, borderRadius: 100}}
           />

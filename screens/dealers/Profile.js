@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   Alert,
+  BackHandler 
 } from 'react-native';
 import {Avatar} from 'react-native-paper';
 import {profilePic} from '../data/data.json';
@@ -95,7 +96,8 @@ const Profile = ({navigation}) => {
         {
           text: 'YES',
           onPress: () => {
-            AsyncStorage.clear(), navigation.navigate('Login'), console.log('Logout')
+           AsyncStorage.clear(), navigation.navigate('Login'), console.log('Logout'),
+           BackHandler.exitApp();
           },
         },
       ]);

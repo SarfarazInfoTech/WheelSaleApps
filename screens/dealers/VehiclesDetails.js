@@ -19,6 +19,14 @@ import React, {useEffect, useState} from 'react';
 import {Button, FAB, RadioButton} from 'react-native-paper';
 import {ShownMyVehical} from '../services/UrlApi.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  showSuccess,
+  showError,
+  showWarning,
+  showInfo,
+  showDefault,
+  showNone,
+} from '../components/FlashMessage';
 
 const VehiclesDetails = ({navigation, route}) => {
   const {height, width} = Dimensions.get('window');
@@ -86,9 +94,10 @@ const VehiclesDetails = ({navigation, route}) => {
     )
       .then(response => response.json())
       .then(json => {
-        alert(json.message);
+        showSuccess(json.message);
         console.log(json);
         setPrice('');
+        navigation.navigate('My Vehicle');
       })
       .catch(err => {
         console.log(err);
@@ -117,9 +126,10 @@ const VehiclesDetails = ({navigation, route}) => {
     )
       .then(response => response.json())
       .then(json => {
-        alert(json.message);
+        showSuccess(json.message);
         console.log(json);
         setCondition('');
+        navigation.navigate('My Vehicle');
       })
       .catch(err => {
         console.log(err);
@@ -127,39 +137,43 @@ const VehiclesDetails = ({navigation, route}) => {
   };
 
   const SoldVehical = () => {
-    fetch(
-      `http://wheelsale.in/wheelsale-app-ws/sub-categories/${subCategoryId}/sold`,
-      {
-        method: 'PUT',
-        headers: {
-          'content-type': 'application/json',
-          accept: 'application/json',
+    if (name && email && phone && aadharNumber && soldPrice) {
+      fetch(
+        `http://wheelsale.in/wheelsale-app-ws/sub-categories/${subCategoryId}/sold`,
+        {
+          method: 'PUT',
+          headers: {
+            'content-type': 'application/json',
+            accept: 'application/json',
+          },
+          body: JSON.stringify({
+            buyer: {
+              name: name,
+              email: email,
+              phone: phone,
+              aadharNumber: aadharNumber,
+              password: password,
+            },
+            saleDetails: {
+              dealerId: dealerId,
+              soldPrice: soldPrice,
+            },
+            sellingPrice: 9999,
+          }),
         },
-        body: JSON.stringify({
-          buyer: {
-            aadharNumber: aadharNumber,
-            email: email,
-            name: name,
-            password: password,
-            phone: phone,
-          },
-          saleDetails: {
-            dealerId: dealerId,
-            soldPrice: soldPrice,
-          },
-          sellingPrice: 9999,
-        }),
-      },
-    )
-      .then(res => res.json())
-      .then(json => {
-        console.log(json.message);
-        Alert.alert('', json.message);
-        navigation.navigate('Sold Vehicle');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      )
+        .then(res => res.json())
+        .then(json => {
+          showSuccess(json.message);
+          // Alert.alert('', json.message);
+          navigation.navigate('Sold Vehicle');
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      Alert.alert('', 'All feilds requried !');
+    }
   };
 
   const DeleteVehical = () => {
@@ -182,8 +196,10 @@ const VehiclesDetails = ({navigation, route}) => {
       .then(res => res.json())
       .then(json => {
         console.log(json);
-        alert(json.message);
+        showSuccess(json.message);
         navigation.navigate('My Vehicle');
+        // navigation.navigate('Dashboard ');
+        // navigation.goBack()
       })
       .catch(err => {
         console.log(err);
@@ -201,6 +217,7 @@ const VehiclesDetails = ({navigation, route}) => {
       .then(res => res.json())
       .then(json => {
         setSales(json.user);
+        setSoldPrice(json.sale.soldPrice);
         // console.log(json);
         // alert(json.message);
       })
@@ -211,13 +228,15 @@ const VehiclesDetails = ({navigation, route}) => {
 
   useEffect(() => {
     // console.log(subCategoryId);
-    SaleUser();
     getData();
-  });
+    SaleUser();
+  }, []);
 
   return (
     <>
-      <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{flex: 1, backgroundColor: 'white'}}>
         <View style={styles.container}>
           <View style={styles.imageBox}>
             <View style={styles.image}>
@@ -282,9 +301,10 @@ const VehiclesDetails = ({navigation, route}) => {
             <View style={styles.flex}>
               <Text
                 style={{
-                  color: 'darkblue',
+                  color: '#00b8dc',
                   fontSize: 16,
                   alignSelf: 'flex-end',
+                  fontWeight: '500',
                 }}>
                 Vehicle Number
               </Text>
@@ -295,8 +315,12 @@ const VehiclesDetails = ({navigation, route}) => {
                     color: 'white',
                     textTransform: 'uppercase',
                     paddingLeft: 3,
+                    fontWeight: '500',
                   }}>
-                  {vehicleNumber}
+                  {vehicleNumber
+                    .match(/.{1,2}/g)
+                    .join(' ')
+                    .replace(/.(?=.{2,2}$)/g, '')}
                 </Text>
               </View>
             </View>
@@ -305,7 +329,11 @@ const VehiclesDetails = ({navigation, route}) => {
               <Text style={styles.price}>Price</Text>
               <Text style={styles.price}>
                 <FontAwesome name="rupee" size={18} color="#3d3d72" />{' '}
-                {sellingPrice}
+                {sellingPrice
+                  ? sellingPrice
+                  : !sellingPrice
+                  ? soldPrice
+                  : sellingPrice}
                 /-
               </Text>
             </View>
@@ -314,21 +342,28 @@ const VehiclesDetails = ({navigation, route}) => {
           {/* User Dealer Details With Logic */}
           {!subCategoryId ? (
             soldVehicle === 'Sold' ? null : (
-              <View style={{flex: 1, margin: 5, paddingBottom: 50}}>
+              <View
+                style={{
+                  flex: 1,
+                  margin: 5,
+                  paddingBottom: 50,
+                  borderBottomColor: '#f7f7f7',
+                  borderBottomWidth: 12,
+                }}>
                 <View
                   style={{
                     padding: 5,
                     borderRadius: 10,
                     backgroundColor: 'white',
-                    borderColor: 'lightgray',
+                    borderColor: '#00b8dc',
                     borderWidth: 1,
                   }}>
                   <View>
                     <Text
                       style={{
-                        color: 'black',
+                        color: '#00b8dc',
                         fontSize: 17,
-                        borderBottomColor: 'gray',
+                        borderBottomColor: '#00b8dc',
                         borderBottomWidth: 1,
                         alignSelf: 'flex-start',
                         marginBottom: 6,
@@ -345,9 +380,12 @@ const VehiclesDetails = ({navigation, route}) => {
                       alignItems: 'center',
                     }}>
                     <FontAwesome name="user" size={17} color="#3d3d72" />
-
                     <Text
-                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      style={{
+                        color: '#3d3d72',
+                        fontSize: 14,
+                        fontWeight: '500',
+                      }}>
                       {' '}
                       Name :{' '}
                     </Text>
@@ -366,9 +404,12 @@ const VehiclesDetails = ({navigation, route}) => {
                       size={15}
                       color="#3d3d72"
                     />
-
                     <Text
-                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      style={{
+                        color: '#3d3d72',
+                        fontSize: 14,
+                        fontWeight: '500',
+                      }}>
                       {' '}
                       Mobile :{' '}
                     </Text>
@@ -388,9 +429,13 @@ const VehiclesDetails = ({navigation, route}) => {
                       color="#3d3d72"
                     />
                     <Text
-                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      style={{
+                        color: '#3d3d72',
+                        fontSize: 14,
+                        fontWeight: '500',
+                      }}>
                       {' '}
-                      Email Id :{' '}
+                      Email :{' '}
                     </Text>
                     <Text style={{color: 'black', fontSize: 14}}>
                       {vehicleDealer.email}
@@ -404,9 +449,13 @@ const VehiclesDetails = ({navigation, route}) => {
                     }}>
                     <FontAwesome name="map" size={14} color="#3d3d72" />
                     <Text
-                      style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+                      style={{
+                        color: '#3d3d72',
+                        fontSize: 14,
+                        fontWeight: '500',
+                      }}>
                       {' '}
-                      Shop Name :{' '}
+                      Shopname :{' '}
                     </Text>
                     <Text style={{color: 'black', fontSize: 14}}>
                       {vehicleDealer.shopName}
@@ -427,13 +476,13 @@ const VehiclesDetails = ({navigation, route}) => {
                     />
                     <Text
                       style={{
-                        color: 'black',
+                        color: '#3d3d72',
                         fontSize: 14,
                         fontWeight: '500',
                         alignSelf: 'baseline',
                       }}>
                       {' '}
-                      Shop Address :{' '}
+                      Address :{' '}
                     </Text>
                     <Text style={{color: 'black', fontSize: 14}}>
                       {vehicleDealer.shopAddress}
@@ -446,7 +495,12 @@ const VehiclesDetails = ({navigation, route}) => {
 
           {subCategoryId ? (
             <>
-              <View style={{margin: 10}}>
+              <View
+                style={{
+                  padding: 10,
+                  borderBottomColor: '#f7f7f7',
+                  borderBottomWidth: 12,
+                }}>
                 {sellingPrice === sellingPrice ? (
                   <View style={{alignItems: 'stretch'}}>
                     <View
@@ -525,7 +579,12 @@ const VehiclesDetails = ({navigation, route}) => {
                 ) : null}
               </View>
 
-              <View style={{margin: 10}}>
+              <View
+                style={{
+                  padding: 10,
+                  borderBottomColor: '#f7f7f7',
+                  borderBottomWidth: 12,
+                }}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -724,7 +783,9 @@ const VehiclesDetails = ({navigation, route}) => {
                 width: '100%',
                 textAlign: 'center',
                 color: 'white',
+                fontWeight: '500',
               }}>
+              <FontAwesome name="trash-o" size={25} color="white" /> {'  '}
               DELETE
             </Text>
           </TouchableOpacity>
@@ -753,7 +814,9 @@ const VehiclesDetails = ({navigation, route}) => {
                 width: '100%',
                 textAlign: 'center',
                 color: 'white',
+                fontWeight: '500',
               }}>
+              <FontAwesome name="paper-plane" size={22} color="white" /> {'  '}
               SOLD
             </Text>
           </TouchableOpacity>
@@ -765,15 +828,15 @@ const VehiclesDetails = ({navigation, route}) => {
               padding: 5,
               borderRadius: 10,
               backgroundColor: 'white',
-              borderColor: 'lightgray',
+              borderColor: '#3d3d72',
               borderWidth: 1,
             }}>
             <View>
               <Text
                 style={{
-                  color: 'black',
+                  color: '#3d3d72',
                   fontSize: 17,
-                  borderBottomColor: 'gray',
+                  borderBottomColor: '#3d3d72',
                   borderBottomWidth: 1,
                   alignSelf: 'flex-start',
                   marginBottom: 6,
@@ -782,7 +845,7 @@ const VehiclesDetails = ({navigation, route}) => {
                 Customer Details
               </Text>
             </View>
-            {/* <Text> Sales id : {sales.userId}</Text> */}
+            {/* <Text> Sales id : {sales.userId} </Text> */}
             <View
               style={{
                 flexDirection: 'row',
@@ -790,14 +853,12 @@ const VehiclesDetails = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <FontAwesome name="user" size={17} color="#3d3d72" />
-
-              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
                 {' '}
                 Name :{' '}
               </Text>
               <Text style={{color: 'black', fontSize: 14}}>{sales.name}</Text>
             </View>
-
             <View
               style={{
                 flexDirection: 'row',
@@ -805,9 +866,9 @@ const VehiclesDetails = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <FontAwesome name="envelope-square" size={16} color="#3d3d72" />
-              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
                 {' '}
-                Email Id :{' '}
+                Email :{' '}
               </Text>
               <Text style={{color: 'black', fontSize: 14}}>{sales.email}</Text>
             </View>
@@ -818,9 +879,9 @@ const VehiclesDetails = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <FontAwesome name="phone-square" size={15} color="#3d3d72" />
-              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
                 {' '}
-                Mobile No. :{' '}
+                Mobile :{' '}
               </Text>
               <Text style={{color: 'black', fontSize: 14}}>{sales.phone}</Text>
             </View>
@@ -831,12 +892,14 @@ const VehiclesDetails = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <FontAwesome name="id-card" size={14} color="#3d3d72" />
-              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
                 {' '}
-                Aadhaar No. :{' '}
+                Aadhaar :{' '}
               </Text>
               <Text style={{color: 'black', fontSize: 14}}>
-                {sales.aadharNumber}
+                {sales.aadharNumber
+                  ? sales.aadharNumber.match(/.{1,4}/g).join(' ')
+                  : ''}
               </Text>
             </View>
             <View
@@ -846,7 +909,7 @@ const VehiclesDetails = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <FontAwesome name="clock-o" size={14} color="#3d3d72" />
-              <Text style={{color: 'black', fontSize: 14, fontWeight: '500'}}>
+              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
                 {' '}
                 Purchase :{' '}
               </Text>
@@ -897,10 +960,10 @@ const VehiclesDetails = ({navigation, route}) => {
                 paddingVertical: 10,
               }}
               onPress={() =>
-                Linking.canOpenURL(`tel:${vehicleDealer.phone}`).then(
+                Linking.canOpenURL(`tel:+91${vehicleDealer.phone}`).then(
                   supported => {
                     if (!supported) {
-                      return Linking.openURL(`tel:${vehicleDealer.phone}`);
+                      return Linking.openURL(`tel:+91${vehicleDealer.phone}`);
                     } else {
                       console.log('Not Working');
                     }
@@ -914,15 +977,18 @@ const VehiclesDetails = ({navigation, route}) => {
                   textAlign: 'center',
                   color: 'white',
                   alignSelf: 'center',
+                  fontWeight: '500',
                 }}>
+                {'  '}CALL
+                {'  '}
                 <FontAwesome
                   style={{padding: 50}}
-                  name="phone"
+                  name="phone-square"
                   size={25}
                   color="white"
                 />
                 {'  '}
-                CALL : {vehicleDealer.phone}
+                {vehicleDealer.phone}
               </Text>
             </TouchableOpacity>
           </View>
@@ -935,20 +1001,18 @@ const VehiclesDetails = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: 'white'},
   flex: {flexDirection: 'row', justifyContent: 'space-between'},
-  box: {},
   image: {
     width: '100%',
     height: 260,
     backgroundColor: 'black',
     resizeMode: 'contain',
   },
-  imageBox: {},
-  card: {},
   hedBox: {
     padding: 5,
-    borderBottomColor: 'lightgray',
-    borderBottomWidth: 1,
-    margin: 5,
+    borderBottomColor: '#f7f7f7',
+    borderBottomWidth: 12,
+    marginVertical: 5,
+    paddingHorizontal: 10,
   },
   title: {
     color: 'black',
@@ -958,7 +1022,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   vehNo: {
-    backgroundColor: 'darkblue',
+    backgroundColor: '#00b8dc',
     borderRadius: 5,
     alignSelf: 'center',
     flexDirection: 'row',
@@ -980,7 +1044,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'black',
   },
-
   lable: {
     color: 'black',
     fontSize: 15,

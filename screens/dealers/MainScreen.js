@@ -1,65 +1,101 @@
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { Image } from 'react-native';
+import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {Image} from 'react-native';
 
-const MainScreen = ({ navigation }) => {
+const MainScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-    <Image source={{uri:"https://lh4.googleusercontent.com/-PIjFRdZgz6A/AAAAAAAAAAI/AAAAAAAAAAA/ZvfRO5L6-cQ/s55-p-k-no-ns-nd/photo.jpg"}} contextC style={{height: 100, width: 100, borderRadius: 100, bottom : 40, backgroundColor: 'white', alignSelf : 'center', borderWidth:5, borderColor:"white"}} />
-    <Text  style={{paddingBottom: 20, color: "#3d3d72", fontSize: 30, alignSelf:"center", fontWeight:"800"}}>
-      WHEELSALE
-    </Text>
-        <Text style={{paddingBottom: 5, color: "#3d3d72", fontSize: 16, marginLeft:20}}>
+        <Text
+          style={{
+            marginVertical: 15,
+            color: 'black',
+            fontSize: 30,
+            alignSelf: 'center',
+            fontWeight: '500',
+          }}>
+          WHEELSALE
+        </Text>
+        <Image
+          source={{uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png'}}
+          style={{
+            height: 112,
+            width: 110,
+            borderRadius: 100,
+            backgroundColor: '#00b8dc',
+            alignSelf: 'center',
+            borderWidth: 5,
+            borderColor: '#00b8dc',
+            // bottom: 50,
+          }}
+        />
+        <Text
+          style={{
+            paddingBottom: 5,
+            color: '#3d3d72',
+            fontSize: 16,
+            marginLeft: 20,
+            fontWeight: '500'
+          }}>
           Existing User
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <View style={{
-            backgroundColor: '#00b8dc', // 00b8dc
-            borderRadius: 10,
-            marginHorizontal: 20,
-            marginVertical: 5
-          }}>
+          <View
+            style={{
+              backgroundColor: '#00b8dc', // 00b8dc
+              borderRadius: 5,
+              marginHorizontal: 20,
+              marginVertical: 5,
+            }}>
             <Text
               style={{
                 color: 'white',
-                fontSize: 20,
+                fontSize: 18,
                 textAlign: 'center',
                 margin: 10,
                 fontWeight: '500',
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
               }}>
               Login
             </Text>
           </View>
         </TouchableOpacity>
-        <Text  style={{paddingBottom: 5, color: "#3d3d72", fontSize: 16, marginTop:20,  marginLeft:20}}>
-        New User Create Accout
+        <Text
+          style={{
+            paddingBottom: 5,
+            color: '#3d3d72',
+            fontSize: 16,
+            marginTop: 20,
+            marginLeft: 20,
+            fontWeight: '500'
+          }}>
+          New Dealer
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-          <View style={{
-            backgroundColor: '#00b8dc', // 00b8dc  3d3d72
-            borderRadius: 10,
-            marginHorizontal: 20,
-            marginVertical: 5
-          }}>
+          <View
+            style={{
+              backgroundColor: '#00b8dc', // 00b8dc  3d3d72
+              borderRadius: 5,
+              marginHorizontal: 20,
+              marginVertical: 5,
+            }}>
             <Text
               style={{
                 color: 'white',
-                fontSize: 20,
+                fontSize: 18,
                 textTransform: 'uppercase',
                 fontWeight: '500',
                 textAlign: 'center',
                 margin: 10,
               }}>
-              Create  Account
+              Create Account
             </Text>
           </View>
         </TouchableOpacity>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -69,15 +105,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   card: {
-    borderRadius: 15,
+    borderRadius: 10,
     borderColor: 'white',
     borderWidth: 2,
-    paddingBottom: 40,
+    // paddingBottom: 40,
     backgroundColor: 'white',
-     paddingHorizontal:10,
-     height : 400
+    paddingHorizontal: 10,
+    height: 400,
   },
 });
 
-
-export default MainScreen
+export default MainScreen;

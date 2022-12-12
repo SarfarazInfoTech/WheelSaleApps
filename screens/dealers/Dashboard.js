@@ -44,7 +44,7 @@ const Dashboard = ({navigation, route}) => {
         if (value != null) {
           let user = JSON.parse(value);
           setShopName(user[0].shopName);
-          console.log(user)
+          console.log(user);
           // console.log(user[0].dealerId);
           // console.log(user[0].shopName);
           // console.log(user[0].fullName);
@@ -58,7 +58,7 @@ const Dashboard = ({navigation, route}) => {
 
   return (
     <>
-      <SafeAreaView style={{backgroundColor: '#f7f7f7', flex: 1}}>
+      <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
         {Data.status ? (
           <View
             style={{
@@ -166,38 +166,6 @@ const Dashboard = ({navigation, route}) => {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
-            {/* <View style={{width: '100%', height: 150}}>
-              <Image
-                source={{
-                  uri: teacherImage,
-                }}
-                style={{
-                  width: '100%',
-                  height: 215,
-                  backgroundColor: 'white',
-                }}
-              />
-              </View>
-              <View
-              style={{
-                borderColor: 'gray',
-                backgroundColor: 'white',
-                borderRadius: 5,
-                margin: 15,
-                alignSelf: 'flex-end',
-                paddingHorizontal: 10,
-                width: '70%',
-                shadowColor: 'black',
-                shadowOffset: {width: 0, height: 1},
-                shadowOpacity: 0.8,
-                shadowRadius: 2,
-              }}>
-              <Text style={{fontSize: 18, color: 'darkgreen'}}>
-                {Data ? `Hey, ${Data.name} your Age is ${Data.age}` : 'Loading...'}
-                {Data ? Data.subject.map(list => ` ${list} `) : ""}
-              </Text>
-            </View> */}
-
             <View
               style={{
                 backgroundColor: 'white',
@@ -417,17 +385,18 @@ const Dashboard = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
 
-            {/* <Image
+            <Image
+              source={{uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png'}}
               style={{
-                height: 60,
-                width: '50%',
-                alignSelf: 'center',
+                height: 102,
+                width: 100,
                 borderRadius: 100,
+                backgroundColor: '#00b8dc',
+                alignSelf: 'center',
+                borderWidth: 5,
+                borderColor: '#00b8dc',
               }}
-              source={{
-                uri: 'https://th.bing.com/th/id/R.884a03cea2c946aab45fa7c32def656d?rik=BNTt3YG%2bqqYNkg&riu=http%3a%2f%2ffreevector.co%2fwp-content%2fuploads%2f2009%2f10%2fpowered-by-ethanol.png&ehk=sOVrfSTxn0alLyQSncKVrrMVpLxNjE5pjl5MNuqnWVw%3d&risl=&pid=ImgRaw&r=0',
-              }}
-            /> */}
+            />
           </ScrollView>
           <Text
             style={{
@@ -461,8 +430,6 @@ const styles = StyleSheet.create({
     width: 140,
     marginVertical: 10,
   },
-
-  shadow: {},
 });
 
 export default Dashboard;

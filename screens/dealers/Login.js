@@ -56,6 +56,7 @@ const Login = ({navigation}) => {
             setError(resData.status);
             setPhone('');
             setPassword('');
+            setLoading(false)
           }
         });
     }
