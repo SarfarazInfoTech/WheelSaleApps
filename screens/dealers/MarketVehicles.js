@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  RefreshControl
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {MarketVehical} from '../services/UrlApi.js';
 import {DefImg} from '../data/data.json';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -57,6 +58,18 @@ const MarketVehicles = ({navigation}) => {
     myVehical();
   }, []);
 
+  const [refreshing, setRefreshing] = useState(false);
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = useCallback(async () => {
+    await setLoading(true);
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+    wait(2000).then(() => setLoading(false));
+    myVehical();
+  }, []);
+
   return (
     <>
       {loading ? (
@@ -76,7 +89,10 @@ const MarketVehicles = ({navigation}) => {
           />
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
           {/* <Text>{message}</Text> */}
           {/* <Text>{Error}</Text> */}
           <View style={{padding: 10, backgroundColor: 'white'}}>
@@ -126,7 +142,7 @@ const MarketVehicles = ({navigation}) => {
                         style={styles.iconLogo}
                       />
                       <View style={{margin: 5}}>
-                        <Text style={styles.vehName} numberOfLines={2}>
+                        <Text style={styles.vehName} numberOfLines={1}>
                           {Data[keys].company} {Data[keys].categoryName} -{' '}
                           {Data[keys].modelYear} ({Data[keys].subCategoryName})
                         </Text>

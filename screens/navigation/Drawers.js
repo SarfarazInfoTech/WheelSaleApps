@@ -124,6 +124,13 @@ const Drawers = ({navigation}) => {
           headerStyle: {
             backgroundColor: '#00b8dc',
           },
+          headerRight: () => (
+            <TouchableOpacity
+              style={{marginRight: 12}}
+              onPress={() => navigation.navigate('SoldSearch')}>
+              <Ionicons name="search" color="white" size={22} />
+            </TouchableOpacity>
+          ),
           drawerIcon: ({color}) => (
             <Ionicons name="ios-checkmark-done" size={22} color={color} />
           ),

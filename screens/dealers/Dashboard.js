@@ -384,28 +384,32 @@ const Dashboard = ({navigation, route}) => {
                 </View>
               </TouchableOpacity>
             </View>
-
-            <Image
-              source={{uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png'}}
-              style={{
-                height: 102,
-                width: 100,
-                borderRadius: 100,
-                backgroundColor: '#00b8dc',
-                alignSelf: 'center',
-                borderWidth: 5,
-                borderColor: '#00b8dc',
-              }}
-            />
           </ScrollView>
+          <Image
+            source={{uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png'}}
+            style={{
+              height: 35,
+              width: 35,
+              borderRadius: 100,
+              backgroundColor: '#00b8dc',
+              alignSelf: 'flex-start',
+              top: 65,
+              left: 10,
+
+              // borderWidth: 5,
+              // borderColor: '#00b8dc',
+            }}
+          />
           <Text
             style={{
-              color: 'blue',
-              textAlign: 'center',
-              top: 90,
+              color: '#00b8dc',
+              textAlign: 'right',
+              top: 40,
+              right: 12,
               position: 'relative',
+              fontWeight: '500',
             }}>
-            WheelSale - by Qaswa Technologies
+            WheelSale - by Qaswa Technologies Pvt Ltd
           </Text>
         </View>
       </SafeAreaView>

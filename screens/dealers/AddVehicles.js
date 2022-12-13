@@ -491,127 +491,9 @@ const AddVehicles = ({navigation}) => {
                 }}>
                 Vehicle Information
               </Text>
-              <Text style={styles.lable}>Vehicle No.</Text>
-              <TextInput
-                value={vehicleNumber}
-                placeholder="Vehicle Number"
-                onChangeText={value => setVehicleNumber(value)}
-                style={styles.textInput}
-                maxLength={10}
-                autoCapitalize={'characters'}
-                placeholderTextColor="gray"
-              />
-              <Text style={styles.lable}>Vehicle Name</Text>
-              <SelectList
-                data={VehiInfo}
-                maxHeight={400}
-                inputStyles={{color: 'black'}}
-                setSelected={setSelected}
-                onSelect={() => setCategoryId(selected)}
-                placeholder="Select Vehicle"
-                dropdownStyles={{margin: 10, backgroundColor: '#f7f7f7'}}
-                boxStyles={styles.selectInput}
-                arrowicon={
-                  <FontAwesome
-                    name="chevron-down"
-                    size={12}
-                    color={'gray'}
-                    style={{alignSelf: 'center'}}
-                  />
-                }
-                searchicon={
-                  <FontAwesome
-                    name="search"
-                    size={18}
-                    color={'gray'}
-                    style={{paddingRight: 10}}
-                  />
-                }
-              />
-              <Text style={styles.lable}>Specification</Text>
-              <TextInput
-                value={Specification}
-                placeholder="Specification"
-                onChangeText={value => setSpecification(value)}
-                style={styles.textInput}
-                maxLength={15}
-                placeholderTextColor="gray"
-              />
-              <Text style={styles.lable}>Year of Model</Text>
-              <SelectList
-                data={Years}
-                maxHeight={400}
-                inputStyles={{color: 'black'}}
-                setSelected={setSelected}
-                onSelect={() => setModelYear(selected)}
-                placeholder="Year of Model"
-                dropdownStyles={{margin: 10, backgroundColor: '#f7f7f7'}}
-                boxStyles={styles.selectInput}
-                arrowicon={
-                  <FontAwesome
-                    name="chevron-down"
-                    size={12}
-                    color={'gray'}
-                    style={{alignSelf: 'center'}}
-                  />
-                }
-                searchicon={
-                  <FontAwesome
-                    name="search"
-                    size={18}
-                    color={'gray'}
-                    style={{paddingRight: 10}}
-                  />
-                }
-              />
-              <Text style={styles.lable}>Color</Text>
-              <TextInput
-                value={Color}
-                placeholder="Color"
-                onChangeText={value => setColor(value)}
-                style={styles.textInput}
-                maxLength={12}
-                placeholderTextColor="gray"
-              />
-              <Text style={styles.lable}>Selling Price</Text>
-              <TextInput
-                value={Price}
-                placeholder="Selling Price"
-                onChangeText={value => setPrice(value)}
-                style={styles.textInput}
-                placeholderTextColor="gray"
-                maxLength={6}
-                keyboardType="decimal-pad"
-              />
-              <Text style={styles.lable}>Condition</Text>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                <View style={styles.radioBtn}>
-                  <RadioButton
-                    value="POOR"
-                    status={checked === 'POOR' ? 'checked' : 'unchecked'}
-                    onPress={() => setChecked('POOR')}
-                  />
-                  <Text style={styles.btnTxt}>POOR</Text>
-                </View>
-                <View style={styles.radioBtn}>
-                  <RadioButton
-                    value="AVERAGE"
-                    status={checked === 'AVERAGE' ? 'checked' : 'unchecked'}
-                    onPress={() => setChecked('AVERAGE')}
-                  />
-                  <Text style={styles.btnTxt}>AVERAGE</Text>
-                </View>
-                <View style={styles.radioBtn}>
-                  <RadioButton
-                    value="GOOD"
-                    status={checked === 'GOOD' ? 'checked' : 'unchecked'}
-                    onPress={() => setChecked('GOOD')}
-                  />
-                  <Text style={styles.btnTxt}>GOOD</Text>
-                </View>
-              </View>
-              <View>
+
+              {/* Add Image Code */}
+              <View style={{marginBottom: 20}}>
                 <Text style={styles.lable}> Image</Text>
 
                 <View style={styles.centeredView}>
@@ -956,25 +838,148 @@ const AddVehicles = ({navigation}) => {
                     )}
                   </TouchableOpacity>
                 </View>
-                <View style={{margin: 15}}>
-                  {(imgDownloadUrl1 && imgDownloadUrl2) ||
-                  (CamDownloadUrl1 && CamDownloadUrl2) ? (
-                    <Button
-                      onPress={() => AddVehicle()}
-                      textColor="white"
-                      buttonColor="#3d3d72"
-                      style={{margin: 5, borderRadius: 6, marginTop: 20}}>
-                      Add Vehicle
-                    </Button>
-                  ) : (
-                    <Button
-                      textColor="white"
-                      buttonColor="darkgray"
-                      style={{margin: 5, borderRadius: 6, marginTop: 20}}>
-                      Add Vehicle
-                    </Button>
-                  )}
+              </View>
+              {/* End Image Code */}
+
+              <Text style={styles.lable}>Vehicle No.</Text>
+              <TextInput
+                value={vehicleNumber}
+                placeholder="Vehicle Number"
+                onChangeText={value => setVehicleNumber(value)}
+                style={styles.textInput}
+                maxLength={10}
+                autoCapitalize={'characters'}
+                placeholderTextColor="gray"
+              />
+              <Text style={styles.lable}>Vehicle Name</Text>
+              <SelectList
+                data={VehiInfo}
+                maxHeight={400}
+                inputStyles={{color: 'black'}}
+                setSelected={setSelected}
+                onSelect={() => setCategoryId(selected)}
+                placeholder="Select Vehicle"
+                dropdownStyles={{margin: 10, backgroundColor: '#f7f7f7'}}
+                boxStyles={styles.selectInput}
+                arrowicon={
+                  <FontAwesome
+                    name="chevron-down"
+                    size={12}
+                    color={'gray'}
+                    style={{alignSelf: 'center'}}
+                  />
+                }
+                searchicon={
+                  <FontAwesome
+                    name="search"
+                    size={18}
+                    color={'gray'}
+                    style={{paddingRight: 10}}
+                  />
+                }
+              />
+              <Text style={styles.lable}>Specification</Text>
+              <TextInput
+                value={Specification}
+                placeholder="Specification"
+                onChangeText={value => setSpecification(value)}
+                style={styles.textInput}
+                maxLength={15}
+                placeholderTextColor="gray"
+              />
+              <Text style={styles.lable}>Year of Model</Text>
+              <SelectList
+                data={Years}
+                maxHeight={400}
+                inputStyles={{color: 'black'}}
+                setSelected={setSelected}
+                onSelect={() => setModelYear(selected)}
+                placeholder="Year of Model"
+                dropdownStyles={{margin: 10, backgroundColor: '#f7f7f7'}}
+                boxStyles={styles.selectInput}
+                arrowicon={
+                  <FontAwesome
+                    name="chevron-down"
+                    size={12}
+                    color={'gray'}
+                    style={{alignSelf: 'center'}}
+                  />
+                }
+                searchicon={
+                  <FontAwesome
+                    name="search"
+                    size={18}
+                    color={'gray'}
+                    style={{paddingRight: 10}}
+                  />
+                }
+              />
+              <Text style={styles.lable}>Color</Text>
+              <TextInput
+                value={Color}
+                placeholder="Color"
+                onChangeText={value => setColor(value)}
+                style={styles.textInput}
+                maxLength={12}
+                placeholderTextColor="gray"
+              />
+              <Text style={styles.lable}>Selling Price</Text>
+              <TextInput
+                value={Price}
+                placeholder="Selling Price"
+                onChangeText={value => setPrice(value)}
+                style={styles.textInput}
+                placeholderTextColor="gray"
+                maxLength={6}
+                keyboardType="decimal-pad"
+              />
+              <Text style={styles.lable}>Condition</Text>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                <View style={styles.radioBtn}>
+                  <RadioButton
+                    value="POOR"
+                    status={checked === 'POOR' ? 'checked' : 'unchecked'}
+                    onPress={() => setChecked('POOR')}
+                  />
+                  <Text style={styles.btnTxt}>POOR</Text>
                 </View>
+                <View style={styles.radioBtn}>
+                  <RadioButton
+                    value="AVERAGE"
+                    status={checked === 'AVERAGE' ? 'checked' : 'unchecked'}
+                    onPress={() => setChecked('AVERAGE')}
+                  />
+                  <Text style={styles.btnTxt}>AVERAGE</Text>
+                </View>
+                <View style={styles.radioBtn}>
+                  <RadioButton
+                    value="GOOD"
+                    status={checked === 'GOOD' ? 'checked' : 'unchecked'}
+                    onPress={() => setChecked('GOOD')}
+                  />
+                  <Text style={styles.btnTxt}>GOOD</Text>
+                </View>
+              </View>
+
+              <View style={{margin: 15}}>
+                {(imgDownloadUrl1 && imgDownloadUrl2) ||
+                (CamDownloadUrl1 && CamDownloadUrl2) ? (
+                  <Button
+                    onPress={() => AddVehicle()}
+                    textColor="white"
+                    buttonColor="#3d3d72"
+                    style={{margin: 5, borderRadius: 6, marginTop: 20}}>
+                    Add Vehicle
+                  </Button>
+                ) : (
+                  <Button
+                    textColor="white"
+                    buttonColor="darkgray"
+                    style={{margin: 5, borderRadius: 6, marginTop: 20}}>
+                    Add Vehicle
+                  </Button>
+                )}
               </View>
             </View>
           </ScrollView>

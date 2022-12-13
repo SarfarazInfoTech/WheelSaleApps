@@ -1,5 +1,5 @@
 import {SearchBar} from 'react-native-elements';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -13,51 +13,28 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {DefImg} from '../data/data.json';
-import { SearchVehical } from '../services/UrlApi.js';
+import {SoldMyVehical} from '../services/UrlApi.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useFocusEffect} from '@react-navigation/native';
 
-const Search = () => {
+const SoldSearch = () => {
   const [loading, setLoading] = useState(true);
+  const [dealerId, setDealerId] = useState('');
   const [search, setSearch] = useState('');
   const [FilterData, setFilterData] = useState([]);
   const [MasterData, setMasterData] = useState([]);
-  const [Page, setPage] = useState(1);
-  
-  const handleLoadMore = () => {
-    setPage(Page + 1);
-    fetchPosts();
-    setLoading(true);
-  };
 
-  const renderFooter = () => {
-    return loading ? (
-      <View style={{margin: 10, alignItems: 'center'}}>
-        <Text>Loading...</Text>
-        <ActivityIndicator size={'small'} />
-      </View>
-    ) : null;
-  };
-
-  const fetchPosts = async () => {
-    const apiURL = `${SearchVehical}` + Page;
-    console.log(apiURL);
-    await fetch(apiURL, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        // console.log(responseJson);
-        setFilterData(responseJson.subCategories);
-        setMasterData(responseJson.subCategories);
-        setLoading(false);
-
-      })
-      .catch(error => {
-        console.log(error);
+  const getData = async () => {
+    try {
+      await AsyncStorage.getItem('UserData').then(value => {
+        if (value != null) {
+          let user = JSON.parse(value);
+          setDealerId(user[0].dealerId);
+        }
       });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const ItemView = ({item}) => {
@@ -100,25 +77,18 @@ const Search = () => {
                     style={styles.iconLogo}
                   />
                   <View style={{margin: 5}}>
-                    <Text style={styles.vehName} numberOfLines={2}>
-                      {item.company}{' '}
-                      {item.categoryName} -{' '}
-                      {item.modelYear} (
+                    <Text style={styles.vehName} numberOfLines={1}>
+                      {item.company} {item.categoryName} - {item.modelYear} (
                       {item.subCategoryName})
                     </Text>
                     <Text style={styles.vehPrice}>
-                      <FontAwesome name="rupee" size={16} color="#3d3d72" />
-                      {''} {item.sellingPrice}/-
+                      {/* <FontAwesome name="rupee" size={16} color="#3d3d72" /> */}
+                      {''}{' '}
+                      {item.vehicleNumber
+                        .match(/.{1,2}/g)
+                        .join(' ')
+                        .replace(/.(?=.{2,2}$)/g, '')}
                     </Text>
-
-                    {/* <Text style={styles.shopName} numberOfLines={1}>
-                    <FontAwesome
-                    name="map-marker"
-                    size={16}
-                    color="black"
-                    />{' '}
-                    Taj Auto Delars Sadar
-                    </Text> */}
                   </View>
                 </View>
               </View>
@@ -132,20 +102,20 @@ const Search = () => {
   const searchFilter = text => {
     if (text) {
       const newData = MasterData.filter(item => {
-        const company = item.company ? item.company : ''.toUpperCase();
-        const categoryName = item.categoryName
-          ? item.categoryName.toUpperCase()
+        // const company = item.company ? item.company : ''.toUpperCase();
+        // const categoryName = item.categoryName ? item.categoryName.toUpperCase() : ''.toUpperCase();
+        // const subCategoryName = item.subCategoryName ? item.subCategoryName.toUpperCase() : ''.toUpperCase();
+        // const modelYear = item.modelYear ? item.modelYear : ''.toUpperCase();
+        const vehicleNumber = item.vehicleNumber
+          ? item.vehicleNumber
           : ''.toUpperCase();
-        const subCategoryName = item.subCategoryName
-          ? item.subCategoryName.toUpperCase()
-          : ''.toUpperCase();
-        const modelYear = item.modelYear ? item.modelYear : ''.toUpperCase();
         const textData = text.toUpperCase();
         return (
-          company.indexOf(textData) > -1 ||
-          categoryName.indexOf(textData) > -1 ||
-          subCategoryName.indexOf(textData) > -1 ||
-          modelYear.indexOf(textData) > -1
+          // company.indexOf(textData) > -1 ||
+          // categoryName.indexOf(textData) > -1 ||
+          // subCategoryName.indexOf(textData) > -1 ||
+          // modelYear.indexOf(textData) > -1 ||
+          vehicleNumber.indexOf(textData) > -1
         );
       });
       setFilterData(newData);
@@ -156,15 +126,36 @@ const Search = () => {
     }
   };
 
+  const fetchPosts = async () => {
+    if (dealerId) {
+      const apiURL = `${SoldMyVehical}` + dealerId;
+      // console.log(apiURL);
+      await fetch(apiURL, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-type': 'application/json',
+        },
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          // console.log(responseJson.subCategories);
+          setFilterData(responseJson.subCategories);
+          setMasterData(responseJson.subCategories);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  };
+
   useEffect(() => {
-    console.log('Current Page : ', Page);
+    getData();
     fetchPosts();
-    // handleLoadMore()
     setLoading(false);
-    return () => {
-    };
-  }, [Page]);
-  
+  }, []);
+
   return (
     <>
       {loading ? (
@@ -188,7 +179,7 @@ const Search = () => {
           <View style={{backgroundColor: '#00b8dc'}}>
             <SearchBar
               inputContainerStyle={{backgroundColor: '#fff'}}
-              placeholder="Searching..."
+              placeholder="Enter vehicle no..."
               placeholderTextColor="gray"
               searchIcon={{size: 24, color: 'black'}}
               clearIcon={{color: 'gray'}}
@@ -203,6 +194,7 @@ const Search = () => {
               value={search}
               onChangeText={text => searchFilter(text)}
               onClear={setSearch}
+              onPressIn={fetchPosts}
             />
           </View>
 
@@ -213,9 +205,9 @@ const Search = () => {
                 data={FilterData}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={ItemView}
-                onEndReached={handleLoadMore}
+                // onEndReached={handleLoadMore}
                 onEndReachedThreshold={0}
-                ListFooterComponent={renderFooter}
+                // ListFooterComponent={renderFooter}
                 contentContainerStyle={{
                   justifyContent: 'space-between',
                   margin: 5,
@@ -235,8 +227,7 @@ const Search = () => {
                     marginTop: 20,
                     color: 'black',
                   }}>
-                  A Delars can find any vehical by using search with Vehical
-                  type, Vehical name, Model year.
+                  A Delars can find vehical by using Sold Search.
                 </Text>
               </View>
             )}
@@ -283,7 +274,6 @@ const styles = StyleSheet.create({
     top: 120,
     right: 5,
   },
-  // shopName: {},
   vehName: {
     textTransform: 'uppercase',
     color: 'black',
@@ -296,9 +286,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   shopName: {
-    // fontStyle: 'italic',
     fontSize: 13,
   },
 });
 
-export default Search;
+export default SoldSearch;
