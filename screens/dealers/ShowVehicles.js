@@ -7,6 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Button,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState, useCallback} from 'react';
 import {ShownMyVehical} from '../services/UrlApi.js';
@@ -67,9 +68,11 @@ const ShowVehicles = ({navigation}) => {
             } else if (resData.status === 'F') {
               setError(resData.status);
               setMessage(resData.message);
-              navigation.navigate('Dashboard ');
+              // navigation.navigate('Dashboard ');
             }
           });
+      } else {
+        setLoading(true);
       }
     } catch (err) {
       alert(err);
@@ -91,12 +94,21 @@ const ShowVehicles = ({navigation}) => {
 
       return () => {
         setData('');
-        Error === 'F'
-          ? showWarning(`${message} Add at least one Vehicle.`)
-          : null;
+        setError('');
       };
     }, []),
   );
+
+  const [refreshing, setRefreshing] = useState(false);
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = useCallback(async () => {
+    await setLoading(true);
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+    wait(2000).then(() => setLoading(false));
+  }, []);
 
   return (
     <>
@@ -117,7 +129,12 @@ const ShowVehicles = ({navigation}) => {
           />
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{flex: 1}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           {Error === 'S' ? (
             <View style={styles.container}>
               {Object.keys(Data).map(keys => {
@@ -161,7 +178,7 @@ const ShowVehicles = ({navigation}) => {
                           style={styles.iconLogo}
                         />
                         <View style={{margin: 5}}>
-                          <Text style={styles.vehName} numberOfLines={2}>
+                          <Text style={styles.vehName} numberOfLines={1}>
                             {Data[keys].company} {Data[keys].categoryName} -{' '}
                             {Data[keys].modelYear} ({Data[keys].subCategoryName}
                             )
@@ -191,17 +208,54 @@ const ShowVehicles = ({navigation}) => {
               })}
             </View>
           ) : Error === 'F' ? (
-            <Text
+            <>
+              <Text
+                style={{
+                  color: 'gray',
+                  // fontWeight: '500',
+                  // fontSize: 18,
+                  alignSelf: 'center',
+                  marginTop: 30,
+                }}>
+                {/* -- {message} -- */}
+                Pull to refresh
+              </Text>
+              <Image
+                source={{
+                  uri: 'https://images.myparkingsign.com/img/pla/K/no-commercial-vehicles-sign-k-8470_pl.png',
+                }}
+                style={{
+                  margin: 40,
+                  height: 350,
+                  width: '85%',
+                  alignSelf: 'center',
+                }}
+              />
+              <View style={{margin: 20}}>
+                <Button
+                  title="Add Vehicles"
+                  color="green"
+                  onPress={() => navigation.navigate('Add Vehicle')}
+                />
+              </View>
+            </>
+          ) : (
+            <View
               style={{
-                color: 'black',
-                fontWeight: '500',
-                fontSize: 18,
+                flex: 1,
+                justifyContent: 'center',
                 alignSelf: 'center',
                 marginTop: 30,
               }}>
-              -- {message} --
-            </Text>
-          ) : null}
+              <ActivityIndicator
+                size="large"
+                color="#00b8dc"
+                visible={loading}
+                textContent={'Loading...'}
+                textStyle={styles.spinnerTextStyle}
+              />
+            </View>
+          )}
         </ScrollView>
       )}
     </>

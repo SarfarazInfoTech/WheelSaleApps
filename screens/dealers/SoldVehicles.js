@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState, useCallback} from 'react';
 import {SoldMyVehical} from '../services/UrlApi.js';
@@ -66,8 +67,11 @@ const SoldVehicles = ({navigation}) => {
               setError(resData.status);
               setMessage(resData.message);
               navigation.navigate('Dashboard ');
+              // showWarning(`${message}`);
             }
           });
+      } else {
+        setLoading(true);
       }
     } catch (err) {
       alert(err);
@@ -89,12 +93,21 @@ const SoldVehicles = ({navigation}) => {
 
       return () => {
         setData('');
-        Error === 'F'
-          ? showWarning(`${message}`)
-          : null;
+        setError('');
       };
     }, []),
   );
+
+  const [refreshing, setRefreshing] = useState(false);
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = useCallback(async () => {
+    await setLoading(true);
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+    wait(2000).then(() => setLoading(false));
+  }, []);
 
   return (
     <>
@@ -115,7 +128,12 @@ const SoldVehicles = ({navigation}) => {
           />
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1, backgroundColor: '#00b8dc'}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{flex: 1, backgroundColor: '#00b8dc'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           {Error === 'S' ? (
             <View style={{paddingHorizontal: 5, flex: 1}}>
               {Object.keys(Data).map(keys => {
@@ -269,7 +287,7 @@ const SoldVehicles = ({navigation}) => {
                           }}
                           onPress={() => {
                             navigation.navigate('Vehicles Details', {
-                              // subCategoryId: Data[keys].subCategoryId,
+                              subCategoryId: Data[keys].subCategoryId,
                               soldVehicle: 'Sold',
                               salesVehicle: Data[keys].subCategoryId,
                               categoryName: Data[keys].categoryName,
@@ -336,15 +354,32 @@ const SoldVehicles = ({navigation}) => {
           ) : Error === 'F' ? (
             <Text
               style={{
-                color: 'black',
-                fontWeight: '500',
-                fontSize: 18,
+                color: 'white',
+                // fontWeight: '500',
+                // fontSize: 18,
                 alignSelf: 'center',
                 marginTop: 30,
               }}>
-              -- {message} --
+              {/* -- {message} -- */}
+              Pull to refresh
             </Text>
-          ) : null}
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignSelf: 'center',
+                marginTop: 30,
+              }}>
+              <ActivityIndicator
+                size="large"
+                color="#00b8dc"
+                visible={loading}
+                textContent={'Loading...'}
+                // textStyle={styles.spinnerTextStyle}
+              />
+            </View>
+          )}
         </ScrollView>
       )}
     </>
