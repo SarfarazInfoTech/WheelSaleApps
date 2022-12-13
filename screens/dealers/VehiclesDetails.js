@@ -822,111 +822,159 @@ const VehiclesDetails = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
       ) : soldVehicle === 'Sold' ? (
-        <View style={{backgroundColor: 'white', padding: 5, paddingBottom: 50}}>
+        <>
           <View
-            style={{
-              padding: 5,
-              borderRadius: 10,
-              backgroundColor: 'white',
-              borderColor: '#3d3d72',
-              borderWidth: 1,
-            }}>
-            <View>
-              <Text
+            style={{backgroundColor: 'white', padding: 5, paddingBottom: 10}}>
+            <View
+              style={{
+                padding: 5,
+                borderRadius: 10,
+                backgroundColor: 'white',
+                borderColor: '#3d3d72',
+                borderWidth: 1,
+              }}>
+              <View>
+                <Text
+                  style={{
+                    color: '#3d3d72',
+                    fontSize: 17,
+                    borderBottomColor: '#3d3d72',
+                    borderBottomWidth: 1,
+                    alignSelf: 'flex-start',
+                    marginBottom: 6,
+                    paddingBottom: 3,
+                  }}>
+                  Customer Details
+                </Text>
+              </View>
+              {/* <Text> Sales id : {sales.userId} </Text> */}
+              <View
                 style={{
-                  color: '#3d3d72',
-                  fontSize: 17,
-                  borderBottomColor: '#3d3d72',
-                  borderBottomWidth: 1,
-                  alignSelf: 'flex-start',
-                  marginBottom: 6,
-                  paddingBottom: 3,
+                  flexDirection: 'row',
+                  margin: 5,
+                  alignItems: 'center',
                 }}>
-                Customer Details
-              </Text>
-            </View>
-            {/* <Text> Sales id : {sales.userId} </Text> */}
-            <View
-              style={{
-                flexDirection: 'row',
-                margin: 5,
-                alignItems: 'center',
-              }}>
-              <FontAwesome name="user" size={17} color="#3d3d72" />
-              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
-                {' '}
-                Name :{' '}
-              </Text>
-              <Text style={{color: 'black', fontSize: 14}}>{sales.name}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                margin: 5,
-                alignItems: 'center',
-              }}>
-              <FontAwesome name="envelope-square" size={16} color="#3d3d72" />
-              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
-                {' '}
-                Email :{' '}
-              </Text>
-              <Text style={{color: 'black', fontSize: 14}}>{sales.email}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                margin: 5,
-                alignItems: 'center',
-              }}>
-              <FontAwesome name="phone-square" size={15} color="#3d3d72" />
-              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
-                {' '}
-                Mobile :{' '}
-              </Text>
-              <Text style={{color: 'black', fontSize: 14}}>{sales.phone}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                margin: 5,
-                alignItems: 'center',
-              }}>
-              <FontAwesome name="id-card" size={14} color="#3d3d72" />
-              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
-                {' '}
-                Aadhaar :{' '}
-              </Text>
-              <Text style={{color: 'black', fontSize: 14}}>
-                {sales.aadharNumber
-                  ? sales.aadharNumber.match(/.{1,4}/g).join(' ')
-                  : ''}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                margin: 5,
-                alignItems: 'center',
-              }}>
-              <FontAwesome name="clock-o" size={14} color="#3d3d72" />
-              <Text style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
-                {' '}
-                Purchase :{' '}
-              </Text>
-              <Text style={{color: 'black', fontSize: 14}}>
-                Date -{' '}
-                {sales.createdAt
-                  ? sales.createdAt
-                      .replace(/-/g, '/')
-                      .split('T')
-                      .join(', Time - ')
-                      .split('.000+00:00')
-                      .join(' ')
-                  : ''}
-              </Text>
+                <FontAwesome name="user" size={17} color="#3d3d72" />
+                <Text
+                  style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
+                  {' '}
+                  Name :{' '}
+                </Text>
+                <Text style={{color: 'black', fontSize: 14}}>{sales.name}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  margin: 5,
+                  alignItems: 'center',
+                }}>
+                <FontAwesome name="envelope-square" size={16} color="#3d3d72" />
+                <Text
+                  style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
+                  {' '}
+                  Email :{' '}
+                </Text>
+                <Text style={{color: 'black', fontSize: 14}}>
+                  {sales.email}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  margin: 5,
+                  alignItems: 'center',
+                }}>
+                <FontAwesome name="phone-square" size={15} color="#3d3d72" />
+                <Text
+                  style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
+                  {' '}
+                  Mobile :{' '}
+                </Text>
+                <Text style={{color: 'black', fontSize: 14}}>
+                  {sales.phone}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  margin: 5,
+                  alignItems: 'center',
+                }}>
+                <FontAwesome name="id-card" size={14} color="#3d3d72" />
+                <Text
+                  style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
+                  {' '}
+                  Aadhaar :{' '}
+                </Text>
+                <Text style={{color: 'black', fontSize: 14}}>
+                  {sales.aadharNumber
+                    ? sales.aadharNumber.match(/.{1,4}/g).join(' ')
+                    : ''}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  margin: 5,
+                  alignItems: 'center',
+                }}>
+                <FontAwesome name="clock-o" size={14} color="#3d3d72" />
+                <Text
+                  style={{color: '#3d3d72', fontSize: 14, fontWeight: '500'}}>
+                  {' '}
+                  Purchase :{' '}
+                </Text>
+                <Text style={{color: 'black', fontSize: 14}}>
+                  Date -{' '}
+                  {sales.createdAt
+                    ? sales.createdAt
+                        .replace(/-/g, '/')
+                        .split('T')
+                        .join(', Time - ')
+                        .split('.000+00:00')
+                        .join(' ')
+                    : ''}
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#3d3d72',
+              width: '100%',
+              paddingVertical: 10,
+            }}
+            onPress={() =>
+              Linking.canOpenURL(`tel:+91${sales.phone}`).then(supported => {
+                if (!supported) {
+                  return Linking.openURL(`tel:+91${sales.phone}`);
+                } else {
+                  console.log('Not Working');
+                }
+              })
+            }>
+            <Text
+              style={{
+                fontSize: 20,
+                width: '100%',
+                textAlign: 'center',
+                color: 'white',
+                alignSelf: 'center',
+                fontWeight: '500',
+              }}>
+              {'  '}CALL
+              {'  '}
+              <FontAwesome
+                style={{padding: 50}}
+                name="phone-square"
+                size={25}
+                color="white"
+              />
+              {'  '}
+              {sales.phone}
+            </Text>
+          </TouchableOpacity>
+        </>
       ) : (
         <>
           <View

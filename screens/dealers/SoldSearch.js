@@ -17,7 +17,7 @@ import {SoldMyVehical} from '../services/UrlApi.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
 
-const SoldSearch = () => {
+const SoldSearch = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [dealerId, setDealerId] = useState('');
   const [search, setSearch] = useState('');
@@ -58,7 +58,25 @@ const SoldSearch = () => {
           </View>
         ) : (
           <View style={styles.container}>
-            <TouchableOpacity key={item.subCategoryId}>
+            <TouchableOpacity
+              key={item.subCategoryId}
+              onPress={() => {
+                navigation.navigate('Vehicles Details', {
+                  // subCategoryId: item.subCategoryId,
+                  soldVehicle: 'Sold',
+                  salesVehicle: item.subCategoryId,
+                  categoryName: item.categoryName,
+                  subCategoryName: item.subCategoryName,
+                  company: item.company,
+                  modelYear: item.modelYear,
+                  color: item.color,
+                  vehicleCondition: item.vehicleCondition,
+                  vehicleNumber: item.vehicleNumber,
+                  // sellingPrice: item.sellingPrice,
+                  images: item.images[0].image === null ? DefImg : item.images,
+                  // : item.images[0].image,
+                });
+              }}>
               <View style={styles.cardItem}>
                 <View style={styles.card}>
                   <Image
@@ -72,7 +90,7 @@ const SoldSearch = () => {
                   />
                   <Image
                     source={{
-                      uri: 'http://wheelsale.in/wheel/Asset1/images/favicon.png',
+                      uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png',
                     }}
                     style={styles.iconLogo}
                   />

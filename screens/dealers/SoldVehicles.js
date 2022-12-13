@@ -287,7 +287,7 @@ const SoldVehicles = ({navigation}) => {
                           }}
                           onPress={() => {
                             navigation.navigate('Vehicles Details', {
-                              subCategoryId: Data[keys].subCategoryId,
+                              // subCategoryId: Data[keys].subCategoryId,
                               soldVehicle: 'Sold',
                               salesVehicle: Data[keys].subCategoryId,
                               categoryName: Data[keys].categoryName,
