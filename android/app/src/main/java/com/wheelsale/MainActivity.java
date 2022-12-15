@@ -1,4 +1,4 @@
-package com.wheelsale;
+package com.qaswatech.wheelsale;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

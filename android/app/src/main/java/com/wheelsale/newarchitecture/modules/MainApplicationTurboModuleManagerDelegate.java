@@ -1,4 +1,4 @@
-package com.wheelsale.newarchitecture.modules;
+package com.qaswatech.wheelsale.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
