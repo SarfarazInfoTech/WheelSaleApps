@@ -1,6 +1,5 @@
 import {View, Text, Image, BackHandler} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SplashScreen = ({navigation}) => {
@@ -40,13 +39,6 @@ const SplashScreen = ({navigation}) => {
             justifyContent: 'center',
             backgroundColor: '#00b8dc',
           }}>
-          {/* <ActivityIndicator
-            size="large"
-            color="white"
-            visible={loading}
-            textContent={'Loading...'}
-            textStyle={{}}
-          /> */}
           <Image
             source={{uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png'}}
             style={{
