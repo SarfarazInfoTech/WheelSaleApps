@@ -253,6 +253,13 @@ const VehiclesDetails = ({navigation, route}) => {
                         }}
                         style={styles.image}
                       />
+                      <Image
+                          source={{
+                            uri: 'http://wheelsale.in/app/icon/wheelsale_logo.png',
+                          }}
+                          style={styles.iconLogo}
+                        />
+
                     </View>
                   );
                 }}
@@ -1054,6 +1061,15 @@ const styles = StyleSheet.create({
     height: 260,
     backgroundColor: 'black',
     resizeMode: 'contain',
+  },
+  iconLogo: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    top: 5,
+    right: 5,
   },
   hedBox: {
     padding: 5,
