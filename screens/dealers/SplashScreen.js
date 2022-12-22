@@ -55,6 +55,7 @@ const SplashScreen = ({navigation}) => {
               fontSize: 30,
               alignSelf: 'center',
               fontWeight: '500',
+              letterSpacing: 3
             }}>
             WHEELSALE
           </Text>

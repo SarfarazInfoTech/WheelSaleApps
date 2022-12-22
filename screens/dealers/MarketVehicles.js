@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState, useCallback} from 'react';
 import {MarketVehical} from '../services/UrlApi.js';
@@ -46,9 +46,13 @@ const MarketVehicles = ({navigation}) => {
           }
         });
     } catch (err) {
-      alert(err);
-      console.log(err);
-      navigation.navigate('Dashboard ');
+      if (err.message === 'Network request failed') {
+        navigation.navigate('ErrorCard');
+      } else {
+        alert(err);
+        navigation.navigate('Dashboard ');
+        console.log(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -89,10 +93,12 @@ const MarketVehicles = ({navigation}) => {
           />
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{flex: 1}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           {/* <Text>{message}</Text> */}
           {/* <Text>{Error}</Text> */}
           <View style={{padding: 10, backgroundColor: 'white'}}>

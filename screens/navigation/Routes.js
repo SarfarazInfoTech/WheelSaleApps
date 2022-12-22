@@ -20,6 +20,7 @@ import ImageUp from '../dealers/Image';
 import ShowNotification from '../dealers/ShowNotification';
 import Searching from '../dealers/Searching';
 import SoldSearch from '../dealers/SoldSearch';
+import ErrorCard from '../components/ErrorCard';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -137,6 +138,12 @@ const Routes = () => {
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="ErrorCard"
+          component={ErrorCard}
           options={{headerShown: false}}
         />
 
