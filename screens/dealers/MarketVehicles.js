@@ -48,10 +48,10 @@ const MarketVehicles = ({navigation}) => {
     } catch (err) {
       if (err.message === 'Network request failed') {
         navigation.navigate('ErrorCard');
-      } else {
-        alert(err);
+      } else if (err) {
         navigation.navigate('Dashboard ');
-        console.log(err.message);
+        console.log(err);
+        alert('', err);
       }
     } finally {
       setLoading(false);

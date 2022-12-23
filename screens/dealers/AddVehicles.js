@@ -179,10 +179,14 @@ const AddVehicles = ({navigation}) => {
             setError(resData.status);
           }
         });
-    } catch (error) {
-      console.log(error);
-      alert(error);
-      navigation.navigate('Dashboard ');
+    } catch (err) {
+      if (err.message === 'Network request failed') {
+        navigation.navigate('ErrorCard');
+      } else if (err) {
+        console.log(err);
+        alert("", err);
+        navigation.navigate('Dashboard ');
+      }
     }
   };
 

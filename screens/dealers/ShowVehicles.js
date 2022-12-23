@@ -75,9 +75,13 @@ const ShowVehicles = ({navigation}) => {
         setLoading(true);
       }
     } catch (err) {
-      alert(err);
-      console.log(err);
-      navigation.navigate('Dashboard ');
+      if (err.message === 'Network request failed') {
+        navigation.navigate('ErrorCard');
+      } else if (err) {
+        navigation.navigate('Dashboard ');
+        console.log(err);
+        alert("", err);
+      }
     } finally {
       setLoading(false);
     }

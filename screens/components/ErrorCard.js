@@ -2,7 +2,7 @@ import {View, Text, Button} from 'react-native';
 import React from 'react';
 import {Image} from 'react-native-elements';
 
-const ErrorCard = () => {
+const ErrorCard = ({navigation}) => {
   return (
     <View
       style={{
@@ -26,7 +26,7 @@ const ErrorCard = () => {
         }}>
         Please check your internet connectivity and try again.
       </Text>
-      <Button color="skyblue" title="Retry" />
+      <Button color="skyblue" title="Retry" onPress={() => navigation.navigate('Dashboard ')} />
     </View>
   );
 };
