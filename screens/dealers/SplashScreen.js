@@ -1,6 +1,7 @@
 import {View, Text, Image, BackHandler} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {StackActions} from '@react-navigation/native';
 
 const SplashScreen = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -9,12 +10,12 @@ const SplashScreen = ({navigation}) => {
     try {
       AsyncStorage.getItem('UserData').then(value => {
         if (value != null) {
-          navigation.navigate('Drawers');
+          navigation.dispatch(StackActions.replace('Drawers'));
           console.log('Login');
           // setLoading(false);
         } else {
           console.log('Not Login');
-          navigation.navigate('Login');
+          navigation.dispatch(StackActions.replace('Login'));
           // navigation.navigate('MainScreen');
           // setLoading(false)
         }

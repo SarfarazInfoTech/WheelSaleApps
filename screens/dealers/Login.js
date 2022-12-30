@@ -5,13 +5,13 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Api from '../Api/Api';
 import {showError, showSuccess} from '../components/FlashMessage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native-paper';
+import { StackActions } from '@react-navigation/native';
 
 const Login = ({navigation}) => {
   const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ const Login = ({navigation}) => {
             console.log(resData.dealers);
             try {
               AsyncStorage.setItem('UserData', JSON.stringify(resData.dealers));
-              navigation.navigate('Drawers');
+              navigation.dispatch(StackActions.replace('Drawers'));
             } catch (error) {
               console.log(error);
             }
