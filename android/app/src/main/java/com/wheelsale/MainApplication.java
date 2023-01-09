@@ -17,6 +17,7 @@ import java.util.List;
 import com.facebook.react.bridge.JSIModulePackage; // <- add
 import com.swmansion.reanimated.ReanimatedJSIModulePackage; // <- add
 import io.xogus.reactnative.versioncheck.RNVersionCheckPackage;  // <- add
+import com.razorpay.rn.RazorpayPackage; // <- add
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
           new RNVersionCheckPackage();
           new VectorIconsPackage();
+          new RazorpayPackage();
           return packages;
         }
 

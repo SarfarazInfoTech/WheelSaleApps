@@ -1,7 +1,6 @@
-import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
-import React, {Component} from 'react';
+import {View, ActivityIndicator} from 'react-native';
+import React from 'react';
 import {WebView} from 'react-native-webview';
-import {Card} from 'react-native-paper';
 
 function LoadingIndicatorView() {
   return (

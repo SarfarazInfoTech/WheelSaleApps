@@ -5,16 +5,14 @@ import Routes from './screens/navigation/Routes.js';
 import Connection from './screens/netInfo/Connection.js';
 import FlashMessage from 'react-native-flash-message';
 import InAppUpdate from './InAppUpdate.js';
-import PaymentGateway from './screens/dealers/PaymentGateway.js';
 
 const App = () => {
   return (
     <>
       <StatusBar style="auto" backgroundColor={'#00b8dc'} />
-      {/* <Routes /> */}
-      <PaymentGateway />
+      <Routes />
       <Connection />
-      {/* <InAppUpdate /> */}
+      <InAppUpdate />
       <FlashMessage position="top" />
     </>
   );
