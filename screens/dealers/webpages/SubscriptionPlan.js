@@ -15,7 +15,7 @@ const SubscriptionPlan = () => {
     <View style={{flex: 1}}>
       <WebView
         originWhitelist={['*']}
-        source={{uri: 'http://wheelsale.in/app/plan.html'}}
+        source={{uri: 'http://wheelsale.in/en/#pricing'}}
         renderLoading={LoadingIndicatorView}
         startInLoadingState={true}
       />
